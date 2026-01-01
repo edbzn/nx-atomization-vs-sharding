@@ -1,0 +1,40 @@
+import { ProductWizard } from './ProductWizard';
+
+describe('ProductWizard tags step', () => {
+  it('creates a product in three steps with 3 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<ProductWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.contains('button', 'Next').click();
+    cy.contains('[role=alert]', 'Name is required').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Ruben De Smet');
+    cy.get('select[name=wizard-category]').select('Outdoor');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('lumen iris{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('GLADE{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('reef{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Back').click();
+    cy.get('input[name=wizard-name]').should('have.value', 'Ruben De Smet');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Ruben De Smet');
+    cy.get('[data-testid=review-category]').should('have.text', 'Outdoor');
+    cy.get('[data-testid=review-tags]').should('have.text', 'lumen-iris, glade, reef');
+    cy.contains('button', 'Create product').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Ruben De Smet","category":"Outdoor","tags":["lumen-iris","glade","reef"]});
+    cy.contains('[role=status]', 'Created Ruben De Smet').should('be.visible');
+  });
+});

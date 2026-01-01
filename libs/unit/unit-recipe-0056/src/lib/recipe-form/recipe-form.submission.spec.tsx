@@ -1,0 +1,40 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { RecipeForm } from './RecipeForm';
+
+describe('RecipeForm submission', () => {
+  it('validates and saves a recipe (8 interactions)', async () => {
+    const onSubmit = vi.fn();
+    const user = userEvent.setup();
+    render(<RecipeForm onSubmit={onSubmit} />);
+    await user.click(screen.getByRole('button', { name: 'Save recipe' }));
+    expect(onSubmit).toHaveBeenCalledTimes(0);
+    expect(screen.getByTestId('error-summary').textContent).toBe('4 errors');
+    expect(screen.getByText('Name is required')).toBeInTheDocument();
+    expect(screen.getByText('Email is required')).toBeInTheDocument();
+    expect(screen.getByText('Category is required')).toBeInTheDocument();
+    expect(screen.getByText('Amount is required')).toBeInTheDocument();
+    await user.clear(screen.getByRole('textbox', { name: 'Notes' }));
+    await user.type(screen.getByRole('textbox', { name: 'Notes' }), 'willow harbor mesa iris mesa orbit flint pine indigo amber velvet aurora pebble drift juniper sable hazel alpha solstice meadow apex sable nectar maple harbor fern tundra frost spruce kestrel prism pin');
+    expect(screen.getByRole('textbox', { name: 'Notes' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Name' }));
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Savory Curry 65');
+    expect(screen.getByRole('textbox', { name: 'Name' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Email' }));
+    await user.type(screen.getByRole('textbox', { name: 'Email' }), 'yara.van.damme66@example.com');
+    expect(screen.getByRole('textbox', { name: 'Email' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Amount' }));
+    await user.type(screen.getByRole('textbox', { name: 'Amount' }), '46507');
+    expect(screen.getByRole('textbox', { name: 'Amount' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Notes' }));
+    await user.type(screen.getByRole('textbox', { name: 'Notes' }), 'prism comet river jade tide delta cedar nova pine prism pine tide');
+    expect(screen.getByRole('textbox', { name: 'Notes' })).not.toHaveAttribute('aria-invalid');
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Category' }), 'Starter');
+    expect(screen.getByRole('combobox', { name: 'Category' })).not.toHaveAttribute('aria-invalid');
+    await user.click(screen.getByRole('button', { name: 'Save recipe' }));
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(onSubmit).toHaveBeenLastCalledWith({"name":"Savory Curry 65","email":"yara.van.damme66@example.com","category":"Starter","amount":46507,"notes":"prism comet river jade tide delta cedar nova pine prism pine tide"});
+    expect(screen.queryByTestId('error-summary')).not.toBeInTheDocument();
+  });
+});

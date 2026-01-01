@@ -1,0 +1,44 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { RecipeWizard } from './RecipeWizard';
+
+describe('RecipeWizard happy path', () => {
+  it('creates a recipe in three steps with 2 tags', async () => {
+    const onComplete = vi.fn();
+    const user = userEvent.setup();
+    render(<RecipeWizard onComplete={onComplete} />);
+    const step = () => screen.getByTestId('wizard-step').textContent;
+    expect(step()).toBe('Step 1 of 3: Details');
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Al');
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByText('Name must be at least 3 characters')).toBeInTheDocument();
+    expect(screen.getByText('Category is required')).toBeInTheDocument();
+    expect(step()).toBe('Step 1 of 3: Details');
+    await user.clear(screen.getByRole('textbox', { name: 'Name' }));
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Oscar Desmet');
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Category' }), 'Main');
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(step()).toBe('Step 2 of 3: Tags');
+    const tagInput = () => screen.getByRole('textbox', { name: 'New tag' });
+    await user.type(tagInput(), 'blaze{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'BIRCH{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('2 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Back' }));
+    expect(screen.getByRole('textbox', { name: 'Name' })).toHaveValue('Oscar Desmet');
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByTestId('review-name').textContent).toBe('Oscar Desmet');
+    expect(screen.getByTestId('review-category').textContent).toBe('Main');
+    expect(screen.getByTestId('review-tags').textContent).toBe('blaze, birch');
+    await user.click(screen.getByRole('button', { name: 'Create recipe' }));
+    expect(onComplete).toHaveBeenCalledExactlyOnceWith({"name":"Oscar Desmet","category":"Main","tags":["blaze","birch"]});
+    expect(screen.getByRole('status')).toHaveTextContent('Created Oscar Desmet');
+  });
+});

@@ -1,0 +1,66 @@
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it } from 'vitest';
+import { VehicleBoard } from './VehicleBoard';
+
+describe('VehicleBoard moving cards 2', () => {
+  it('moves 4 cards across the board', async () => {
+    const user = userEvent.setup();
+    render(<VehicleBoard />);
+    const cardsIn = (status: string) => within(screen.getByTestId(`column-${status}`)).queryAllByTestId('card');
+    const newCard = screen.getByRole('textbox', { name: 'New card' });
+    const filter = screen.getByRole('searchbox', { name: 'Filter cards' });
+    await user.type(newCard, 'Fix carrier apex{Enter}');
+    await user.type(newCard, 'Review rover falcon{Enter}');
+    await user.type(newCard, 'Plan mover reef{Enter}');
+    expect(cardsIn('todo')).toHaveLength(3);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 3 done');
+    await user.clear(filter);
+    await user.type(filter, 'Fix');
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 3 done');
+    await user.type(newCard, 'Plan courier topaz{Enter}');
+    await user.click(screen.getByRole('button', { name: 'Start Fix carrier apex' }));
+    expect(cardsIn('todo')).toHaveLength(0);
+    expect(cardsIn('doing')).toHaveLength(1);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 4 done');
+    await user.click(screen.getByRole('button', { name: 'Pause Fix carrier apex' }));
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 4 done');
+    await user.click(screen.getByRole('button', { name: 'Delete Fix carrier apex' }));
+    expect(cardsIn('todo')).toHaveLength(0);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 3 done');
+    await user.type(newCard, 'Price unit garnet{Enter}');
+    expect(cardsIn('todo')).toHaveLength(0);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 4 done');
+    await user.clear(filter);
+    expect(cardsIn('todo')).toHaveLength(4);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 4 done');
+  });
+
+  it('moves 1 cards across the board', async () => {
+    const user = userEvent.setup();
+    render(<VehicleBoard />);
+    const cardsIn = (status: string) => within(screen.getByTestId(`column-${status}`)).queryAllByTestId('card');
+    const newCard = screen.getByRole('textbox', { name: 'New card' });
+    const filter = screen.getByRole('searchbox', { name: 'Filter cards' });
+    await user.type(newCard, 'Audit rover spruce{Enter}');
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 1 done');
+  });
+});
