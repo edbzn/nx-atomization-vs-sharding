@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "name": "unit-campaign-0061",
+  "sourceRoot": "libs/unit/unit-campaign-0061/src",
+  "projectType": "library",
+  "tags": [
+    "type:domain",
+    "runner:vitest",
+    "layer:6"
+  ]
+}

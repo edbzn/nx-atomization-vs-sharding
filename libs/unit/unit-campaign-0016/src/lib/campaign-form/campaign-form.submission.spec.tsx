@@ -1,0 +1,40 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { CampaignForm } from './CampaignForm';
+
+describe('CampaignForm submission', () => {
+  it('validates and saves a campaign (8 interactions)', async () => {
+    const onSubmit = vi.fn();
+    const user = userEvent.setup();
+    render(<CampaignForm onSubmit={onSubmit} />);
+    await user.click(screen.getByRole('button', { name: 'Save campaign' }));
+    expect(onSubmit).toHaveBeenCalledTimes(0);
+    expect(screen.getByTestId('error-summary').textContent).toBe('4 errors');
+    expect(screen.getByText('Name is required')).toBeInTheDocument();
+    expect(screen.getByText('Email is required')).toBeInTheDocument();
+    expect(screen.getByText('Category is required')).toBeInTheDocument();
+    expect(screen.getByText('Amount is required')).toBeInTheDocument();
+    await user.clear(screen.getByRole('textbox', { name: 'Notes' }));
+    await user.type(screen.getByRole('textbox', { name: 'Notes' }), 'aurora delta zinc pine blaze apex kestrel delta flint birch drift lumen atlas orbit nectar ridge nectar prism iris nectar willow iris topaz sable zephyr pine amber nectar indigo juniper jade ember lark');
+    expect(screen.getByRole('textbox', { name: 'Notes' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Name' }));
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Autumn Webinar 89');
+    expect(screen.getByRole('textbox', { name: 'Name' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Email' }));
+    await user.type(screen.getByRole('textbox', { name: 'Email' }), 'sara.bogaert79@example.com');
+    expect(screen.getByRole('textbox', { name: 'Email' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Amount' }));
+    await user.type(screen.getByRole('textbox', { name: 'Amount' }), '54681');
+    expect(screen.getByRole('textbox', { name: 'Amount' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Notes' }));
+    await user.type(screen.getByRole('textbox', { name: 'Notes' }), 'umber oak tide lagoon orbit');
+    expect(screen.getByRole('textbox', { name: 'Notes' })).not.toHaveAttribute('aria-invalid');
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Category' }), 'Display');
+    expect(screen.getByRole('combobox', { name: 'Category' })).not.toHaveAttribute('aria-invalid');
+    await user.click(screen.getByRole('button', { name: 'Save campaign' }));
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(onSubmit).toHaveBeenLastCalledWith({"name":"Autumn Webinar 89","email":"sara.bogaert79@example.com","category":"Display","amount":54681,"notes":"umber oak tide lagoon orbit"});
+    expect(screen.queryByTestId('error-summary')).not.toBeInTheDocument();
+  });
+});

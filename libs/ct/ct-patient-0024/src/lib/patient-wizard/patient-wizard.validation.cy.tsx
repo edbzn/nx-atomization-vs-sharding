@@ -1,0 +1,44 @@
+import { PatientWizard } from './PatientWizard';
+
+describe('PatientWizard validation', () => {
+  it('creates a patient in three steps with 2 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<PatientWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.contains('button', 'Next').click();
+    cy.contains('[role=alert]', 'Name is required').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Noor Hendrickx');
+    cy.get('select[name=wizard-category]').select('Referred');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('UMBER{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('iris{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('UMBER{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('have.text', '"umber" is already added');
+    cy.get('input[name=new-tag]').type('indigo88{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('button[aria-label="Remove indigo88"]').click();
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Noor Hendrickx');
+    cy.get('[data-testid=review-category]').should('have.text', 'Referred');
+    cy.get('[data-testid=review-tags]').should('have.text', 'umber, iris');
+    cy.contains('button', 'Create patient').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Noor Hendrickx","category":"Referred","tags":["umber","iris"]});
+    cy.contains('[role=status]', 'Created Noor Hendrickx').should('be.visible');
+  });
+});

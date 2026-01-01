@@ -1,0 +1,45 @@
+import { InvoiceWizard } from './InvoiceWizard';
+
+describe('InvoiceWizard happy path', () => {
+  it('creates a invoice in three steps with 3 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<InvoiceWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').type('Al');
+    cy.contains('button', 'Next').click();
+    cy.contains('[role=alert]', 'Name must be at least 3 characters').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Monthly Upgrade');
+    cy.get('select[name=wizard-category]').select('Draft');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('garnet alpha{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('FLINT{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('spruce maple{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('zinc{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '4 tags');
+    cy.get('[data-testid=tag]').should('have.length', 4);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('button[aria-label="Remove garnet-alpha"]').click();
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Monthly Upgrade');
+    cy.get('[data-testid=review-category]').should('have.text', 'Draft');
+    cy.get('[data-testid=review-tags]').should('have.text', 'flint, spruce-maple, zinc');
+    cy.contains('button', 'Create invoice').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Monthly Upgrade","category":"Draft","tags":["flint","spruce-maple","zinc"]});
+    cy.contains('[role=status]', 'Created Monthly Upgrade').should('be.visible');
+  });
+});

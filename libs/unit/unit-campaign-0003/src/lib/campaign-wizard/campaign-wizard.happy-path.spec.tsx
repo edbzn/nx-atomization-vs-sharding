@@ -1,0 +1,43 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { CampaignWizard } from './CampaignWizard';
+
+describe('CampaignWizard happy path', () => {
+  it('creates a campaign in three steps with 3 tags', async () => {
+    const onComplete = vi.fn();
+    const user = userEvent.setup();
+    render(<CampaignWizard onComplete={onComplete} />);
+    const step = () => screen.getByTestId('wizard-step').textContent;
+    expect(step()).toBe('Step 1 of 3: Details');
+    await user.clear(screen.getByRole('textbox', { name: 'Name' }));
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Victor Claessens');
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Category' }), 'Search');
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(step()).toBe('Step 2 of 3: Tags');
+    const tagInput = () => screen.getByRole('textbox', { name: 'New tag' });
+    await user.type(tagInput(), 'vale{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'iris14{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('2 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'VALE{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('2 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    expect(screen.getByTestId('tag-message').textContent).toBe('"vale" is already added');
+    await user.type(tagInput(), 'zephyr{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('3 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(3);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByTestId('review-name').textContent).toBe('Victor Claessens');
+    expect(screen.getByTestId('review-category').textContent).toBe('Search');
+    expect(screen.getByTestId('review-tags').textContent).toBe('vale, iris14, zephyr');
+    await user.click(screen.getByRole('button', { name: 'Create campaign' }));
+    expect(onComplete).toHaveBeenCalledExactlyOnceWith({"name":"Victor Claessens","category":"Search","tags":["vale","iris14","zephyr"]});
+    expect(screen.getByRole('status')).toHaveTextContent('Created Victor Claessens');
+  });
+});

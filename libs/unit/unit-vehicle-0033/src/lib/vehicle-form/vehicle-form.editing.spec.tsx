@@ -1,0 +1,68 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { VehicleForm } from './VehicleForm';
+
+describe('VehicleForm editing', () => {
+  it('validates and saves a vehicle (6 interactions)', async () => {
+    const onSubmit = vi.fn();
+    const user = userEvent.setup();
+    render(<VehicleForm onSubmit={onSubmit} />);
+    await user.click(screen.getByRole('button', { name: 'Save vehicle' }));
+    expect(onSubmit).toHaveBeenCalledTimes(0);
+    expect(screen.getByTestId('error-summary').textContent).toBe('4 errors');
+    expect(screen.getByText('Name is required')).toBeInTheDocument();
+    expect(screen.getByText('Email is required')).toBeInTheDocument();
+    expect(screen.getByText('Category is required')).toBeInTheDocument();
+    expect(screen.getByText('Amount is required')).toBeInTheDocument();
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Category' }), 'Sedan');
+    expect(screen.getByRole('combobox', { name: 'Category' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Name' }));
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Marco Martens');
+    expect(screen.getByRole('textbox', { name: 'Name' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Email' }));
+    await user.type(screen.getByRole('textbox', { name: 'Email' }), 'arne.desmet87@example.com');
+    expect(screen.getByRole('textbox', { name: 'Email' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Amount' }));
+    await user.type(screen.getByRole('textbox', { name: 'Amount' }), '18950');
+    expect(screen.getByRole('textbox', { name: 'Amount' })).not.toHaveAttribute('aria-invalid');
+    await user.click(screen.getByRole('button', { name: 'Save vehicle' }));
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(onSubmit).toHaveBeenLastCalledWith({"name":"Marco Martens","email":"arne.desmet87@example.com","category":"Sedan","amount":18950,"notes":""});
+    expect(screen.queryByTestId('error-summary')).not.toBeInTheDocument();
+  });
+
+  it('validates and saves a vehicle (7 interactions)', async () => {
+    const onSubmit = vi.fn();
+    const user = userEvent.setup();
+    render(<VehicleForm onSubmit={onSubmit} />);
+    await user.click(screen.getByRole('button', { name: 'Save vehicle' }));
+    expect(onSubmit).toHaveBeenCalledTimes(0);
+    expect(screen.getByTestId('error-summary').textContent).toBe('4 errors');
+    expect(screen.getByText('Name is required')).toBeInTheDocument();
+    expect(screen.getByText('Email is required')).toBeInTheDocument();
+    expect(screen.getByText('Category is required')).toBeInTheDocument();
+    expect(screen.getByText('Amount is required')).toBeInTheDocument();
+    await user.clear(screen.getByRole('textbox', { name: 'Amount' }));
+    await user.type(screen.getByRole('textbox', { name: 'Amount' }), '73023');
+    expect(screen.getByRole('textbox', { name: 'Amount' })).not.toHaveAttribute('aria-invalid');
+    await user.click(screen.getByRole('button', { name: 'Save vehicle' }));
+    expect(onSubmit).toHaveBeenCalledTimes(0);
+    expect(screen.getByTestId('error-summary').textContent).toBe('3 errors');
+    expect(screen.getByText('Name is required')).toBeInTheDocument();
+    expect(screen.getByText('Email is required')).toBeInTheDocument();
+    expect(screen.getByText('Category is required')).toBeInTheDocument();
+    await user.clear(screen.getByRole('textbox', { name: 'Name' }));
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Field Hauler 8');
+    expect(screen.getByRole('textbox', { name: 'Name' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Email' }));
+    await user.type(screen.getByRole('textbox', { name: 'Email' }), 'sara.cools16@example.com');
+    expect(screen.getByRole('textbox', { name: 'Email' })).not.toHaveAttribute('aria-invalid');
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Category' }), 'Bike');
+    expect(screen.getByRole('combobox', { name: 'Category' })).not.toHaveAttribute('aria-invalid');
+    await user.click(screen.getByRole('button', { name: 'Save vehicle' }));
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(onSubmit).toHaveBeenLastCalledWith({"name":"Field Hauler 8","email":"sara.cools16@example.com","category":"Bike","amount":73023,"notes":""});
+    expect(screen.queryByTestId('error-summary')).not.toBeInTheDocument();
+  });
+});

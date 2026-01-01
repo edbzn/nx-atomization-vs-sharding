@@ -1,0 +1,63 @@
+import { ShipmentForm } from './ShipmentForm';
+
+describe('ShipmentForm editing', () => {
+  it('validates and saves a shipment (6 interactions)', () => {
+    const onSubmit = cy.stub().as('submit');
+    cy.mount(<ShipmentForm onSubmit={onSubmit} />);
+    cy.contains('button', 'Save shipment').click();
+    cy.get('[data-testid=error-summary]').should('have.text', '4 errors');
+    cy.contains('[role=alert]', 'Name is required').should('be.visible');
+    cy.contains('[role=alert]', 'Email is required').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.contains('[role=alert]', 'Amount is required').should('be.visible');
+    cy.get('@submit').should('have.callCount', 0);
+    cy.get('input[name=email]').clear().type('pia.de.smet59@example.com', { delay: 0 });
+    cy.get('input[name=email]').should('not.have.attr', 'aria-invalid');
+    cy.get('input[name=name]').clear().type('Priority Envelope 40');
+    cy.get('input[name=name]').should('not.have.attr', 'aria-invalid');
+    cy.get('input[name=amount]').clear().type('73938');
+    cy.get('input[name=amount]').should('not.have.attr', 'aria-invalid');
+    cy.get('select[name=category]').select('Packed');
+    cy.get('select[name=category]').should('not.have.attr', 'aria-invalid');
+    cy.contains('button', 'Save shipment').click();
+    cy.get('@submit').should('have.callCount', 1);
+    cy.get('@submit').its('lastCall.args.0').should('deep.equal', {"name":"Priority Envelope 40","email":"pia.de.smet59@example.com","category":"Packed","amount":73938,"notes":""});
+    cy.get('[data-testid=error-summary]').should('not.exist');
+  });
+
+  it('validates and saves a shipment (9 interactions)', () => {
+    const onSubmit = cy.stub().as('submit');
+    cy.mount(<ShipmentForm onSubmit={onSubmit} />);
+    cy.contains('button', 'Save shipment').click();
+    cy.get('[data-testid=error-summary]').should('have.text', '4 errors');
+    cy.contains('[role=alert]', 'Name is required').should('be.visible');
+    cy.contains('[role=alert]', 'Email is required').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.contains('[role=alert]', 'Amount is required').should('be.visible');
+    cy.get('@submit').should('have.callCount', 0);
+    cy.get('textarea[name=notes]').clear().type('onyx nectar ember alpha tide juniper lumen juniper nectar indigo cedar delta topaz amber birch willow pine hazel drift cobalt summit lumen meadow pine spruce solstice atlas drift solstice pine oak orbi', { delay: 0 });
+    cy.get('textarea[name=notes]').should('not.have.attr', 'aria-invalid');
+    cy.contains('button', 'Save shipment').click();
+    cy.get('[data-testid=error-summary]').should('have.text', '5 errors');
+    cy.contains('[role=alert]', 'Name is required').should('be.visible');
+    cy.contains('[role=alert]', 'Email is required').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.contains('[role=alert]', 'Amount is required').should('be.visible');
+    cy.contains('[role=alert]', 'Notes must be at most 200 characters').should('be.visible');
+    cy.get('@submit').should('have.callCount', 0);
+    cy.get('input[name=name]').clear().type('Oscar Bogaert');
+    cy.get('input[name=name]').should('not.have.attr', 'aria-invalid');
+    cy.get('input[name=email]').clear().type('ruben.verhoeven26@example.com', { delay: 0 });
+    cy.get('input[name=email]').should('not.have.attr', 'aria-invalid');
+    cy.get('input[name=amount]').clear().type('12982');
+    cy.get('input[name=amount]').should('not.have.attr', 'aria-invalid');
+    cy.get('textarea[name=notes]').clear().type('solstice drift spruce glade mesa jade delta atlas sable zinc velvet falcon', { delay: 0 });
+    cy.get('textarea[name=notes]').should('not.have.attr', 'aria-invalid');
+    cy.get('select[name=category]').select('Packed');
+    cy.get('select[name=category]').should('not.have.attr', 'aria-invalid');
+    cy.contains('button', 'Save shipment').click();
+    cy.get('@submit').should('have.callCount', 1);
+    cy.get('@submit').its('lastCall.args.0').should('deep.equal', {"name":"Oscar Bogaert","email":"ruben.verhoeven26@example.com","category":"Packed","amount":12982,"notes":"solstice drift spruce glade mesa jade delta atlas sable zinc velvet falcon"});
+    cy.get('[data-testid=error-summary]').should('not.exist');
+  });
+});

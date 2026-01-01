@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "name": "unit-asset-0035",
+  "sourceRoot": "libs/unit/unit-asset-0035/src",
+  "projectType": "library",
+  "tags": [
+    "type:domain",
+    "runner:vitest",
+    "layer:3"
+  ]
+}

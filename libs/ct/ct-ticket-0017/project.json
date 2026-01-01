@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "name": "ct-ticket-0017",
+  "sourceRoot": "libs/ct/ct-ticket-0017/src",
+  "projectType": "library",
+  "tags": [
+    "type:feature",
+    "runner:cypress",
+    "layer:1"
+  ]
+}

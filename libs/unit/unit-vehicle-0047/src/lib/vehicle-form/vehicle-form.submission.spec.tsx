@@ -1,0 +1,41 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { VehicleForm } from './VehicleForm';
+
+describe('VehicleForm submission', () => {
+  it('validates and saves a vehicle (8 interactions)', async () => {
+    const onSubmit = vi.fn();
+    const user = userEvent.setup();
+    render(<VehicleForm onSubmit={onSubmit} />);
+    await user.clear(screen.getByRole('textbox', { name: 'Notes' }));
+    await user.type(screen.getByRole('textbox', { name: 'Notes' }), 'solstice tide willow river atlas prism lark apex cedar ridge fern mesa maple birch velvet spruce reef comet lumen harbor juniper amber orbit coral indigo summit nectar glade zinc falcon blaze cedar amb');
+    expect(screen.getByRole('textbox', { name: 'Notes' })).not.toHaveAttribute('aria-invalid');
+    await user.click(screen.getByRole('button', { name: 'Save vehicle' }));
+    expect(onSubmit).toHaveBeenCalledTimes(0);
+    expect(screen.getByTestId('error-summary').textContent).toBe('5 errors');
+    expect(screen.getByText('Name is required')).toBeInTheDocument();
+    expect(screen.getByText('Email is required')).toBeInTheDocument();
+    expect(screen.getByText('Category is required')).toBeInTheDocument();
+    expect(screen.getByText('Amount is required')).toBeInTheDocument();
+    expect(screen.getByText('Notes must be at most 200 characters')).toBeInTheDocument();
+    await user.clear(screen.getByRole('textbox', { name: 'Name' }));
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Wout Cools');
+    expect(screen.getByRole('textbox', { name: 'Name' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Email' }));
+    await user.type(screen.getByRole('textbox', { name: 'Email' }), 'oscar.coppens32@example.com');
+    expect(screen.getByRole('textbox', { name: 'Email' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Amount' }));
+    await user.type(screen.getByRole('textbox', { name: 'Amount' }), '76463');
+    expect(screen.getByRole('textbox', { name: 'Amount' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Notes' }));
+    await user.type(screen.getByRole('textbox', { name: 'Notes' }), 'iris mesa lark willow glade ridge');
+    expect(screen.getByRole('textbox', { name: 'Notes' })).not.toHaveAttribute('aria-invalid');
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Category' }), 'Sedan');
+    expect(screen.getByRole('combobox', { name: 'Category' })).not.toHaveAttribute('aria-invalid');
+    await user.click(screen.getByRole('button', { name: 'Save vehicle' }));
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(onSubmit).toHaveBeenLastCalledWith({"name":"Wout Cools","email":"oscar.coppens32@example.com","category":"Sedan","amount":76463,"notes":"iris mesa lark willow glade ridge"});
+    expect(screen.queryByTestId('error-summary')).not.toBeInTheDocument();
+  });
+});

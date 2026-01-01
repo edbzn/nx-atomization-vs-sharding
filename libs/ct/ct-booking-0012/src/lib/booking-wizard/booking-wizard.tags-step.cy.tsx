@@ -1,0 +1,66 @@
+import { BookingWizard } from './BookingWizard';
+
+describe('BookingWizard tags step', () => {
+  it('creates a booking in three steps with 3 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<BookingWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Tom Verhoeven');
+    cy.get('select[name=wizard-category]').select('Flight');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('maple hazel{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('COMET{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('  comet {enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('have.text', '"comet" is already added');
+    cy.get('input[name=new-tag]').type('RAVEN{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Back').click();
+    cy.get('input[name=wizard-name]').should('have.value', 'Tom Verhoeven');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Tom Verhoeven');
+    cy.get('[data-testid=review-category]').should('have.text', 'Flight');
+    cy.get('[data-testid=review-tags]').should('have.text', 'maple-hazel, comet, raven');
+    cy.contains('button', 'Create booking').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Tom Verhoeven","category":"Flight","tags":["maple-hazel","comet","raven"]});
+    cy.contains('[role=status]', 'Created Tom Verhoeven').should('be.visible');
+  });
+
+  it('creates a booking in three steps with 1 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<BookingWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').type('Al');
+    cy.contains('button', 'Next').click();
+    cy.contains('[role=alert]', 'Name must be at least 3 characters').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Yara Desmet');
+    cy.get('select[name=wizard-category]').select('Hotel');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('alpha{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Yara Desmet');
+    cy.get('[data-testid=review-category]').should('have.text', 'Hotel');
+    cy.get('[data-testid=review-tags]').should('have.text', 'alpha');
+    cy.contains('button', 'Create booking').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Yara Desmet","category":"Hotel","tags":["alpha"]});
+    cy.contains('[role=status]', 'Created Yara Desmet').should('be.visible');
+  });
+});
