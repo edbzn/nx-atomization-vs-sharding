@@ -1,0 +1,58 @@
+import { expect, test } from '@playwright/test';
+
+test('validates the checkout form and places an order (3 edits)', async ({ page }) => {
+  await page.goto('/checkout');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Checkout');
+  await page.getByRole('textbox', { name: 'Full name', exact: true }).clear();
+  await page.getByRole('textbox', { name: 'Full name', exact: true }).pressSequentially('Jo');
+  await expect(page.getByRole('textbox', { name: 'Full name', exact: true })).not.toHaveAttribute('aria-invalid');
+  await page.getByRole('textbox', { name: 'Full name', exact: true }).fill('Jo');
+  await expect(page.getByRole('textbox', { name: 'Full name', exact: true })).not.toHaveAttribute('aria-invalid');
+  await page.getByRole('textbox', { name: 'Postal code', exact: true }).fill('8098');
+  await expect(page.getByRole('textbox', { name: 'Postal code', exact: true })).not.toHaveAttribute('aria-invalid');
+  await page.getByRole('textbox', { name: 'Full name', exact: true }).fill('Sara Verhoeven');
+  await expect(page.getByRole('textbox', { name: 'Full name', exact: true })).not.toHaveAttribute('aria-invalid');
+  await page.getByRole('textbox', { name: 'Email', exact: true }).fill('pia.desmet13@example.com');
+  await expect(page.getByRole('textbox', { name: 'Email', exact: true })).not.toHaveAttribute('aria-invalid');
+  await page.getByRole('textbox', { name: 'Address', exact: true }).clear();
+  await page.getByRole('textbox', { name: 'Address', exact: true }).pressSequentially('Willowstraat 57');
+  await expect(page.getByRole('textbox', { name: 'Address', exact: true })).not.toHaveAttribute('aria-invalid');
+  await page.getByRole('textbox', { name: 'City', exact: true }).fill('Brugge');
+  await expect(page.getByRole('textbox', { name: 'City', exact: true })).not.toHaveAttribute('aria-invalid');
+  await page.getByRole('combobox', { name: 'Delivery' }).selectOption('Express');
+  await page.getByRole('checkbox', { name: 'I accept the terms' }).check();
+  await page.getByRole('button', { name: 'Place order' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Thank you, Sara Verhoeven');
+  await expect(page.getByTestId('order-reference')).toHaveText('REF-0MML28M');
+  await expect(page.getByTestId('order-total')).toHaveText('0 items · $12.95');
+});
+
+test('validates the checkout form and places an order (4 edits)', async ({ page }) => {
+  await page.goto('/checkout');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Checkout');
+  await page.getByRole('button', { name: 'Place order' }).click();
+  await expect(page.getByTestId('error-summary')).toHaveText('7 errors');
+  await expect(page.getByRole('alert')).toHaveCount(7);
+  await page.getByRole('textbox', { name: 'Email', exact: true }).fill('sara.van.damme76@example.com');
+  await expect(page.getByRole('textbox', { name: 'Email', exact: true })).not.toHaveAttribute('aria-invalid');
+  await page.getByRole('textbox', { name: 'City', exact: true }).clear();
+  await page.getByRole('textbox', { name: 'City', exact: true }).pressSequentially('Leuven');
+  await expect(page.getByRole('textbox', { name: 'City', exact: true })).not.toHaveAttribute('aria-invalid');
+  await page.getByRole('textbox', { name: 'Full name', exact: true }).fill('Jo');
+  await expect(page.getByRole('textbox', { name: 'Full name', exact: true })).toHaveAccessibleDescription('Full name must be at least 3 characters');
+  await page.getByRole('button', { name: 'Place order' }).click();
+  await expect(page.getByTestId('error-summary')).toHaveText('5 errors');
+  await expect(page.getByRole('alert')).toHaveCount(5);
+  await page.getByRole('textbox', { name: 'Full name', exact: true }).fill('Arne Van Damme');
+  await expect(page.getByRole('textbox', { name: 'Full name', exact: true })).not.toHaveAttribute('aria-invalid');
+  await page.getByRole('textbox', { name: 'Address', exact: true }).fill('Cobaltstraat 1');
+  await expect(page.getByRole('textbox', { name: 'Address', exact: true })).not.toHaveAttribute('aria-invalid');
+  await page.getByRole('textbox', { name: 'Postal code', exact: true }).fill('1273');
+  await expect(page.getByRole('textbox', { name: 'Postal code', exact: true })).not.toHaveAttribute('aria-invalid');
+  await page.getByRole('combobox', { name: 'Delivery' }).selectOption('Standard');
+  await page.getByRole('checkbox', { name: 'I accept the terms' }).check();
+  await page.getByRole('button', { name: 'Place order' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Thank you, Arne Van Damme');
+  await expect(page.getByTestId('order-reference')).toHaveText('REF-0ZSR7M3');
+  await expect(page.getByTestId('order-total')).toHaveText('0 items · $4.95');
+});

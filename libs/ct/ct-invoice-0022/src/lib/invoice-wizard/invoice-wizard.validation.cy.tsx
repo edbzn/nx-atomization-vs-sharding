@@ -1,0 +1,61 @@
+import { InvoiceWizard } from './InvoiceWizard';
+
+describe('InvoiceWizard validation', () => {
+  it('creates a invoice in three steps with 5 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<InvoiceWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Ruben De Smet');
+    cy.get('select[name=wizard-category]').select('Void');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('summit umber{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('pebble{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('RIVER{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('flint{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '4 tags');
+    cy.get('[data-testid=tag]').should('have.length', 4);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('cobalt{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '5 tags');
+    cy.get('[data-testid=tag]').should('have.length', 5);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Ruben De Smet');
+    cy.get('[data-testid=review-category]').should('have.text', 'Void');
+    cy.get('[data-testid=review-tags]').should('have.text', 'summit-umber, pebble, river, flint, cobalt');
+    cy.contains('button', 'Create invoice').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Ruben De Smet","category":"Void","tags":["summit-umber","pebble","river","flint","cobalt"]});
+    cy.contains('[role=status]', 'Created Ruben De Smet').should('be.visible');
+  });
+
+  it('creates a invoice in three steps with 1 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<InvoiceWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Quarterly Hosting');
+    cy.get('select[name=wizard-category]').select('Sent');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('lark tide{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Quarterly Hosting');
+    cy.get('[data-testid=review-category]').should('have.text', 'Sent');
+    cy.get('[data-testid=review-tags]').should('have.text', 'lark-tide');
+    cy.contains('button', 'Create invoice').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Quarterly Hosting","category":"Sent","tags":["lark-tide"]});
+    cy.contains('[role=status]', 'Created Quarterly Hosting').should('be.visible');
+  });
+});

@@ -1,0 +1,65 @@
+import { BookingWizard } from './BookingWizard';
+
+describe('BookingWizard navigation 2', () => {
+  it('creates a booking in three steps with 2 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<BookingWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Uma Van Damme');
+    cy.get('select[name=wizard-category]').select('Tour');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('kestrel oak{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('cobalt{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('FERN{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('button[aria-label="Remove fern"]').click();
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('  kestrel-oak {enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('have.text', '"kestrel-oak" is already added');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Uma Van Damme');
+    cy.get('[data-testid=review-category]').should('have.text', 'Tour');
+    cy.get('[data-testid=review-tags]').should('have.text', 'kestrel-oak, cobalt');
+    cy.contains('button', 'Create booking').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Uma Van Damme","category":"Tour","tags":["kestrel-oak","cobalt"]});
+    cy.contains('[role=status]', 'Created Uma Van Damme').should('be.visible');
+  });
+
+  it('creates a booking in three steps with 1 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<BookingWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.contains('button', 'Next').click();
+    cy.contains('[role=alert]', 'Name is required').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Premium Ghent');
+    cy.get('select[name=wizard-category]').select('Car');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('jade oak{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Premium Ghent');
+    cy.get('[data-testid=review-category]').should('have.text', 'Car');
+    cy.get('[data-testid=review-tags]').should('have.text', 'jade-oak');
+    cy.contains('button', 'Create booking').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Premium Ghent","category":"Car","tags":["jade-oak"]});
+    cy.contains('[role=status]', 'Created Premium Ghent').should('be.visible');
+  });
+});

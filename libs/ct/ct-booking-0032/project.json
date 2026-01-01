@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "name": "ct-booking-0032",
+  "sourceRoot": "libs/ct/ct-booking-0032/src",
+  "projectType": "library",
+  "tags": [
+    "type:feature",
+    "runner:cypress",
+    "layer:6"
+  ]
+}

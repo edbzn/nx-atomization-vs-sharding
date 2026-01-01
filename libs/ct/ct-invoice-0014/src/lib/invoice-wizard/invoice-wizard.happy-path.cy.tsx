@@ -1,0 +1,40 @@
+import { InvoiceWizard } from './InvoiceWizard';
+
+describe('InvoiceWizard happy path', () => {
+  it('creates a invoice in three steps with 3 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<InvoiceWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Yara Desmet');
+    cy.get('select[name=wizard-category]').select('Overdue');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('nectar{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('NECTAR{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('have.text', '"nectar" is already added');
+    cy.get('input[name=new-tag]').type('jade{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('JADE{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('have.text', '"jade" is already added');
+    cy.get('input[name=new-tag]').type('vale{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Yara Desmet');
+    cy.get('[data-testid=review-category]').should('have.text', 'Overdue');
+    cy.get('[data-testid=review-tags]').should('have.text', 'nectar, jade, vale');
+    cy.contains('button', 'Create invoice').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Yara Desmet","category":"Overdue","tags":["nectar","jade","vale"]});
+    cy.contains('[role=status]', 'Created Yara Desmet').should('be.visible');
+  });
+});
