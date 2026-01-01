@@ -1,0 +1,66 @@
+import { ProductWizard } from './ProductWizard';
+
+describe('ProductWizard navigation', () => {
+  it('creates a product in three steps with 2 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<ProductWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.contains('button', 'Next').click();
+    cy.contains('[role=alert]', 'Name is required').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Ruben Michiels');
+    cy.get('select[name=wizard-category]').select('Lighting');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('QUARTZ{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('  quartz {enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('have.text', '"quartz" is already added');
+    cy.get('input[name=new-tag]').type('willow{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Back').click();
+    cy.get('input[name=wizard-name]').should('have.value', 'Ruben Michiels');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Ruben Michiels');
+    cy.get('[data-testid=review-category]').should('have.text', 'Lighting');
+    cy.get('[data-testid=review-tags]').should('have.text', 'quartz, willow');
+    cy.contains('button', 'Create product').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Ruben Michiels","category":"Lighting","tags":["quartz","willow"]});
+    cy.contains('[role=status]', 'Created Ruben Michiels').should('be.visible');
+  });
+
+  it('creates a product in three steps with 1 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<ProductWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').type('Al');
+    cy.contains('button', 'Next').click();
+    cy.contains('[role=alert]', 'Name must be at least 3 characters').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Brushed Lamp');
+    cy.get('select[name=wizard-category]').select('Outdoor');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('solstice{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Brushed Lamp');
+    cy.get('[data-testid=review-category]').should('have.text', 'Outdoor');
+    cy.get('[data-testid=review-tags]').should('have.text', 'solstice');
+    cy.contains('button', 'Create product').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Brushed Lamp","category":"Outdoor","tags":["solstice"]});
+    cy.contains('[role=status]', 'Created Brushed Lamp').should('be.visible');
+  });
+});

@@ -1,0 +1,48 @@
+import { ShipmentWizard } from './ShipmentWizard';
+
+describe('ShipmentWizard validation', () => {
+  it('creates a shipment in three steps with 5 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<ShipmentWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Marco Coppens');
+    cy.get('select[name=wizard-category]').select('Transit');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('reef{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('zinc{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('alpha56{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('ALPHA56{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('have.text', '"alpha56" is already added');
+    cy.get('input[name=new-tag]').type('sable{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '4 tags');
+    cy.get('[data-testid=tag]').should('have.length', 4);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('quartz33{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '5 tags');
+    cy.get('[data-testid=tag]').should('have.length', 5);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Back').click();
+    cy.get('input[name=wizard-name]').should('have.value', 'Marco Coppens');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=tag]').should('have.length', 5);
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Marco Coppens');
+    cy.get('[data-testid=review-category]').should('have.text', 'Transit');
+    cy.get('[data-testid=review-tags]').should('have.text', 'reef, zinc, alpha56, sable, quartz33');
+    cy.contains('button', 'Create shipment').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Marco Coppens","category":"Transit","tags":["reef","zinc","alpha56","sable","quartz33"]});
+    cy.contains('[role=status]', 'Created Marco Coppens').should('be.visible');
+  });
+});

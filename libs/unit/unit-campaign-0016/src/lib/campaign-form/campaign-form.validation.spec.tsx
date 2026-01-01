@@ -1,0 +1,68 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { CampaignForm } from './CampaignForm';
+
+describe('CampaignForm validation', () => {
+  it('validates and saves a campaign (6 interactions)', async () => {
+    const onSubmit = vi.fn();
+    const user = userEvent.setup();
+    render(<CampaignForm onSubmit={onSubmit} />);
+    await user.click(screen.getByRole('button', { name: 'Save campaign' }));
+    expect(onSubmit).toHaveBeenCalledTimes(0);
+    expect(screen.getByTestId('error-summary').textContent).toBe('4 errors');
+    expect(screen.getByText('Name is required')).toBeInTheDocument();
+    expect(screen.getByText('Email is required')).toBeInTheDocument();
+    expect(screen.getByText('Category is required')).toBeInTheDocument();
+    expect(screen.getByText('Amount is required')).toBeInTheDocument();
+    await user.clear(screen.getByRole('textbox', { name: 'Name' }));
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Uma De Smet');
+    expect(screen.getByRole('textbox', { name: 'Name' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Email' }));
+    await user.type(screen.getByRole('textbox', { name: 'Email' }), 'tom.michiels89@example.com');
+    expect(screen.getByRole('textbox', { name: 'Email' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Amount' }));
+    await user.type(screen.getByRole('textbox', { name: 'Amount' }), '71538');
+    expect(screen.getByRole('textbox', { name: 'Amount' })).not.toHaveAttribute('aria-invalid');
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Category' }), 'Social');
+    expect(screen.getByRole('combobox', { name: 'Category' })).not.toHaveAttribute('aria-invalid');
+    await user.click(screen.getByRole('button', { name: 'Save campaign' }));
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(onSubmit).toHaveBeenLastCalledWith({"name":"Uma De Smet","email":"tom.michiels89@example.com","category":"Social","amount":71538,"notes":""});
+    expect(screen.queryByTestId('error-summary')).not.toBeInTheDocument();
+  });
+
+  it('validates and saves a campaign (7 interactions)', async () => {
+    const onSubmit = vi.fn();
+    const user = userEvent.setup();
+    render(<CampaignForm onSubmit={onSubmit} />);
+    await user.click(screen.getByRole('button', { name: 'Save campaign' }));
+    expect(onSubmit).toHaveBeenCalledTimes(0);
+    expect(screen.getByTestId('error-summary').textContent).toBe('4 errors');
+    expect(screen.getByText('Name is required')).toBeInTheDocument();
+    expect(screen.getByText('Email is required')).toBeInTheDocument();
+    expect(screen.getByText('Category is required')).toBeInTheDocument();
+    expect(screen.getByText('Amount is required')).toBeInTheDocument();
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Category' }), 'Search');
+    expect(screen.getByRole('combobox', { name: 'Category' })).not.toHaveAttribute('aria-invalid');
+    await user.click(screen.getByRole('button', { name: 'Save campaign' }));
+    expect(onSubmit).toHaveBeenCalledTimes(0);
+    expect(screen.getByTestId('error-summary').textContent).toBe('3 errors');
+    expect(screen.getByText('Name is required')).toBeInTheDocument();
+    expect(screen.getByText('Email is required')).toBeInTheDocument();
+    expect(screen.getByText('Amount is required')).toBeInTheDocument();
+    await user.clear(screen.getByRole('textbox', { name: 'Name' }));
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Winter Digest 78');
+    expect(screen.getByRole('textbox', { name: 'Name' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Email' }));
+    await user.type(screen.getByRole('textbox', { name: 'Email' }), 'oscar.martens36@example.com');
+    expect(screen.getByRole('textbox', { name: 'Email' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Amount' }));
+    await user.type(screen.getByRole('textbox', { name: 'Amount' }), '89093');
+    expect(screen.getByRole('textbox', { name: 'Amount' })).not.toHaveAttribute('aria-invalid');
+    await user.click(screen.getByRole('button', { name: 'Save campaign' }));
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(onSubmit).toHaveBeenLastCalledWith({"name":"Winter Digest 78","email":"oscar.martens36@example.com","category":"Search","amount":89093,"notes":""});
+    expect(screen.queryByTestId('error-summary')).not.toBeInTheDocument();
+  });
+});

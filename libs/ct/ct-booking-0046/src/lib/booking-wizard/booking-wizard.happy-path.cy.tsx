@@ -1,0 +1,28 @@
+import { BookingWizard } from './BookingWizard';
+
+describe('BookingWizard happy path', () => {
+  it('creates a booking in three steps with 1 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<BookingWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Solo Bruges');
+    cy.get('select[name=wizard-category]').select('Car');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('juniper34{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Back').click();
+    cy.get('input[name=wizard-name]').should('have.value', 'Solo Bruges');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Solo Bruges');
+    cy.get('[data-testid=review-category]').should('have.text', 'Car');
+    cy.get('[data-testid=review-tags]').should('have.text', 'juniper34');
+    cy.contains('button', 'Create booking').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Solo Bruges","category":"Car","tags":["juniper34"]});
+    cy.contains('[role=status]', 'Created Solo Bruges').should('be.visible');
+  });
+});

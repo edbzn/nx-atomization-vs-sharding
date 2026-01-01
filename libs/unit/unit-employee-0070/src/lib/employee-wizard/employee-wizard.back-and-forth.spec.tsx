@@ -1,0 +1,64 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { EmployeeWizard } from './EmployeeWizard';
+
+describe('EmployeeWizard back and forth', () => {
+  it('creates a employee in three steps with 3 tags', async () => {
+    const onComplete = vi.fn();
+    const user = userEvent.setup();
+    render(<EmployeeWizard onComplete={onComplete} />);
+    const step = () => screen.getByTestId('wizard-step').textContent;
+    expect(step()).toBe('Step 1 of 3: Details');
+    await user.clear(screen.getByRole('textbox', { name: 'Name' }));
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Ivo Aerts');
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Category' }), 'Sales');
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(step()).toBe('Step 2 of 3: Tags');
+    const tagInput = () => screen.getByRole('textbox', { name: 'New tag' });
+    await user.type(tagInput(), 'jade{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'juniper{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('2 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'kestrel65{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('3 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(3);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByTestId('review-name').textContent).toBe('Ivo Aerts');
+    expect(screen.getByTestId('review-category').textContent).toBe('Sales');
+    expect(screen.getByTestId('review-tags').textContent).toBe('jade, juniper, kestrel65');
+    await user.click(screen.getByRole('button', { name: 'Create employee' }));
+    expect(onComplete).toHaveBeenCalledExactlyOnceWith({"name":"Ivo Aerts","category":"Sales","tags":["jade","juniper","kestrel65"]});
+    expect(screen.getByRole('status')).toHaveTextContent('Created Ivo Aerts');
+  });
+
+  it('creates a employee in three steps with 1 tags', async () => {
+    const onComplete = vi.fn();
+    const user = userEvent.setup();
+    render(<EmployeeWizard onComplete={onComplete} />);
+    const step = () => screen.getByTestId('wizard-step').textContent;
+    expect(step()).toBe('Step 1 of 3: Details');
+    await user.clear(screen.getByRole('textbox', { name: 'Name' }));
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Femke Michiels');
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Category' }), 'Finance');
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(step()).toBe('Step 2 of 3: Tags');
+    const tagInput = () => screen.getByRole('textbox', { name: 'New tag' });
+    await user.type(tagInput(), 'cedar95{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByTestId('review-name').textContent).toBe('Femke Michiels');
+    expect(screen.getByTestId('review-category').textContent).toBe('Finance');
+    expect(screen.getByTestId('review-tags').textContent).toBe('cedar95');
+    await user.click(screen.getByRole('button', { name: 'Create employee' }));
+    expect(onComplete).toHaveBeenCalledExactlyOnceWith({"name":"Femke Michiels","category":"Finance","tags":["cedar95"]});
+    expect(screen.getByRole('status')).toHaveTextContent('Created Femke Michiels');
+  });
+});

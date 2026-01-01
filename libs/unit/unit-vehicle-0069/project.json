@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "name": "unit-vehicle-0069",
+  "sourceRoot": "libs/unit/unit-vehicle-0069/src",
+  "projectType": "library",
+  "tags": [
+    "type:domain",
+    "runner:vitest",
+    "layer:6"
+  ]
+}

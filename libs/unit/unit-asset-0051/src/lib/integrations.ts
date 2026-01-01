@@ -1,0 +1,9 @@
+// Cross-library integrations: lower-layer libs this one builds on (Nx infers the project
+// dependencies from these imports through the tsconfig.base.json path aliases).
+import { PatientTable as ctPatient0024Table } from '@bench/ct-patient-0024';
+import { EmployeeTable as unitEmployee0049Table } from '@bench/unit-employee-0049';
+
+export const INTEGRATIONS = {
+  'ct-patient-0024': ctPatient0024Table,
+  'unit-employee-0049': unitEmployee0049Table,
+} as const;

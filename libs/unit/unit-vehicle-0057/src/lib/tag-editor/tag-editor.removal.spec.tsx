@@ -1,0 +1,102 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { TagEditor } from './TagEditor';
+
+describe('TagEditor removal', () => {
+  it('edits a list of 6 tag operations', async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    render(<TagEditor onChange={onChange} />);
+    const tagInput = () => screen.getByRole('textbox', { name: 'New tag' });
+    await user.type(tagInput(), 'hazel{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), '  hazel {Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.getByTestId('tag-message').textContent).toBe('"hazel" is already added');
+    await user.type(tagInput(), 'alpha22{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('2 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'nectar84{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('3 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(3);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'mesa{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('4 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(4);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'glade{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('5 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(5);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    expect(onChange).toHaveBeenCalledTimes(5);
+    expect(onChange).toHaveBeenLastCalledWith(["hazel","alpha22","nectar84","mesa","glade"]);
+  });
+
+  it('edits a list of 3 tag operations', async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    render(<TagEditor onChange={onChange} />);
+    const tagInput = () => screen.getByRole('textbox', { name: 'New tag' });
+    await user.type(tagInput(), 'REEF{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), '  reef {Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.getByTestId('tag-message').textContent).toBe('"reef" is already added');
+    await user.type(tagInput(), 'nectar8{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('2 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(onChange).toHaveBeenLastCalledWith(["reef","nectar8"]);
+  });
+
+  it('edits a list of 4 tag operations', async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    render(<TagEditor onChange={onChange} />);
+    const tagInput = () => screen.getByRole('textbox', { name: 'New tag' });
+    await user.type(tagInput(), 'willow{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'ridge33{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('2 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'lumen tide{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('3 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(3);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'BIRCH{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('4 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(4);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    expect(onChange).toHaveBeenCalledTimes(4);
+    expect(onChange).toHaveBeenLastCalledWith(["willow","ridge33","lumen-tide","birch"]);
+  });
+
+  it('edits a list of 2 tag operations', async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    render(<TagEditor onChange={onChange} />);
+    const tagInput = () => screen.getByRole('textbox', { name: 'New tag' });
+    await user.type(tagInput(), 'falcon atlas{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'PRISM{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('2 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(onChange).toHaveBeenLastCalledWith(["falcon-atlas","prism"]);
+  });
+});

@@ -1,0 +1,65 @@
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it } from 'vitest';
+import { ContractBoard } from './ContractBoard';
+
+describe('ContractBoard moving cards', () => {
+  it('moves 2 cards across the board', async () => {
+    const user = userEvent.setup();
+    render(<ContractBoard />);
+    const cardsIn = (status: string) => within(screen.getByTestId(`column-${status}`)).queryAllByTestId('card');
+    const newCard = screen.getByRole('textbox', { name: 'New card' });
+    const filter = screen.getByRole('searchbox', { name: 'Filter cards' });
+    await user.type(newCard, 'Ship agreement glade{Enter}');
+    await user.type(newCard, 'Ship charter garnet{Enter}');
+    await user.click(screen.getByRole('button', { name: 'Start Ship agreement glade' }));
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(1);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 2 done');
+    await user.click(screen.getByRole('button', { name: 'Finish Ship agreement glade' }));
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(1);
+    expect(screen.getByTestId('board-summary').textContent).toBe('1 of 2 done');
+    await user.click(screen.getByRole('button', { name: 'Delete Ship agreement glade' }));
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 1 done');
+    await user.type(newCard, 'Draft waiver ridge{Enter}');
+    expect(cardsIn('todo')).toHaveLength(2);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 2 done');
+    await user.click(screen.getByRole('button', { name: 'Start Draft waiver ridge' }));
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(1);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 2 done');
+    await user.click(screen.getByRole('button', { name: 'Finish Draft waiver ridge' }));
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(1);
+    expect(screen.getByTestId('board-summary').textContent).toBe('1 of 2 done');
+    await user.type(newCard, 'DRAFT WAIVER RIDGE{Enter}');
+    expect(screen.getByTestId('board-message').textContent).toBe('"DRAFT WAIVER RIDGE" already exists');
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(1);
+    expect(screen.getByTestId('board-summary').textContent).toBe('1 of 2 done');
+  });
+
+  it('moves 1 cards across the board', async () => {
+    const user = userEvent.setup();
+    render(<ContractBoard />);
+    const cardsIn = (status: string) => within(screen.getByTestId(`column-${status}`)).queryAllByTestId('card');
+    const newCard = screen.getByRole('textbox', { name: 'New card' });
+    const filter = screen.getByRole('searchbox', { name: 'Filter cards' });
+    await user.type(newCard, 'Review notice tundra{Enter}');
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 1 done');
+  });
+});

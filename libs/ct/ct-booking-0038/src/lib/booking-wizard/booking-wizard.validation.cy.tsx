@@ -1,0 +1,48 @@
+import { BookingWizard } from './BookingWizard';
+
+describe('BookingWizard validation', () => {
+  it('creates a booking in three steps with 3 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<BookingWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Budget Krakow');
+    cy.get('select[name=wizard-category]').select('Hotel');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('jade55{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('spruce{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('JADE55{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('have.text', '"jade55" is already added');
+    cy.get('input[name=new-tag]').type('tundra{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('  jade55 {enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('have.text', '"jade55" is already added');
+    cy.get('input[name=new-tag]').type('  spruce {enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('have.text', '"spruce" is already added');
+    cy.contains('button', 'Back').click();
+    cy.get('input[name=wizard-name]').should('have.value', 'Budget Krakow');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Budget Krakow');
+    cy.get('[data-testid=review-category]').should('have.text', 'Hotel');
+    cy.get('[data-testid=review-tags]').should('have.text', 'jade55, spruce, tundra');
+    cy.contains('button', 'Create booking').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Budget Krakow","category":"Hotel","tags":["jade55","spruce","tundra"]});
+    cy.contains('[role=status]', 'Created Budget Krakow').should('be.visible');
+  });
+});
