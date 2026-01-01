@@ -1,0 +1,61 @@
+import { ShipmentForm } from './ShipmentForm';
+
+describe('ShipmentForm submission', () => {
+  it('validates and saves a shipment (6 interactions)', () => {
+    const onSubmit = cy.stub().as('submit');
+    cy.mount(<ShipmentForm onSubmit={onSubmit} />);
+    cy.contains('button', 'Save shipment').click();
+    cy.get('[data-testid=error-summary]').should('have.text', '4 errors');
+    cy.contains('[role=alert]', 'Name is required').should('be.visible');
+    cy.contains('[role=alert]', 'Email is required').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.contains('[role=alert]', 'Amount is required').should('be.visible');
+    cy.get('@submit').should('have.callCount', 0);
+    cy.get('input[name=email]').clear().type('marco.coppens19@example.com', { delay: 0 });
+    cy.get('input[name=email]').should('not.have.attr', 'aria-invalid');
+    cy.get('input[name=name]').clear().type('Cas Michiels');
+    cy.get('input[name=name]').should('not.have.attr', 'aria-invalid');
+    cy.get('input[name=amount]').clear().type('36126');
+    cy.get('input[name=amount]').should('not.have.attr', 'aria-invalid');
+    cy.get('select[name=category]').select('Packed');
+    cy.get('select[name=category]').should('not.have.attr', 'aria-invalid');
+    cy.contains('button', 'Save shipment').click();
+    cy.get('@submit').should('have.callCount', 1);
+    cy.get('@submit').its('lastCall.args.0').should('deep.equal', {"name":"Cas Michiels","email":"marco.coppens19@example.com","category":"Packed","amount":36126,"notes":""});
+    cy.get('[data-testid=error-summary]').should('not.exist');
+  });
+
+  it('validates and saves a shipment (8 interactions)', () => {
+    const onSubmit = cy.stub().as('submit');
+    cy.mount(<ShipmentForm onSubmit={onSubmit} />);
+    cy.contains('button', 'Save shipment').click();
+    cy.get('[data-testid=error-summary]').should('have.text', '4 errors');
+    cy.contains('[role=alert]', 'Name is required').should('be.visible');
+    cy.contains('[role=alert]', 'Email is required').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.contains('[role=alert]', 'Amount is required').should('be.visible');
+    cy.get('@submit').should('have.callCount', 0);
+    cy.get('input[name=email]').clear().type('missing.at.example.com', { delay: 0 });
+    cy.get('input[name=email]').should('have.attr', 'aria-invalid', 'true');
+    cy.get('input[name=email]').parent().find('[role=alert]').should('have.text', 'Enter a valid email address');
+    cy.contains('button', 'Save shipment').click();
+    cy.get('[data-testid=error-summary]').should('have.text', '4 errors');
+    cy.contains('[role=alert]', 'Name is required').should('be.visible');
+    cy.contains('[role=alert]', 'Enter a valid email address').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.contains('[role=alert]', 'Amount is required').should('be.visible');
+    cy.get('@submit').should('have.callCount', 0);
+    cy.get('input[name=name]').clear().type('Lena Coppens');
+    cy.get('input[name=name]').should('not.have.attr', 'aria-invalid');
+    cy.get('input[name=email]').clear().type('noor.lemmens32@example.com', { delay: 0 });
+    cy.get('input[name=email]').should('not.have.attr', 'aria-invalid');
+    cy.get('input[name=amount]').clear().type('22642');
+    cy.get('input[name=amount]').should('not.have.attr', 'aria-invalid');
+    cy.get('select[name=category]').select('Delivered');
+    cy.get('select[name=category]').should('not.have.attr', 'aria-invalid');
+    cy.contains('button', 'Save shipment').click();
+    cy.get('@submit').should('have.callCount', 1);
+    cy.get('@submit').its('lastCall.args.0').should('deep.equal', {"name":"Lena Coppens","email":"noor.lemmens32@example.com","category":"Delivered","amount":22642,"notes":""});
+    cy.get('[data-testid=error-summary]').should('not.exist');
+  });
+});

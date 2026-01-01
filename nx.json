@@ -1,0 +1,63 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "neverConnectToCloud": true,
+  "analytics": false,
+  "defaultBase": "main",
+  "namedInputs": {
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
+    "production": [
+      "default",
+      "!{projectRoot}/**/*.cy.tsx",
+      "!{projectRoot}/**/*.spec.ts",
+      "!{projectRoot}/**/*.spec.tsx",
+      "!{projectRoot}/cypress/**/*",
+      "!{projectRoot}/cypress.config.ts",
+      "!{projectRoot}/vitest.config.ts",
+      "!{projectRoot}/playwright.config.ts",
+      "!{projectRoot}/src/test-setup.ts",
+      "!{projectRoot}/tsconfig.json"
+    ],
+    "sharedGlobals": [
+      "{workspaceRoot}/tsconfig.base.json"
+    ]
+  },
+  "targetDefaults": {
+    "build": {
+      "cache": true,
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "component-test-ci--*/**": {
+      "parallelism": true
+    }
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/cypress/plugin",
+      "options": {
+        "componentTestingTargetName": "component-test",
+        "openTargetName": "open-cypress",
+        "ciComponentTestingTargetName": "component-test-ci"
+      }
+    },
+    {
+      "plugin": "@nx/playwright/plugin",
+      "options": {
+        "targetName": "e2e",
+        "ciTargetName": "e2e-ci"
+      }
+    },
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testTargetName": "test",
+        "testMode": "run",
+        "ciTargetName": "test-ci"
+      }
+    }
+  ]
+}

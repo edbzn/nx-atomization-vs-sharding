@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "name": "ct-shipment-0079",
+  "sourceRoot": "libs/ct/ct-shipment-0079/src",
+  "projectType": "library",
+  "tags": [
+    "type:feature",
+    "runner:cypress",
+    "layer:7"
+  ]
+}

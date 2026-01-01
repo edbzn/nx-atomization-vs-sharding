@@ -1,0 +1,46 @@
+import { ProductBoard } from './ProductBoard';
+
+describe('ProductBoard workflow', () => {
+  it('moves 4 cards across the board', () => {
+    cy.mount(<ProductBoard />);
+    cy.get('input[name=new-card]').type('Price lantern comet{enter}');
+    cy.get('input[name=new-card]').type('Archive desk apex{enter}');
+    cy.get('button[aria-label="Delete Price lantern comet"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 1 done');
+    cy.get('input[name=new-card]').type('Label kettle meadow{enter}');
+    cy.get('input[name=new-card]').type('Draft lamp birch{enter}');
+    cy.get('input[name=new-card]').type('Price shelf cobalt{enter}');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 4);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 4 done');
+    cy.get('input[name=card-filter]').clear().type('apex');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 4 done');
+    cy.get('button[aria-label="Start Archive desk apex"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 4 done');
+    cy.get('input[name=card-filter]').clear();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 3);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 4 done');
+    cy.get('button[aria-label="Start Price shelf cobalt"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 4 done');
+    cy.get('button[aria-label="Start Label kettle meadow"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 3);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 4 done');
+  });
+});

@@ -1,0 +1,40 @@
+import { TicketBoard } from './TicketBoard';
+
+describe('TicketBoard workflow', () => {
+  it('moves 4 cards across the board', () => {
+    cy.mount(<TicketBoard />);
+    cy.get('input[name=new-card]').type('Audit export summit{enter}');
+    cy.get('input[name=new-card]').type('Plan payment coral{enter}');
+    cy.get('input[name=card-filter]').clear().type('summ');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('button[aria-label="Start Audit export summit"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('button[aria-label="Delete Audit export summit"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 1 done');
+    cy.get('input[name=new-card]').type('Test webhook zephyr{enter}');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('input[name=new-card]').type('Archive login aurora{enter}');
+    cy.get('input[name=card-filter]').clear();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 3);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+    cy.get('input[name=new-card]').type('Fix webhook fern{enter}');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 4);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 4 done');
+  });
+});

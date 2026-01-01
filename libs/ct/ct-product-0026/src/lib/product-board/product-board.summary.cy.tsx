@@ -1,0 +1,267 @@
+import { ProductBoard } from './ProductBoard';
+
+describe('ProductBoard summary', () => {
+  it('moves 2 cards across the board', () => {
+    cy.mount(<ProductBoard />);
+    cy.get('input[name=new-card]').type('Label planter blaze{enter}');
+    cy.get('input[name=new-card]').type('LABEL PLANTER BLAZE{enter}');
+    cy.get('[data-testid=board-message]').should('have.text', '"LABEL PLANTER BLAZE" already exists');
+    cy.get('input[name=new-card]').type('Plan lamp atlas{enter}');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+  });
+
+  it('moves 2 cards across the board', () => {
+    cy.mount(<ProductBoard />);
+    cy.get('input[name=new-card]').type('Fix lantern birch{enter}');
+    cy.get('input[name=new-card]').type('Draft bench atlas{enter}');
+    cy.get('input[name=new-card]').type('DRAFT BENCH ATLAS{enter}');
+    cy.get('[data-testid=board-message]').should('have.text', '"DRAFT BENCH ATLAS" already exists');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('input[name=card-filter]').clear().type('Fix');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('input[name=new-card]').type('DRAFT BENCH ATLAS{enter}');
+    cy.get('[data-testid=board-message]').should('have.text', '"DRAFT BENCH ATLAS" already exists');
+    cy.get('button[aria-label="Start Fix lantern birch"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+  });
+
+  it('moves 3 cards across the board', () => {
+    cy.mount(<ProductBoard />);
+    cy.get('input[name=new-card]').type('Audit lamp blaze{enter}');
+    cy.get('input[name=new-card]').type('Plan lamp summit{enter}');
+    cy.get('input[name=card-filter]').clear().type('summ');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('input[name=new-card]').type('Draft planter summit{enter}');
+    cy.get('button[aria-label="Start Draft planter summit"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+  });
+
+  it('moves 2 cards across the board', () => {
+    cy.mount(<ProductBoard />);
+    cy.get('input[name=new-card]').type('Archive lantern drift{enter}');
+    cy.get('input[name=new-card]').type('Archive kettle apex{enter}');
+    cy.get('button[aria-label="Start Archive lantern drift"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+  });
+
+  it('moves 2 cards across the board', () => {
+    cy.mount(<ProductBoard />);
+    cy.get('input[name=new-card]').type('Test lantern nova{enter}');
+    cy.get('input[name=new-card]').type('Archive stool iris{enter}');
+    cy.get('input[name=card-filter]').clear().type('nova');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('input[name=card-filter]').clear();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('button[aria-label="Start Test lantern nova"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+  });
+
+  it('moves 3 cards across the board', () => {
+    cy.mount(<ProductBoard />);
+    cy.get('input[name=new-card]').type('Plan shelf reef{enter}');
+    cy.get('input[name=new-card]').type('Archive desk frost{enter}');
+    cy.get('button[aria-label="Start Archive desk frost"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('input[name=new-card]').type('Review bench topaz{enter}');
+    cy.get('input[name=new-card]').type('Ship lamp quartz{enter}');
+    cy.get('button[aria-label="Delete Plan shelf reef"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+    cy.get('button[aria-label="Start Ship lamp quartz"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+    cy.get('button[aria-label="Start Review bench topaz"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 3);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+  });
+
+  it('moves 2 cards across the board', () => {
+    cy.mount(<ProductBoard />);
+    cy.get('input[name=new-card]').type('Test lantern velvet{enter}');
+    cy.get('input[name=new-card]').type('Draft clock orbit{enter}');
+    cy.get('input[name=card-filter]').clear().type('velv');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('input[name=card-filter]').clear();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+  });
+
+  it('moves 2 cards across the board', () => {
+    cy.mount(<ProductBoard />);
+    cy.get('input[name=new-card]').type('Draft tray blaze{enter}');
+    cy.get('input[name=new-card]').type('Label lamp jade{enter}');
+    cy.get('button[aria-label="Start Label lamp jade"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+  });
+
+  it('moves 6 cards across the board', () => {
+    cy.mount(<ProductBoard />);
+    cy.get('input[name=new-card]').type('Label bench blaze{enter}');
+    cy.get('input[name=new-card]').type('Plan planter reef{enter}');
+    cy.get('input[name=new-card]').type('Review desk birch{enter}');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 3);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+    cy.get('button[aria-label="Start Plan planter reef"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+    cy.get('input[name=new-card]').type('Price kettle river{enter}');
+    cy.get('input[name=new-card]').type('Review stool apex{enter}');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 4);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 5 done');
+    cy.get('button[aria-label="Start Label bench blaze"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 3);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 5 done');
+    cy.get('input[name=new-card]').type('Test shelf comet{enter}');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 4);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 6 done');
+  });
+
+  it('moves 3 cards across the board', () => {
+    cy.mount(<ProductBoard />);
+    cy.get('input[name=new-card]').type('Label lantern pebble{enter}');
+    cy.get('input[name=new-card]').type('Archive desk pebble{enter}');
+    cy.get('input[name=new-card]').type('Ship stool kestrel{enter}');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 3);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+  });
+
+  it('moves 7 cards across the board', () => {
+    cy.mount(<ProductBoard />);
+    cy.get('input[name=new-card]').type('Label lamp maple{enter}');
+    cy.get('input[name=new-card]').type('Price kettle cedar{enter}');
+    cy.get('button[aria-label="Start Price kettle cedar"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('input[name=new-card]').type('Audit clock drift{enter}');
+    cy.get('button[aria-label="Start Label lamp maple"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+    cy.get('input[name=new-card]').type('Test bench ridge{enter}');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 4 done');
+    cy.get('input[name=new-card]').type('Ship stool juniper{enter}');
+    cy.get('input[name=new-card]').type('Draft kettle garnet{enter}');
+    cy.get('button[aria-label="Start Draft kettle garnet"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 3);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 3);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 6 done');
+    cy.get('input[name=new-card]').type('Ship clock frost{enter}');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 4);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 3);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 7 done');
+  });
+
+  it('moves 4 cards across the board', () => {
+    cy.mount(<ProductBoard />);
+    cy.get('input[name=new-card]').type('Audit kettle lumen{enter}');
+    cy.get('input[name=new-card]').type('Price stool lumen{enter}');
+    cy.get('button[aria-label="Start Audit kettle lumen"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('button[aria-label="Finish Audit kettle lumen"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=board-summary]').should('have.text', '1 of 2 done');
+    cy.get('input[name=new-card]').type('Audit bench lagoon{enter}');
+    cy.get('input[name=new-card]').type('Price bench amber{enter}');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 3);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=board-summary]').should('have.text', '1 of 4 done');
+    cy.get('input[name=card-filter]').clear().type('benc');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '1 of 4 done');
+    cy.get('input[name=card-filter]').clear();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 3);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=board-summary]').should('have.text', '1 of 4 done');
+    cy.get('button[aria-label="Start Price bench amber"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=board-summary]').should('have.text', '1 of 4 done');
+    cy.get('button[aria-label="Start Price stool lumen"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=board-summary]').should('have.text', '1 of 4 done');
+    cy.get('button[aria-label="Finish Price stool lumen"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=board-summary]').should('have.text', '2 of 4 done');
+  });
+});
