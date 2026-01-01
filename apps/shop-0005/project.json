@@ -1,0 +1,40 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "shop-0005",
+  "sourceRoot": "apps/shop-0005/src",
+  "projectType": "application",
+  "tags": [
+    "type:app"
+  ],
+  "targets": {
+    "build": {
+      "command": "vite build",
+      "options": {
+        "cwd": "{projectRoot}"
+      },
+      "cache": true,
+      "inputs": [
+        "production",
+        "^production",
+        {
+          "externalDependencies": [
+            "vite"
+          ]
+        }
+      ],
+      "outputs": [
+        "{projectRoot}/dist"
+      ]
+    },
+    "serve-static": {
+      "command": "vite preview --host 127.0.0.1 --port 4305 --strictPort",
+      "options": {
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": [
+        "build"
+      ],
+      "continuous": true
+    }
+  }
+}

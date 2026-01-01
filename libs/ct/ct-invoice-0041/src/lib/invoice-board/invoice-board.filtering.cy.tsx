@@ -1,0 +1,45 @@
+import { InvoiceBoard } from './InvoiceBoard';
+
+describe('InvoiceBoard filtering', () => {
+  it('moves 3 cards across the board', () => {
+    cy.mount(<InvoiceBoard />);
+    cy.get('input[name=new-card]').type('Audit consulting orbit{enter}');
+    cy.get('input[name=new-card]').type('Fix retainer prism{enter}');
+    cy.get('button[aria-label="Start Fix retainer prism"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('input[name=new-card]').type('Label audit juniper{enter}');
+    cy.get('input[name=card-filter]').clear().type('pris');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+    cy.get('input[name=card-filter]').clear();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+    cy.get('button[aria-label="Start Label audit juniper"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+    cy.get('input[name=card-filter]').clear().type('audi');
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+    cy.get('button[aria-label="Pause Label audit juniper"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+    cy.get('button[aria-label="Start Audit consulting orbit"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 3 done');
+  });
+});

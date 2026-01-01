@@ -1,0 +1,266 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "ES2023",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@bench/shared-ui": [
+        "libs/shared-ui/src/index.ts"
+      ],
+      "@bench/unit-employee-0000": [
+        "libs/unit/unit-employee-0000/src/index.ts"
+      ],
+      "@bench/unit-asset-0001": [
+        "libs/unit/unit-asset-0001/src/index.ts"
+      ],
+      "@bench/ct-product-0002": [
+        "libs/ct/ct-product-0002/src/index.ts"
+      ],
+      "@bench/unit-campaign-0003": [
+        "libs/unit/unit-campaign-0003/src/index.ts"
+      ],
+      "@bench/ct-invoice-0004": [
+        "libs/ct/ct-invoice-0004/src/index.ts"
+      ],
+      "@bench/ct-ticket-0005": [
+        "libs/ct/ct-ticket-0005/src/index.ts"
+      ],
+      "@bench/ct-shipment-0006": [
+        "libs/ct/ct-shipment-0006/src/index.ts"
+      ],
+      "@bench/ct-patient-0007": [
+        "libs/ct/ct-patient-0007/src/index.ts"
+      ],
+      "@bench/unit-contract-0008": [
+        "libs/unit/unit-contract-0008/src/index.ts"
+      ],
+      "@bench/unit-recipe-0009": [
+        "libs/unit/unit-recipe-0009/src/index.ts"
+      ],
+      "@bench/unit-vehicle-0010": [
+        "libs/unit/unit-vehicle-0010/src/index.ts"
+      ],
+      "@bench/unit-employee-0011": [
+        "libs/unit/unit-employee-0011/src/index.ts"
+      ],
+      "@bench/ct-booking-0012": [
+        "libs/ct/ct-booking-0012/src/index.ts"
+      ],
+      "@bench/ct-product-0013": [
+        "libs/ct/ct-product-0013/src/index.ts"
+      ],
+      "@bench/unit-asset-0014": [
+        "libs/unit/unit-asset-0014/src/index.ts"
+      ],
+      "@bench/ct-invoice-0015": [
+        "libs/ct/ct-invoice-0015/src/index.ts"
+      ],
+      "@bench/unit-campaign-0016": [
+        "libs/unit/unit-campaign-0016/src/index.ts"
+      ],
+      "@bench/ct-ticket-0017": [
+        "libs/ct/ct-ticket-0017/src/index.ts"
+      ],
+      "@bench/unit-contract-0018": [
+        "libs/unit/unit-contract-0018/src/index.ts"
+      ],
+      "@bench/unit-recipe-0019": [
+        "libs/unit/unit-recipe-0019/src/index.ts"
+      ],
+      "@bench/ct-shipment-0020": [
+        "libs/ct/ct-shipment-0020/src/index.ts"
+      ],
+      "@bench/unit-vehicle-0021": [
+        "libs/unit/unit-vehicle-0021/src/index.ts"
+      ],
+      "@bench/unit-employee-0022": [
+        "libs/unit/unit-employee-0022/src/index.ts"
+      ],
+      "@bench/unit-asset-0023": [
+        "libs/unit/unit-asset-0023/src/index.ts"
+      ],
+      "@bench/ct-patient-0024": [
+        "libs/ct/ct-patient-0024/src/index.ts"
+      ],
+      "@bench/ct-booking-0025": [
+        "libs/ct/ct-booking-0025/src/index.ts"
+      ],
+      "@bench/ct-product-0026": [
+        "libs/ct/ct-product-0026/src/index.ts"
+      ],
+      "@bench/ct-invoice-0027": [
+        "libs/ct/ct-invoice-0027/src/index.ts"
+      ],
+      "@bench/unit-campaign-0028": [
+        "libs/unit/unit-campaign-0028/src/index.ts"
+      ],
+      "@bench/ct-ticket-0029": [
+        "libs/ct/ct-ticket-0029/src/index.ts"
+      ],
+      "@bench/unit-contract-0030": [
+        "libs/unit/unit-contract-0030/src/index.ts"
+      ],
+      "@bench/ct-shipment-0031": [
+        "libs/ct/ct-shipment-0031/src/index.ts"
+      ],
+      "@bench/unit-recipe-0032": [
+        "libs/unit/unit-recipe-0032/src/index.ts"
+      ],
+      "@bench/unit-vehicle-0033": [
+        "libs/unit/unit-vehicle-0033/src/index.ts"
+      ],
+      "@bench/unit-employee-0034": [
+        "libs/unit/unit-employee-0034/src/index.ts"
+      ],
+      "@bench/unit-asset-0035": [
+        "libs/unit/unit-asset-0035/src/index.ts"
+      ],
+      "@bench/ct-patient-0036": [
+        "libs/ct/ct-patient-0036/src/index.ts"
+      ],
+      "@bench/unit-campaign-0037": [
+        "libs/unit/unit-campaign-0037/src/index.ts"
+      ],
+      "@bench/ct-booking-0038": [
+        "libs/ct/ct-booking-0038/src/index.ts"
+      ],
+      "@bench/ct-product-0039": [
+        "libs/ct/ct-product-0039/src/index.ts"
+      ],
+      "@bench/unit-contract-0040": [
+        "libs/unit/unit-contract-0040/src/index.ts"
+      ],
+      "@bench/ct-invoice-0041": [
+        "libs/ct/ct-invoice-0041/src/index.ts"
+      ],
+      "@bench/ct-ticket-0042": [
+        "libs/ct/ct-ticket-0042/src/index.ts"
+      ],
+      "@bench/ct-shipment-0043": [
+        "libs/ct/ct-shipment-0043/src/index.ts"
+      ],
+      "@bench/unit-recipe-0044": [
+        "libs/unit/unit-recipe-0044/src/index.ts"
+      ],
+      "@bench/ct-patient-0045": [
+        "libs/ct/ct-patient-0045/src/index.ts"
+      ],
+      "@bench/ct-booking-0046": [
+        "libs/ct/ct-booking-0046/src/index.ts"
+      ],
+      "@bench/unit-vehicle-0047": [
+        "libs/unit/unit-vehicle-0047/src/index.ts"
+      ],
+      "@bench/ct-product-0048": [
+        "libs/ct/ct-product-0048/src/index.ts"
+      ],
+      "@bench/unit-employee-0049": [
+        "libs/unit/unit-employee-0049/src/index.ts"
+      ],
+      "@bench/ct-invoice-0050": [
+        "libs/ct/ct-invoice-0050/src/index.ts"
+      ],
+      "@bench/unit-asset-0051": [
+        "libs/unit/unit-asset-0051/src/index.ts"
+      ],
+      "@bench/ct-ticket-0052": [
+        "libs/ct/ct-ticket-0052/src/index.ts"
+      ],
+      "@bench/unit-campaign-0053": [
+        "libs/unit/unit-campaign-0053/src/index.ts"
+      ],
+      "@bench/unit-contract-0054": [
+        "libs/unit/unit-contract-0054/src/index.ts"
+      ],
+      "@bench/ct-shipment-0055": [
+        "libs/ct/ct-shipment-0055/src/index.ts"
+      ],
+      "@bench/unit-recipe-0056": [
+        "libs/unit/unit-recipe-0056/src/index.ts"
+      ],
+      "@bench/unit-vehicle-0057": [
+        "libs/unit/unit-vehicle-0057/src/index.ts"
+      ],
+      "@bench/ct-patient-0058": [
+        "libs/ct/ct-patient-0058/src/index.ts"
+      ],
+      "@bench/unit-employee-0059": [
+        "libs/unit/unit-employee-0059/src/index.ts"
+      ],
+      "@bench/unit-asset-0060": [
+        "libs/unit/unit-asset-0060/src/index.ts"
+      ],
+      "@bench/unit-campaign-0061": [
+        "libs/unit/unit-campaign-0061/src/index.ts"
+      ],
+      "@bench/ct-booking-0062": [
+        "libs/ct/ct-booking-0062/src/index.ts"
+      ],
+      "@bench/ct-product-0063": [
+        "libs/ct/ct-product-0063/src/index.ts"
+      ],
+      "@bench/unit-contract-0064": [
+        "libs/unit/unit-contract-0064/src/index.ts"
+      ],
+      "@bench/ct-invoice-0065": [
+        "libs/ct/ct-invoice-0065/src/index.ts"
+      ],
+      "@bench/ct-ticket-0066": [
+        "libs/ct/ct-ticket-0066/src/index.ts"
+      ],
+      "@bench/ct-shipment-0067": [
+        "libs/ct/ct-shipment-0067/src/index.ts"
+      ],
+      "@bench/unit-recipe-0068": [
+        "libs/unit/unit-recipe-0068/src/index.ts"
+      ],
+      "@bench/unit-vehicle-0069": [
+        "libs/unit/unit-vehicle-0069/src/index.ts"
+      ],
+      "@bench/unit-employee-0070": [
+        "libs/unit/unit-employee-0070/src/index.ts"
+      ],
+      "@bench/unit-asset-0071": [
+        "libs/unit/unit-asset-0071/src/index.ts"
+      ],
+      "@bench/unit-campaign-0072": [
+        "libs/unit/unit-campaign-0072/src/index.ts"
+      ],
+      "@bench/ct-patient-0073": [
+        "libs/ct/ct-patient-0073/src/index.ts"
+      ],
+      "@bench/ct-booking-0074": [
+        "libs/ct/ct-booking-0074/src/index.ts"
+      ],
+      "@bench/unit-contract-0075": [
+        "libs/unit/unit-contract-0075/src/index.ts"
+      ],
+      "@bench/ct-product-0076": [
+        "libs/ct/ct-product-0076/src/index.ts"
+      ],
+      "@bench/ct-invoice-0077": [
+        "libs/ct/ct-invoice-0077/src/index.ts"
+      ],
+      "@bench/ct-ticket-0078": [
+        "libs/ct/ct-ticket-0078/src/index.ts"
+      ],
+      "@bench/ct-shipment-0079": [
+        "libs/ct/ct-shipment-0079/src/index.ts"
+      ]
+    }
+  }
+}

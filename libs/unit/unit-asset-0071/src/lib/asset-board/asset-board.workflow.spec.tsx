@@ -1,0 +1,85 @@
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it } from 'vitest';
+import { AssetBoard } from './AssetBoard';
+
+describe('AssetBoard workflow', () => {
+  it('moves 1 cards across the board', async () => {
+    const user = userEvent.setup();
+    render(<AssetBoard />);
+    const cardsIn = (status: string) => within(screen.getByTestId(`column-${status}`)).queryAllByTestId('card');
+    const newCard = screen.getByRole('textbox', { name: 'New card' });
+    const filter = screen.getByRole('searchbox', { name: 'Filter cards' });
+    await user.type(newCard, 'Archive juliet willow{Enter}');
+    await user.type(newCard, 'Review foxtrot ridge{Enter}');
+    await user.type(newCard, 'REVIEW FOXTROT RIDGE{Enter}');
+    expect(screen.getByTestId('board-message').textContent).toBe('"REVIEW FOXTROT RIDGE" already exists');
+    expect(cardsIn('todo')).toHaveLength(2);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 2 done');
+    await user.type(newCard, 'Price india tundra{Enter}');
+    await user.click(screen.getByRole('button', { name: 'Start Archive juliet willow' }));
+    expect(cardsIn('todo')).toHaveLength(2);
+    expect(cardsIn('doing')).toHaveLength(1);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 3 done');
+    await user.click(screen.getByRole('button', { name: 'Delete Review foxtrot ridge' }));
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(1);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 2 done');
+    await user.click(screen.getByRole('button', { name: 'Start Price india tundra' }));
+    expect(cardsIn('todo')).toHaveLength(0);
+    expect(cardsIn('doing')).toHaveLength(2);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 2 done');
+    await user.clear(filter);
+    await user.type(filter, 'will');
+    expect(cardsIn('todo')).toHaveLength(0);
+    expect(cardsIn('doing')).toHaveLength(1);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 2 done');
+    await user.click(screen.getByRole('button', { name: 'Finish Archive juliet willow' }));
+    expect(cardsIn('todo')).toHaveLength(0);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(1);
+    expect(screen.getByTestId('board-summary').textContent).toBe('1 of 2 done');
+    await user.clear(filter);
+    expect(cardsIn('todo')).toHaveLength(0);
+    expect(cardsIn('doing')).toHaveLength(1);
+    expect(cardsIn('done')).toHaveLength(1);
+    expect(screen.getByTestId('board-summary').textContent).toBe('1 of 2 done');
+    await user.click(screen.getByRole('button', { name: 'Delete Archive juliet willow' }));
+    expect(cardsIn('todo')).toHaveLength(0);
+    expect(cardsIn('doing')).toHaveLength(1);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 1 done');
+  });
+
+  it('moves 1 cards across the board', async () => {
+    const user = userEvent.setup();
+    render(<AssetBoard />);
+    const cardsIn = (status: string) => within(screen.getByTestId(`column-${status}`)).queryAllByTestId('card');
+    const newCard = screen.getByRole('textbox', { name: 'New card' });
+    const filter = screen.getByRole('searchbox', { name: 'Filter cards' });
+    await user.type(newCard, 'Archive echo sable{Enter}');
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 1 done');
+  });
+
+  it('moves 1 cards across the board', async () => {
+    const user = userEvent.setup();
+    render(<AssetBoard />);
+    const cardsIn = (status: string) => within(screen.getByTestId(`column-${status}`)).queryAllByTestId('card');
+    const newCard = screen.getByRole('textbox', { name: 'New card' });
+    const filter = screen.getByRole('searchbox', { name: 'Filter cards' });
+    await user.type(newCard, 'Price foxtrot summit{Enter}');
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 1 done');
+  });
+});

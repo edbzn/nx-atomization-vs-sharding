@@ -1,0 +1,77 @@
+import { expect, test } from '@playwright/test';
+
+test('adds 2 courses to the cart and updates totals', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Academy Portal');
+  await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Courses' }).click();
+  await page.getByRole('searchbox', { name: 'Filter' }).fill('CRS-0054');
+  await expect(page.getByTestId('row')).toHaveCount(1);
+  await page.getByTestId('row').first().click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Applied Statistics');
+  await expect(page.getByTestId('quantity')).toHaveText('1');
+  await page.getByRole('button', { name: 'Add to cart' }).click();
+  await expect(page.getByRole('status').last()).toHaveText('Added 1 × Applied Statistics');
+  await expect(page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: /^Cart/ })).toHaveText('Cart (1)');
+  await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Courses' }).click();
+  await page.getByRole('searchbox', { name: 'Filter' }).fill('CRS-0036');
+  await expect(page.getByTestId('row')).toHaveCount(1);
+  await page.getByTestId('row').first().click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Remote Typing');
+  await expect(page.getByTestId('quantity')).toHaveText('1');
+  await page.getByRole('button', { name: 'Add to cart' }).click();
+  await expect(page.getByRole('status').last()).toHaveText('Added 1 × Remote Typing');
+  await expect(page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: /^Cart/ })).toHaveText('Cart (2)');
+  await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: /^Cart/ }).click();
+  await expect(page.getByTestId('cart-line')).toHaveCount(2);
+  await expect(page.getByTestId('line-quantity').nth(0)).toHaveText('1');
+  await expect(page.getByTestId('line-total').nth(0)).toHaveText('$5,715.26');
+  await expect(page.getByTestId('line-quantity').nth(1)).toHaveText('1');
+  await expect(page.getByTestId('line-total').nth(1)).toHaveText('$8,046.49');
+  await expect(page.getByTestId('cart-subtotal')).toHaveText('Subtotal: $13,761.75');
+  await page.getByRole('button', { name: 'Remove CRS-0054' }).click();
+  await expect(page.getByTestId('cart-line')).toHaveCount(1);
+  await expect(page.getByTestId('line-quantity').nth(0)).toHaveText('1');
+  await expect(page.getByTestId('line-total').nth(0)).toHaveText('$8,046.49');
+  await expect(page.getByTestId('cart-subtotal')).toHaveText('Subtotal: $8,046.49');
+});
+
+test('adds 1 courses to the cart and updates totals', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Academy Portal');
+  await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Courses' }).click();
+  await page.getByRole('searchbox', { name: 'Filter' }).fill('CRS-0053');
+  await expect(page.getByTestId('row')).toHaveCount(1);
+  await page.getByTestId('row').first().click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Applied Spanish');
+  await page.getByRole('button', { name: 'Increase quantity' }).click();
+  await page.getByRole('button', { name: 'Increase quantity' }).click();
+  await page.getByRole('button', { name: 'Increase quantity' }).click();
+  await expect(page.getByTestId('quantity')).toHaveText('4');
+  await page.getByRole('button', { name: 'Add to cart' }).click();
+  await expect(page.getByRole('status').last()).toHaveText('Added 4 × Applied Spanish');
+  await expect(page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: /^Cart/ })).toHaveText('Cart (4)');
+  await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: /^Cart/ }).click();
+  await expect(page.getByTestId('cart-line')).toHaveCount(1);
+  await expect(page.getByTestId('line-quantity').nth(0)).toHaveText('4');
+  await expect(page.getByTestId('line-total').nth(0)).toHaveText('$39,126.68');
+  await expect(page.getByTestId('cart-subtotal')).toHaveText('Subtotal: $39,126.68');
+});
+
+test('adds 1 courses to the cart and updates totals #3', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Academy Portal');
+  await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Courses' }).click();
+  await page.getByRole('searchbox', { name: 'Filter' }).fill('CRS-0010');
+  await expect(page.getByTestId('row')).toHaveCount(1);
+  await page.getByTestId('row').first().click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Intensive Welding');
+  await expect(page.getByTestId('quantity')).toHaveText('1');
+  await page.getByRole('button', { name: 'Add to cart' }).click();
+  await expect(page.getByRole('status').last()).toHaveText('Added 1 × Intensive Welding');
+  await expect(page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: /^Cart/ })).toHaveText('Cart (1)');
+  await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: /^Cart/ }).click();
+  await expect(page.getByTestId('cart-line')).toHaveCount(1);
+  await expect(page.getByTestId('line-quantity').nth(0)).toHaveText('1');
+  await expect(page.getByTestId('line-total').nth(0)).toHaveText('$4,512.63');
+  await expect(page.getByTestId('cart-subtotal')).toHaveText('Subtotal: $4,512.63');
+});

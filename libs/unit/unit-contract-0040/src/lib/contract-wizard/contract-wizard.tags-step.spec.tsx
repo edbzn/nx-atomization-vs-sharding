@@ -1,0 +1,48 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { ContractWizard } from './ContractWizard';
+
+describe('ContractWizard tags step', () => {
+  it('creates a contract in three steps with 2 tags', async () => {
+    const onComplete = vi.fn();
+    const user = userEvent.setup();
+    render(<ContractWizard onComplete={onComplete} />);
+    const step = () => screen.getByTestId('wizard-step').textContent;
+    expect(step()).toBe('Step 1 of 3: Details');
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Al');
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByText('Name must be at least 3 characters')).toBeInTheDocument();
+    expect(screen.getByText('Category is required')).toBeInTheDocument();
+    expect(step()).toBe('Step 1 of 3: Details');
+    await user.clear(screen.getByRole('textbox', { name: 'Name' }));
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Tom Hendrickx');
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Category' }), 'Draft');
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(step()).toBe('Step 2 of 3: Tags');
+    const tagInput = () => screen.getByRole('textbox', { name: 'New tag' });
+    await user.type(tagInput(), 'velvet{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'prism{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('2 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), '  prism {Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('2 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    expect(screen.getByTestId('tag-message').textContent).toBe('"prism" is already added');
+    await user.click(screen.getByRole('button', { name: 'Back' }));
+    expect(screen.getByRole('textbox', { name: 'Name' })).toHaveValue('Tom Hendrickx');
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByTestId('review-name').textContent).toBe('Tom Hendrickx');
+    expect(screen.getByTestId('review-category').textContent).toBe('Draft');
+    expect(screen.getByTestId('review-tags').textContent).toBe('velvet, prism');
+    await user.click(screen.getByRole('button', { name: 'Create contract' }));
+    expect(onComplete).toHaveBeenCalledExactlyOnceWith({"name":"Tom Hendrickx","category":"Draft","tags":["velvet","prism"]});
+    expect(screen.getByRole('status')).toHaveTextContent('Created Tom Hendrickx');
+  });
+});

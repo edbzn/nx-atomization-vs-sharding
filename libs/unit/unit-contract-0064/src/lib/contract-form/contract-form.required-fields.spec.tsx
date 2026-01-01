@@ -1,0 +1,41 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { ContractForm } from './ContractForm';
+
+describe('ContractForm required fields', () => {
+  it('validates and saves a contract (8 interactions)', async () => {
+    const onSubmit = vi.fn();
+    const user = userEvent.setup();
+    render(<ContractForm onSubmit={onSubmit} />);
+    await user.clear(screen.getByRole('textbox', { name: 'Notes' }));
+    await user.type(screen.getByRole('textbox', { name: 'Notes' }), 'fern flint tundra garnet summit velvet sage indigo comet apex apex delta iris harbor topaz birch lagoon reef ember alpha comet alpha onyx nectar hazel drift vale alpha sable fern reef onyx flint harbor');
+    expect(screen.getByRole('textbox', { name: 'Notes' })).not.toHaveAttribute('aria-invalid');
+    await user.click(screen.getByRole('button', { name: 'Save contract' }));
+    expect(onSubmit).toHaveBeenCalledTimes(0);
+    expect(screen.getByTestId('error-summary').textContent).toBe('5 errors');
+    expect(screen.getByText('Name is required')).toBeInTheDocument();
+    expect(screen.getByText('Email is required')).toBeInTheDocument();
+    expect(screen.getByText('Category is required')).toBeInTheDocument();
+    expect(screen.getByText('Amount is required')).toBeInTheDocument();
+    expect(screen.getByText('Notes must be at most 200 characters')).toBeInTheDocument();
+    await user.clear(screen.getByRole('textbox', { name: 'Name' }));
+    await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Zoe Desmet');
+    expect(screen.getByRole('textbox', { name: 'Name' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Email' }));
+    await user.type(screen.getByRole('textbox', { name: 'Email' }), 'cas.cools20@example.com');
+    expect(screen.getByRole('textbox', { name: 'Email' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Amount' }));
+    await user.type(screen.getByRole('textbox', { name: 'Amount' }), '51646');
+    expect(screen.getByRole('textbox', { name: 'Amount' })).not.toHaveAttribute('aria-invalid');
+    await user.clear(screen.getByRole('textbox', { name: 'Notes' }));
+    await user.type(screen.getByRole('textbox', { name: 'Notes' }), 'topaz pine cobalt cobalt spruce harbor aurora lark sage maple comet aurora nectar willow');
+    expect(screen.getByRole('textbox', { name: 'Notes' })).not.toHaveAttribute('aria-invalid');
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Category' }), 'Expired');
+    expect(screen.getByRole('combobox', { name: 'Category' })).not.toHaveAttribute('aria-invalid');
+    await user.click(screen.getByRole('button', { name: 'Save contract' }));
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(onSubmit).toHaveBeenLastCalledWith({"name":"Zoe Desmet","email":"cas.cools20@example.com","category":"Expired","amount":51646,"notes":"topaz pine cobalt cobalt spruce harbor aurora lark sage maple comet aurora nectar willow"});
+    expect(screen.queryByTestId('error-summary')).not.toBeInTheDocument();
+  });
+});

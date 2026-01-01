@@ -1,0 +1,48 @@
+import { ProductWizard } from './ProductWizard';
+
+describe('ProductWizard tags step 2', () => {
+  it('creates a product in three steps with 3 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<ProductWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.contains('button', 'Next').click();
+    cy.contains('[role=alert]', 'Name is required').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Modular Lantern');
+    cy.get('select[name=wizard-category]').select('Garden');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('apex60{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('garnet{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('birch95{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('APEX60{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('have.text', '"apex60" is already added');
+    cy.get('input[name=new-tag]').type('oak iris{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '4 tags');
+    cy.get('[data-testid=tag]').should('have.length', 4);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('button[aria-label="Remove birch95"]').click();
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Modular Lantern');
+    cy.get('[data-testid=review-category]').should('have.text', 'Garden');
+    cy.get('[data-testid=review-tags]').should('have.text', 'apex60, garnet, oak-iris');
+    cy.contains('button', 'Create product').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Modular Lantern","category":"Garden","tags":["apex60","garnet","oak-iris"]});
+    cy.contains('[role=status]', 'Created Modular Lantern').should('be.visible');
+  });
+});

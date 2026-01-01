@@ -1,0 +1,13 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "academy-0000-e2e",
+  "sourceRoot": "apps/academy-0000-e2e/src",
+  "projectType": "application",
+  "tags": [
+    "type:e2e",
+    "runner:playwright"
+  ],
+  "implicitDependencies": [
+    "academy-0000"
+  ]
+}

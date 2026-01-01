@@ -1,0 +1,13 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "homes-0007-e2e",
+  "sourceRoot": "apps/homes-0007-e2e/src",
+  "projectType": "application",
+  "tags": [
+    "type:e2e",
+    "runner:playwright"
+  ],
+  "implicitDependencies": [
+    "homes-0007"
+  ]
+}

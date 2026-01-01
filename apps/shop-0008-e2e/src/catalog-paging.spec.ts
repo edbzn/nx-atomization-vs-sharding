@@ -1,0 +1,96 @@
+import { expect, test } from '@playwright/test';
+
+test('filters, sorts and pages the orders catalog (4 steps)', async ({ page }) => {
+  await page.goto('/catalog');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Orders');
+  const filter = page.getByRole('searchbox', { name: 'Filter' });
+  await page.getByRole('button', { name: /^Reference/ }).click();
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 1-10 of 140');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+  await expect(page.getByTestId('row').first()).toContainText('ORD-0001');
+  await filter.fill('Preo');
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 1-10 of 17');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+  await page.getByRole('button', { name: /^Name/ }).click();
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 1-10 of 17');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+  await expect(page.getByTestId('row').first()).toContainText('ORD-0027');
+  await filter.fill('hamp');
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 1-10 of 16');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+  await page.getByTestId('row').filter({ hasText: 'ORD-0070' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Bulk Hamper');
+  await expect(page.getByTestId('detail-price')).toHaveText('$1,075.26');
+});
+
+test('filters, sorts and pages the orders catalog (6 steps)', async ({ page }) => {
+  await page.goto('/catalog');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Orders');
+  const filter = page.getByRole('searchbox', { name: 'Filter' });
+  await filter.clear();
+  await filter.pressSequentially('paid');
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 1-10 of 27');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+  await filter.fill('ORD-0063');
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 1-1 of 1');
+  await expect(page.getByTestId('row')).toHaveCount(1);
+  await filter.clear();
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 1-10 of 140');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+  await expect(page.getByTestId('row').first()).toContainText('ORD-0001');
+  await filter.fill('shipped');
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 1-10 of 31');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 11-20 of 31');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+  await expect(page.getByTestId('row').first()).toContainText('ORD-0047');
+  await filter.fill('ord-001');
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 1-10 of 10');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+});
+
+test('filters, sorts and pages the orders catalog (6 steps) #3', async ({ page }) => {
+  await page.goto('/catalog');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Orders');
+  const filter = page.getByRole('searchbox', { name: 'Filter' });
+  await filter.fill('ord-000');
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 1-9 of 9');
+  await expect(page.getByTestId('row')).toHaveCount(9);
+  await page.getByRole('button', { name: /^Price/ }).click();
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 1-9 of 9');
+  await expect(page.getByTestId('row')).toHaveCount(9);
+  await expect(page.getByTestId('row').first()).toContainText('ORD-0007');
+  await filter.clear();
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 1-10 of 140');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+  await expect(page.getByTestId('row').first()).toContainText('ORD-0067');
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 11-20 of 140');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+  await expect(page.getByTestId('row').first()).toContainText('ORD-0136');
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 21-30 of 140');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+  await expect(page.getByTestId('row').first()).toContainText('ORD-0114');
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 31-40 of 140');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+  await expect(page.getByTestId('row').first()).toContainText('ORD-0064');
+});
+
+test('filters, sorts and pages the orders catalog (2 steps)', async ({ page }) => {
+  await page.goto('/catalog');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Orders');
+  const filter = page.getByRole('searchbox', { name: 'Filter' });
+  await page.getByRole('button', { name: /^Reference/ }).click();
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 1-10 of 140');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+  await expect(page.getByTestId('row').first()).toContainText('ORD-0001');
+  await filter.fill('cancelled');
+  await expect(page.getByTestId('table-status')).toHaveText('Showing 1-10 of 32');
+  await expect(page.getByTestId('row')).toHaveCount(10);
+  await page.getByTestId('row').filter({ hasText: 'ORD-0002' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Repeat Box');
+  await expect(page.getByTestId('detail-price')).toHaveText('$1,176.66');
+});

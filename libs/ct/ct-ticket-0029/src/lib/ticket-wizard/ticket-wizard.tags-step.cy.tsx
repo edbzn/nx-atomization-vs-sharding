@@ -1,0 +1,61 @@
+import { TicketWizard } from './TicketWizard';
+
+describe('TicketWizard tags step', () => {
+  it('creates a ticket in three steps with 3 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<TicketWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Pia Martens');
+    cy.get('select[name=wizard-category]').select('Feature');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('iris jade{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('river77{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('spruce{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Back').click();
+    cy.get('input[name=wizard-name]').should('have.value', 'Pia Martens');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Pia Martens');
+    cy.get('[data-testid=review-category]').should('have.text', 'Feature');
+    cy.get('[data-testid=review-tags]').should('have.text', 'iris-jade, river77, spruce');
+    cy.contains('button', 'Create ticket').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Pia Martens","category":"Feature","tags":["iris-jade","river77","spruce"]});
+    cy.contains('[role=status]', 'Created Pia Martens').should('be.visible');
+  });
+
+  it('creates a ticket in three steps with 1 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<TicketWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Stale Dashboard');
+    cy.get('select[name=wizard-category]').select('Bug');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('indigo amber{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Back').click();
+    cy.get('input[name=wizard-name]').should('have.value', 'Stale Dashboard');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Stale Dashboard');
+    cy.get('[data-testid=review-category]').should('have.text', 'Bug');
+    cy.get('[data-testid=review-tags]').should('have.text', 'indigo-amber');
+    cy.contains('button', 'Create ticket').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Stale Dashboard","category":"Bug","tags":["indigo-amber"]});
+    cy.contains('[role=status]', 'Created Stale Dashboard').should('be.visible');
+  });
+});

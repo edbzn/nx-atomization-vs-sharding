@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "name": "unit-recipe-0032",
+  "sourceRoot": "libs/unit/unit-recipe-0032/src",
+  "projectType": "library",
+  "tags": [
+    "type:domain",
+    "runner:vitest",
+    "layer:3"
+  ]
+}
