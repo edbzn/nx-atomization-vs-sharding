@@ -1,0 +1,40 @@
+import { PatientBoard } from './PatientBoard';
+
+describe('PatientBoard filtering', () => {
+  it('moves 1 cards across the board', () => {
+    cy.mount(<PatientBoard />);
+    cy.get('input[name=new-card]').type('Archive claes amber{enter}');
+    cy.get('input[name=new-card]').type('Review maes juniper{enter}');
+    cy.get('button[aria-label="Start Review maes juniper"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('button[aria-label="Pause Review maes juniper"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('button[aria-label="Start Review maes juniper"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('button[aria-label="Start Archive claes amber"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 2);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 2 done');
+    cy.get('button[aria-label="Delete Review maes juniper"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 1 done');
+    cy.get('input[name=new-card]').type('Ship janssens willow{enter}');
+    cy.get('button[aria-label="Delete Ship janssens willow"]').click();
+    cy.get('[data-testid=column-todo] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=column-doing] [data-testid=card]').should('have.length', 1);
+    cy.get('[data-testid=column-done] [data-testid=card]').should('have.length', 0);
+    cy.get('[data-testid=board-summary]').should('have.text', '0 of 1 done');
+  });
+});

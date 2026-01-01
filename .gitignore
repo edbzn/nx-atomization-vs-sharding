@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.nx/cache/
+.nx/workspace-data/
+test-results/
+playwright-report/
+blob-report/
+cypress/videos/
+cypress/screenshots/
+coverage/
+*.log
