@@ -1,0 +1,44 @@
+import { PatientWizard } from './PatientWizard';
+
+describe('PatientWizard review', () => {
+  it('creates a patient in three steps with 4 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<PatientWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Farid Peeters');
+    cy.get('select[name=wizard-category]').select('Admitted');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('prism{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('zinc77{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('mesa flint{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('button[aria-label="Remove prism"]').click();
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('sage{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('FROST{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '4 tags');
+    cy.get('[data-testid=tag]').should('have.length', 4);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Farid Peeters');
+    cy.get('[data-testid=review-category]').should('have.text', 'Admitted');
+    cy.get('[data-testid=review-tags]').should('have.text', 'zinc77, mesa-flint, sage, frost');
+    cy.contains('button', 'Create patient').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Farid Peeters","category":"Admitted","tags":["zinc77","mesa-flint","sage","frost"]});
+    cy.contains('[role=status]', 'Created Farid Peeters').should('be.visible');
+  });
+});

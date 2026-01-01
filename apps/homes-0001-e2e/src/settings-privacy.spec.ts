@@ -1,0 +1,52 @@
+import { expect, test } from '@playwright/test';
+
+test('updates and persists settings (8 changes)', async ({ page }) => {
+  await page.goto('/settings');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Settings');
+  await page.getByRole('tab', { name: 'Privacy' }).click();
+  await page.getByRole('checkbox', { name: 'Show me in search' }).uncheck();
+  await page.getByRole('tab', { name: 'Profile' }).click();
+  await page.getByRole('textbox', { name: 'Display name' }).fill('Wout Lemmens');
+  await page.getByRole('tab', { name: 'Privacy' }).click();
+  await page.getByRole('combobox', { name: 'Profile visibility' }).selectOption('Public');
+  await page.getByRole('tab', { name: 'Notifications' }).click();
+  await page.getByRole('checkbox', { name: 'Order updates' }).uncheck();
+  await page.getByRole('checkbox', { name: 'Order updates' }).check();
+  await page.getByRole('tab', { name: 'Privacy' }).click();
+  await page.getByRole('combobox', { name: 'Profile visibility' }).selectOption('Public');
+  await page.getByRole('tab', { name: 'Notifications' }).click();
+  await page.getByRole('checkbox', { name: 'Order updates' }).uncheck();
+  await page.getByRole('tab', { name: 'Privacy' }).click();
+  await page.getByRole('checkbox', { name: 'Show me in search' }).check();
+  await page.getByRole('button', { name: 'Save settings' }).click();
+  await expect(page.getByRole('status').last()).toHaveText('Settings saved');
+  await page.reload();
+  await expect(page.getByRole('textbox', { name: 'Display name' })).toHaveValue('Wout Lemmens');
+  await expect(page.getByRole('combobox', { name: 'Language' })).toHaveValue('English');
+  await page.getByRole('tab', { name: 'Notifications' }).click();
+  await expect(page.getByRole('checkbox', { name: 'Order updates' })).not.toBeChecked();
+  await expect(page.getByRole('checkbox', { name: 'Weekly digest' })).not.toBeChecked();
+  await expect(page.getByRole('checkbox', { name: 'Product news' })).not.toBeChecked();
+  await page.getByRole('tab', { name: 'Privacy' }).click();
+  await expect(page.getByRole('combobox', { name: 'Profile visibility' })).toHaveValue('Public');
+  await expect(page.getByRole('checkbox', { name: 'Show me in search' })).toBeChecked();
+});
+
+test('updates and persists settings (2 changes)', async ({ page }) => {
+  await page.goto('/settings');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Settings');
+  await page.getByRole('combobox', { name: 'Language' }).selectOption('English');
+  await page.getByRole('combobox', { name: 'Language' }).selectOption('Deutsch');
+  await page.getByRole('button', { name: 'Save settings' }).click();
+  await expect(page.getByRole('status').last()).toHaveText('Settings saved');
+  await page.reload();
+  await expect(page.getByRole('textbox', { name: 'Display name' })).toHaveValue('');
+  await expect(page.getByRole('combobox', { name: 'Language' })).toHaveValue('Deutsch');
+  await page.getByRole('tab', { name: 'Notifications' }).click();
+  await expect(page.getByRole('checkbox', { name: 'Order updates' })).toBeChecked();
+  await expect(page.getByRole('checkbox', { name: 'Weekly digest' })).not.toBeChecked();
+  await expect(page.getByRole('checkbox', { name: 'Product news' })).not.toBeChecked();
+  await page.getByRole('tab', { name: 'Privacy' }).click();
+  await expect(page.getByRole('combobox', { name: 'Profile visibility' })).toHaveValue('Team');
+  await expect(page.getByRole('checkbox', { name: 'Show me in search' })).toBeChecked();
+});
