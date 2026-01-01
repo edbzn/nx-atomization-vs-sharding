@@ -1,0 +1,13 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "shop-0008-e2e",
+  "sourceRoot": "apps/shop-0008-e2e/src",
+  "projectType": "application",
+  "tags": [
+    "type:e2e",
+    "runner:playwright"
+  ],
+  "implicitDependencies": [
+    "shop-0008"
+  ]
+}

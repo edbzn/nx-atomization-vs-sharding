@@ -1,0 +1,635 @@
+import { ProductTable } from './ProductTable';
+import type { ProductRow } from '../types';
+
+const ROWS: ProductRow[] = [
+  { id: 'PRD-0219', name: 'Brushed Stool', category: 'Outdoor', amount: 462367 },
+  { id: 'PRD-0220', name: 'Smart Kettle', category: 'Office', amount: 860708 },
+  { id: 'PRD-0221', name: 'Compact Bench', category: 'Kitchen', amount: 822905 },
+  { id: 'PRD-0222', name: 'Heavy Stool', category: 'Lighting', amount: 271261 },
+  { id: 'PRD-0223', name: 'Heavy Kettle', category: 'Garden', amount: 119017 },
+  { id: 'PRD-0224', name: 'Heavy Shelf', category: 'Office', amount: 334449 },
+  { id: 'PRD-0225', name: 'Folding Bench', category: 'Kitchen', amount: 344398 },
+  { id: 'PRD-0226', name: 'Brushed Desk', category: 'Outdoor', amount: 845093 },
+  { id: 'PRD-0227', name: 'Smart Tray', category: 'Outdoor', amount: 386137 },
+  { id: 'PRD-0228', name: 'Vintage Shelf', category: 'Office', amount: 312823 },
+  { id: 'PRD-0229', name: 'Vintage Tray', category: 'Lighting', amount: 936182 },
+  { id: 'PRD-0230', name: 'Smart Shelf', category: 'Outdoor', amount: 465247 },
+  { id: 'PRD-0231', name: 'Smart Shelf', category: 'Outdoor', amount: 272460 },
+  { id: 'PRD-0232', name: 'Heavy Planter', category: 'Garden', amount: 892025 },
+  { id: 'PRD-0233', name: 'Compact Tray', category: 'Outdoor', amount: 374762 },
+  { id: 'PRD-0234', name: 'Rustic Bench', category: 'Office', amount: 114609 },
+  { id: 'PRD-0235', name: 'Vintage Stool', category: 'Kitchen', amount: 678237 },
+  { id: 'PRD-0236', name: 'Classic Lantern', category: 'Office', amount: 471744 },
+  { id: 'PRD-0237', name: 'Rustic Stool', category: 'Outdoor', amount: 878953 },
+];
+
+describe('ProductTable large dataset', () => {
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('input[name=filter]').clear().type('plante');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-1 of 1');
+    cy.get('[data-testid=row]').should('have.length', 1);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+    cy.get('input[name=filter]').clear().type('Clas');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-1 of 1');
+    cy.get('[data-testid=row]').should('have.length', 1);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+    cy.contains('th button', 'Amount').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0234');
+    cy.contains('th button', 'Name').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0226');
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0226');
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('input[name=filter]').clear().type('office');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-5 of 5');
+    cy.get('[data-testid=row]').should('have.length', 5);
+    cy.get('input[name=filter]').clear().type('Slim');
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.contains('th button', 'Name').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.contains('th button', 'Amount').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.contains('th button', 'Name').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0226');
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear().type('desk');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-1 of 1');
+    cy.get('[data-testid=row]').should('have.length', 1);
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('input[name=filter]').clear().type('Class');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-1 of 1');
+    cy.get('[data-testid=row]').should('have.length', 1);
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-1 of 1');
+    cy.get('[data-testid=row]').should('have.length', 1);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0236');
+    cy.get('input[name=filter]').clear().type('lighting');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-2 of 2');
+    cy.get('[data-testid=row]').should('have.length', 2);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear().type('Sli');
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+    cy.contains('button', 'Previous').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+    cy.get('input[name=filter]').clear().type('stool');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-4 of 4');
+    cy.get('[data-testid=row]').should('have.length', 4);
+    cy.contains('th button', 'Name').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-4 of 4');
+    cy.get('[data-testid=row]').should('have.length', 4);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear().type('garden');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-2 of 2');
+    cy.get('[data-testid=row]').should('have.length', 2);
+    cy.get('input[name=filter]').clear().type('kitchen');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-3 of 3');
+    cy.get('[data-testid=row]').should('have.length', 3);
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.contains('th button', 'Name').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0226');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0234');
+    cy.contains('button', 'Previous').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0226');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0234');
+    cy.get('input[name=filter]').clear().type('Clas');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-1 of 1');
+    cy.get('[data-testid=row]').should('have.length', 1);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0226');
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+    cy.contains('button', 'Previous').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear().type('PRD-0237');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-1 of 1');
+    cy.get('[data-testid=row]').should('have.length', 1);
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-1 of 1');
+    cy.get('[data-testid=row]').should('have.length', 1);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0237');
+    cy.get('input[name=filter]').clear().type('lighting');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-2 of 2');
+    cy.get('[data-testid=row]').should('have.length', 2);
+    cy.contains('th button', 'Name').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-2 of 2');
+    cy.get('[data-testid=row]').should('have.length', 2);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0222');
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0226');
+    cy.get('input[name=filter]').clear().type('prd-000');
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.contains('th button', 'Amount').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0234');
+    cy.get('input[name=filter]').clear().type('PRD-0220');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-1 of 1');
+    cy.get('[data-testid=row]').should('have.length', 1);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0234');
+    cy.get('input[name=filter]').clear().type('tray');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-3 of 3');
+    cy.get('[data-testid=row]').should('have.length', 3);
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+    cy.get('input[name=filter]').clear().type('lighting');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-2 of 2');
+    cy.get('[data-testid=row]').should('have.length', 2);
+    cy.get('input[name=filter]').clear().type('office');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-5 of 5');
+    cy.get('[data-testid=row]').should('have.length', 5);
+    cy.get('input[name=filter]').clear().type('office');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-5 of 5');
+    cy.get('[data-testid=row]').should('have.length', 5);
+    cy.get('input[name=filter]').clear().type('lighting');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-2 of 2');
+    cy.get('[data-testid=row]').should('have.length', 2);
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-2 of 2');
+    cy.get('[data-testid=row]').should('have.length', 2);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0222');
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear().type('Sli');
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear().type('PRD-0233');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-1 of 1');
+    cy.get('[data-testid=row]').should('have.length', 1);
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+    cy.contains('th button', 'Name').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0226');
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+    cy.contains('button', 'Previous').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear().type('prd-001');
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear().type('clo');
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+  });
+
+  it('filters, sorts and pages through 18 products', () => {
+    const rows = ROWS.slice(0, 18);
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 18');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('input[name=filter]').clear().type('bench');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-3 of 3');
+    cy.get('[data-testid=row]').should('have.length', 3);
+    cy.get('input[name=filter]').clear().type('prd-001');
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.get('input[name=filter]').clear().type('PRD-0221');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-1 of 1');
+    cy.get('[data-testid=row]').should('have.length', 1);
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+    cy.get('input[name=filter]').clear().type('prd-000');
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('input[name=filter]').clear().type('office');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-5 of 5');
+    cy.get('[data-testid=row]').should('have.length', 5);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('th button', 'Amount').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0234');
+    cy.get('input[name=filter]').clear().type('prd-000');
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('input[name=filter]').clear().type('pla');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-1 of 1');
+    cy.get('[data-testid=row]').should('have.length', 1);
+    cy.get('input[name=filter]').clear().type('clock');
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.get('input[name=filter]').clear().type('prd-000');
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('input[name=filter]').clear().type('Brus');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-2 of 2');
+    cy.get('[data-testid=row]').should('have.length', 2);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('th button', 'Amount').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0234');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0230');
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0230');
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('input[name=filter]').clear().type('Brush');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-2 of 2');
+    cy.get('[data-testid=row]').should('have.length', 2);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('th button', 'Amount').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0234');
+    cy.contains('th button', 'Amount').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+    cy.contains('button', 'Previous').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear().type('prd-000');
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.get('input[name=filter]').clear().type('prd-001');
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.contains('th button', 'Reference').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.get('input[name=filter]').clear().type('lighting');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-2 of 2');
+    cy.get('[data-testid=row]').should('have.length', 2);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0237');
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0237');
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0237');
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+    cy.get('input[name=filter]').clear().type('Mod');
+    cy.get('[data-testid=table-status]').should('have.text', 'No results');
+    cy.get('[data-testid=row]').should('have.length', 0);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('th button', 'Name').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0226');
+    cy.get('input[name=filter]').clear().type('lighting');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-2 of 2');
+    cy.get('[data-testid=row]').should('have.length', 2);
+    cy.get('input[name=filter]').clear().type('lan');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-2 of 2');
+    cy.get('[data-testid=row]').should('have.length', 2);
+    cy.get('input[name=filter]').clear().type('Fold');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-1 of 1');
+    cy.get('[data-testid=row]').should('have.length', 1);
+  });
+
+  it('filters, sorts and pages through 19 products', () => {
+    const rows = ROWS;
+    cy.mount(<ProductTable rows={rows} />);
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('input[name=filter]').clear().type('PRD-0234');
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-1 of 1');
+    cy.get('[data-testid=row]').should('have.length', 1);
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 11-19 of 19');
+    cy.get('[data-testid=row]').should('have.length', 9);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0229');
+    cy.contains('button', 'Previous').click();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+    cy.get('input[name=filter]').clear();
+    cy.get('[data-testid=table-status]').should('have.text', 'Showing 1-10 of 19');
+    cy.get('[data-testid=row]').should('have.length', 10);
+    cy.get('[data-testid=row]').first().should('contain.text', 'PRD-0219');
+  });
+});

@@ -1,0 +1,81 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { TagEditor } from './TagEditor';
+
+describe('TagEditor duplicates', () => {
+  it('edits a list of 5 tag operations', async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    render(<TagEditor onChange={onChange} />);
+    const tagInput = () => screen.getByRole('textbox', { name: 'New tag' });
+    await user.type(tagInput(), 'willow7{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'cobalt{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('2 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'zephyr{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('3 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(3);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'juniper meadow{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('4 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(4);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'WILLOW7{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('4 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(4);
+    expect(screen.getByTestId('tag-message').textContent).toBe('"willow7" is already added');
+    expect(onChange).toHaveBeenCalledTimes(4);
+    expect(onChange).toHaveBeenLastCalledWith(["willow7","cobalt","zephyr","juniper-meadow"]);
+  });
+
+  it('edits a list of 5 tag operations', async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    render(<TagEditor onChange={onChange} />);
+    const tagInput = () => screen.getByRole('textbox', { name: 'New tag' });
+    await user.type(tagInput(), 'quartz18{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'indigo{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('2 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), '  quartz18 {Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('2 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    expect(screen.getByTestId('tag-message').textContent).toBe('"quartz18" is already added');
+    await user.type(tagInput(), '  quartz18 {Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('2 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(2);
+    expect(screen.getByTestId('tag-message').textContent).toBe('"quartz18" is already added');
+    await user.type(tagInput(), 'lagoon mesa{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('3 tags');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(3);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    expect(onChange).toHaveBeenCalledTimes(3);
+    expect(onChange).toHaveBeenLastCalledWith(["quartz18","indigo","lagoon-mesa"]);
+  });
+
+  it('edits a list of 2 tag operations', async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    render(<TagEditor onChange={onChange} />);
+    const tagInput = () => screen.getByRole('textbox', { name: 'New tag' });
+    await user.type(tagInput(), 'zephyr23{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.queryByTestId('tag-message')).not.toBeInTheDocument();
+    await user.type(tagInput(), 'ZEPHYR23{Enter}');
+    expect(screen.getByTestId('tag-count').textContent).toBe('1 tag');
+    expect(screen.queryAllByTestId('tag')).toHaveLength(1);
+    expect(screen.getByTestId('tag-message').textContent).toBe('"zephyr23" is already added');
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenLastCalledWith(["zephyr23"]);
+  });
+});

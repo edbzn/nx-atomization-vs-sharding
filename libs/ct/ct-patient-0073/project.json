@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "name": "ct-patient-0073",
+  "sourceRoot": "libs/ct/ct-patient-0073/src",
+  "projectType": "library",
+  "tags": [
+    "type:feature",
+    "runner:cypress",
+    "layer:7"
+  ]
+}

@@ -1,0 +1,21 @@
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it } from 'vitest';
+import { CampaignBoard } from './CampaignBoard';
+
+describe('CampaignBoard workflow', () => {
+  it('moves 1 cards across the board', async () => {
+    const user = userEvent.setup();
+    render(<CampaignBoard />);
+    const cardsIn = (status: string) => within(screen.getByTestId(`column-${status}`)).queryAllByTestId('card');
+    const newCard = screen.getByRole('textbox', { name: 'New card' });
+    const filter = screen.getByRole('searchbox', { name: 'Filter cards' });
+    await user.type(newCard, 'Audit survey zephyr{Enter}');
+    await user.type(newCard, 'Plan giveaway lark{Enter}');
+    await user.click(screen.getByRole('button', { name: 'Delete Plan giveaway lark' }));
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 1 done');
+  });
+});

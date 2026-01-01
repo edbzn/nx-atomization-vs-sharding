@@ -1,0 +1,40 @@
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it } from 'vitest';
+import { ContractBoard } from './ContractBoard';
+
+describe('ContractBoard workflow', () => {
+  it('moves 5 cards across the board', async () => {
+    const user = userEvent.setup();
+    render(<ContractBoard />);
+    const cardsIn = (status: string) => within(screen.getByTestId(`column-${status}`)).queryAllByTestId('card');
+    const newCard = screen.getByRole('textbox', { name: 'New card' });
+    const filter = screen.getByRole('searchbox', { name: 'Filter cards' });
+    await user.type(newCard, 'Draft notice cobalt{Enter}');
+    await user.type(newCard, 'Label waiver delta{Enter}');
+    await user.click(screen.getByRole('button', { name: 'Start Draft notice cobalt' }));
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(1);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 2 done');
+    await user.type(newCard, 'Test schedule iris{Enter}');
+    await user.type(newCard, 'Plan annex topaz{Enter}');
+    await user.click(screen.getByRole('button', { name: 'Start Label waiver delta' }));
+    expect(cardsIn('todo')).toHaveLength(2);
+    expect(cardsIn('doing')).toHaveLength(2);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 4 done');
+    await user.type(newCard, 'Fix agreement juniper{Enter}');
+    await user.clear(filter);
+    await user.type(filter, 'Fix');
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 5 done');
+    await user.click(screen.getByRole('button', { name: 'Start Fix agreement juniper' }));
+    expect(cardsIn('todo')).toHaveLength(0);
+    expect(cardsIn('doing')).toHaveLength(1);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 5 done');
+  });
+});
