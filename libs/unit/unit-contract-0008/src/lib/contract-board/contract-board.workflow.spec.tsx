@@ -1,0 +1,48 @@
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it } from 'vitest';
+import { ContractBoard } from './ContractBoard';
+
+describe('ContractBoard workflow', () => {
+  it('moves 3 cards across the board', async () => {
+    const user = userEvent.setup();
+    render(<ContractBoard />);
+    const cardsIn = (status: string) => within(screen.getByTestId(`column-${status}`)).queryAllByTestId('card');
+    const newCard = screen.getByRole('textbox', { name: 'New card' });
+    const filter = screen.getByRole('searchbox', { name: 'Filter cards' });
+    await user.type(newCard, 'Plan agreement cobalt{Enter}');
+    await user.type(newCard, 'Archive waiver comet{Enter}');
+    await user.click(screen.getByRole('button', { name: 'Start Archive waiver comet' }));
+    expect(cardsIn('todo')).toHaveLength(1);
+    expect(cardsIn('doing')).toHaveLength(1);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 2 done');
+    await user.click(screen.getByRole('button', { name: 'Delete Plan agreement cobalt' }));
+    expect(cardsIn('todo')).toHaveLength(0);
+    expect(cardsIn('doing')).toHaveLength(1);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 1 done');
+    await user.type(newCard, 'Price waiver sable{Enter}');
+    await user.click(screen.getByRole('button', { name: 'Start Price waiver sable' }));
+    expect(cardsIn('todo')).toHaveLength(0);
+    expect(cardsIn('doing')).toHaveLength(2);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 2 done');
+    await user.clear(filter);
+    await user.type(filter, 'come');
+    expect(cardsIn('todo')).toHaveLength(0);
+    expect(cardsIn('doing')).toHaveLength(1);
+    expect(cardsIn('done')).toHaveLength(0);
+    expect(screen.getByTestId('board-summary').textContent).toBe('0 of 2 done');
+    await user.click(screen.getByRole('button', { name: 'Finish Archive waiver comet' }));
+    expect(cardsIn('todo')).toHaveLength(0);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(1);
+    expect(screen.getByTestId('board-summary').textContent).toBe('1 of 2 done');
+    await user.type(newCard, 'Label mandate raven{Enter}');
+    expect(cardsIn('todo')).toHaveLength(0);
+    expect(cardsIn('doing')).toHaveLength(0);
+    expect(cardsIn('done')).toHaveLength(1);
+    expect(screen.getByTestId('board-summary').textContent).toBe('1 of 3 done');
+  });
+});

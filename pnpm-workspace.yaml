@@ -1,0 +1,7 @@
+# No workspace packages: projects are Nx projects (project.json) wired with TS path aliases,
+# so the lockfile is the same for every size and variant.
+allowBuilds:
+  '@swc/core': true
+  cypress: true
+  esbuild: true
+  nx: true
