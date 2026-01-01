@@ -1,0 +1,40 @@
+import { TicketWizard } from './TicketWizard';
+
+describe('TicketWizard happy path', () => {
+  it('creates a ticket in three steps with 3 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<TicketWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Ruben Lemmens');
+    cy.get('select[name=wizard-category]').select('Bug');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('aurora{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('ALPHA{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('  aurora {enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('have.text', '"aurora" is already added');
+    cy.get('input[name=new-tag]').type('coral harbor{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Back').click();
+    cy.get('input[name=wizard-name]').should('have.value', 'Ruben Lemmens');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Ruben Lemmens');
+    cy.get('[data-testid=review-category]').should('have.text', 'Bug');
+    cy.get('[data-testid=review-tags]').should('have.text', 'aurora, alpha, coral-harbor');
+    cy.contains('button', 'Create ticket').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Ruben Lemmens","category":"Bug","tags":["aurora","alpha","coral-harbor"]});
+    cy.contains('[role=status]', 'Created Ruben Lemmens').should('be.visible');
+  });
+});

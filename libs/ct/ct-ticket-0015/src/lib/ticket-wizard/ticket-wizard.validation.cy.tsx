@@ -1,0 +1,48 @@
+import { TicketWizard } from './TicketWizard';
+
+describe('TicketWizard validation', () => {
+  it('creates a ticket in three steps with 5 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<TicketWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Bea De Smet');
+    cy.get('select[name=wizard-category]').select('Bug');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('indigo{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('coral91{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('nova{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('button[aria-label="Remove nova"]').click();
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('kestrel28{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('nectar{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '4 tags');
+    cy.get('[data-testid=tag]').should('have.length', 4);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('meadow26{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '5 tags');
+    cy.get('[data-testid=tag]').should('have.length', 5);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Bea De Smet');
+    cy.get('[data-testid=review-category]').should('have.text', 'Bug');
+    cy.get('[data-testid=review-tags]').should('have.text', 'indigo, coral91, kestrel28, nectar, meadow26');
+    cy.contains('button', 'Create ticket').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Bea De Smet","category":"Bug","tags":["indigo","coral91","kestrel28","nectar","meadow26"]});
+    cy.contains('[role=status]', 'Created Bea De Smet').should('be.visible');
+  });
+});

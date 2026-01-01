@@ -1,0 +1,45 @@
+import { BookingWizard } from './BookingWizard';
+
+describe('BookingWizard back and forth', () => {
+  it('creates a booking in three steps with 3 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<BookingWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').type('Al');
+    cy.contains('button', 'Next').click();
+    cy.contains('[role=alert]', 'Name must be at least 3 characters').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Weekend Lyon');
+    cy.get('select[name=wizard-category]').select('Train');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('falcon{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('  falcon {enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('have.text', '"falcon" is already added');
+    cy.get('input[name=new-tag]').type('quartz30{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('FALCON{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('have.text', '"falcon" is already added');
+    cy.get('input[name=new-tag]').type('lark willow{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Weekend Lyon');
+    cy.get('[data-testid=review-category]').should('have.text', 'Train');
+    cy.get('[data-testid=review-tags]').should('have.text', 'falcon, quartz30, lark-willow');
+    cy.contains('button', 'Create booking').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Weekend Lyon","category":"Train","tags":["falcon","quartz30","lark-willow"]});
+    cy.contains('[role=status]', 'Created Weekend Lyon').should('be.visible');
+  });
+});
