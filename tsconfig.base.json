@@ -1,0 +1,56 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "ES2023",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@bench/shared-ui": [
+        "libs/shared-ui/src/index.ts"
+      ],
+      "@bench/ct-product-0000": [
+        "libs/ct/ct-product-0000/src/index.ts"
+      ],
+      "@bench/unit-employee-0001": [
+        "libs/unit/unit-employee-0001/src/index.ts"
+      ],
+      "@bench/ct-invoice-0002": [
+        "libs/ct/ct-invoice-0002/src/index.ts"
+      ],
+      "@bench/unit-asset-0003": [
+        "libs/unit/unit-asset-0003/src/index.ts"
+      ],
+      "@bench/ct-ticket-0004": [
+        "libs/ct/ct-ticket-0004/src/index.ts"
+      ],
+      "@bench/ct-shipment-0005": [
+        "libs/ct/ct-shipment-0005/src/index.ts"
+      ],
+      "@bench/ct-patient-0006": [
+        "libs/ct/ct-patient-0006/src/index.ts"
+      ],
+      "@bench/unit-campaign-0007": [
+        "libs/unit/unit-campaign-0007/src/index.ts"
+      ],
+      "@bench/unit-contract-0008": [
+        "libs/unit/unit-contract-0008/src/index.ts"
+      ],
+      "@bench/unit-recipe-0009": [
+        "libs/unit/unit-recipe-0009/src/index.ts"
+      ]
+    }
+  }
+}

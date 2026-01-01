@@ -1,0 +1,62 @@
+import { ShipmentWizard } from './ShipmentWizard';
+
+describe('ShipmentWizard tags step', () => {
+  it('creates a shipment in three steps with 3 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<ShipmentWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').type('Al');
+    cy.contains('button', 'Next').click();
+    cy.contains('[role=alert]', 'Name must be at least 3 characters').should('be.visible');
+    cy.contains('[role=alert]', 'Category is required').should('be.visible');
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Oversize Parcel');
+    cy.get('select[name=wizard-category]').select('Returned');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('alpha velvet{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('hazel72{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '2 tags');
+    cy.get('[data-testid=tag]').should('have.length', 2);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.get('input[name=new-tag]').type('FLINT{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '3 tags');
+    cy.get('[data-testid=tag]').should('have.length', 3);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Oversize Parcel');
+    cy.get('[data-testid=review-category]').should('have.text', 'Returned');
+    cy.get('[data-testid=review-tags]').should('have.text', 'alpha-velvet, hazel72, flint');
+    cy.contains('button', 'Create shipment').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Oversize Parcel","category":"Returned","tags":["alpha-velvet","hazel72","flint"]});
+    cy.contains('[role=status]', 'Created Oversize Parcel').should('be.visible');
+  });
+
+  it('creates a shipment in three steps with 1 tags', () => {
+    const onComplete = cy.stub().as('complete');
+    cy.mount(<ShipmentWizard onComplete={onComplete} />);
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 1 of 3: Details');
+    cy.get('input[name=wizard-name]').clear().type('Tom Cools');
+    cy.get('select[name=wizard-category]').select('Transit');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=wizard-step]').should('have.text', 'Step 2 of 3: Tags');
+    cy.get('input[name=new-tag]').type('comet{enter}');
+    cy.get('[data-testid=tag-count]').should('have.text', '1 tag');
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.get('[data-testid=tag-message]').should('not.exist');
+    cy.contains('button', 'Back').click();
+    cy.get('input[name=wizard-name]').should('have.value', 'Tom Cools');
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=tag]').should('have.length', 1);
+    cy.contains('button', 'Next').click();
+    cy.get('[data-testid=review-name]').should('have.text', 'Tom Cools');
+    cy.get('[data-testid=review-category]').should('have.text', 'Transit');
+    cy.get('[data-testid=review-tags]').should('have.text', 'comet');
+    cy.contains('button', 'Create shipment').click();
+    cy.get('@complete').should('have.been.calledOnceWith', {"name":"Tom Cools","category":"Transit","tags":["comet"]});
+    cy.contains('[role=status]', 'Created Tom Cools').should('be.visible');
+  });
+});
