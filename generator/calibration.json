@@ -1,0 +1,29 @@
+{
+  "cypress": {
+    "spec": 0.1491,
+    "its": 0,
+    "mounts": 0,
+    "cmds": 0.01199,
+    "chars": 0.012,
+    "fastChars": 0.003512,
+    "rows": 0.001743
+  },
+  "vitest": {
+    "spec": 0.1159,
+    "its": 0,
+    "renders": 0,
+    "roles": 0.002745,
+    "queries": 0,
+    "actions": 0.00498,
+    "chars": 0.001702,
+    "rows": 0.0006064
+  },
+  "playwright": {
+    "spec": 0,
+    "tests": 0,
+    "gotos": 0,
+    "actions": 0.02471,
+    "asserts": 0,
+    "chars": 0
+  }
+}

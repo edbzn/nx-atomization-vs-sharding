@@ -1,0 +1,96 @@
+{
+  "n": 20,
+  "variant": "baseline",
+  "phase": "run",
+  "rep": 1,
+  "target": "test",
+  "parallel": 16,
+  "startedAt": "2026-10-09T18:44:17.823Z",
+  "cpus": 32,
+  "memAvailGbBefore": 17.2,
+  "stats": {
+    "variant": "baseline",
+    "projects": 20,
+    "targets": 20,
+    "atomTargets": 0,
+    "shardTargets": 0,
+    "projectDeps": 38,
+    "graphWallMs": 650
+  },
+  "ok": true,
+  "errors": [],
+  "spawnAt": 1791571457825,
+  "exitAt": 1791571462146,
+  "wallMs": 4321,
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "time": {
+    "wallS": 4.31,
+    "maxRssMb": 174.3,
+    "userS": 24.69,
+    "sysS": 3.2,
+    "cpuS": 27.89
+  },
+  "mem": {
+    "nxPeakRssMb": 179.3,
+    "workers": 4,
+    "workersPeakRssMbSum": 395.8,
+    "workersPeakRssMbMax": 121.7,
+    "workerComms": {
+      "MainThread": 4
+    },
+    "coordTreePeakRssMb": 474.8,
+    "treePeakRssMb": 3257.7,
+    "peakTaskProcs": 64,
+    "taskProcsSeen": 156,
+    "samplerTicks": 22,
+    "samplerTickMsMean": 1.7
+  },
+  "tasks": {
+    "count": 20,
+    "realCount": 20,
+    "noopCount": 0,
+    "slotsUsed": 16,
+    "statuses": {
+      "success": 20
+    },
+    "failed": [],
+    "cacheHits": 0,
+    "sumDurMs": 22362,
+    "sumRealDurMs": 22362,
+    "realDurMeanMs": 1118.1,
+    "realDurMedianMs": 795,
+    "realDurP95Ms": 2795.2,
+    "noopDurSumMs": 0,
+    "preTaskMs": 558,
+    "taskPhaseMs": 3730,
+    "postTaskMs": 33,
+    "slotOccupancy": 0.375,
+    "gapCount": 4,
+    "gapSumMs": 2,
+    "gapMeanMs": 0.5,
+    "gapMedianMs": 0.5,
+    "gapP95Ms": 1,
+    "idealMakespanMs": 1398,
+    "overheadMs": 2923,
+    "overheadPerTaskMs": 146.17,
+    "inPhaseLossMs": 2332
+  },
+  "hook": {
+    "graphReadyMs": 552,
+    "runDuration": 3739.324462890625,
+    "criticalPathDuration": 3730,
+    "criticalPathTaskCount": 1,
+    "overhead": 9.324462890625,
+    "recoverableByParallel": 9.324462890625,
+    "recoverableByMachines": 0,
+    "coordinatorOverhead": 0,
+    "error": null
+  },
+  "printedReport": {
+    "runDuration": 3700,
+    "criticalPathDuration": 3700,
+    "recoverable": 9
+  }
+}

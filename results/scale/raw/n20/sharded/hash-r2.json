@@ -1,0 +1,81 @@
+{
+  "n": 20,
+  "variant": "sharded",
+  "phase": "hash",
+  "rep": 2,
+  "target": "test-ci",
+  "parallel": null,
+  "startedAt": "2026-10-09T18:44:12.498Z",
+  "cpus": 32,
+  "memAvailGbBefore": 17.2,
+  "stats": {
+    "variant": "sharded",
+    "projects": 20,
+    "targets": 44,
+    "atomTargets": 0,
+    "shardTargets": 4,
+    "projectDeps": 38,
+    "graphWallMs": 794
+  },
+  "ok": true,
+  "spawnAt": 1791571452499,
+  "exitAt": 1791571453217,
+  "wallMs": 718,
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "time": {
+    "wallS": 0.71,
+    "maxRssMb": 169.8,
+    "userS": 0.96,
+    "sysS": 0.29,
+    "cpuS": 1.25
+  },
+  "mem": {
+    "nxPeakRssMb": 156.9,
+    "workers": 5,
+    "workersPeakRssMbSum": 462.5,
+    "workersPeakRssMbMax": 158.5,
+    "workerComms": {
+      "MainThread": 4,
+      "esbuild": 1
+    },
+    "coordTreePeakRssMb": 471.7,
+    "treePeakRssMb": 471.7,
+    "peakTaskProcs": 0,
+    "taskProcsSeen": 0,
+    "samplerTicks": 4,
+    "samplerTickMsMean": 0.86
+  },
+  "readyMs": 694,
+  "taskCount": 42,
+  "hashedUpfront": 42,
+  "ranTasks": false,
+  "nxMeasures": {
+    "createProjectGraphAsync": 568.5,
+    "buildProjectConfigs": 137.2,
+    "createDependencies": 14.1,
+    "hashMultipleTasks": 16.9,
+    "all": {
+      "loading dotenv files": 0.3,
+      "workspace context init": 0.2,
+      "code-loading": 22.6,
+      "createProjectGraphAsync": 568.5,
+      "createProjectGraphAsync >> retrieve-project-configurations": 524.6,
+      "loadDefaultNxPlugins": 282,
+      "loadSpecifiedNxPlugins": 402.7,
+      "build-project-configs": 137.2,
+      "createNodes:merge": 5.3,
+      "createProjectGraphAsync >> retrieve-workspace-files": 0.7,
+      "native-file-deps": 0,
+      "get-workspace-files": 0.7,
+      "createProjectGraphAsync >> build-project-graph-using-project-file-map": 16.9,
+      "read cache": 0.1,
+      "createDependencies": 14.1,
+      "createMetadata": 0,
+      "write cache": 1.1,
+      "preTasksExecution": 0.1,
+      "hashMultipleTasks": 16.9
+    }
+  }
+}

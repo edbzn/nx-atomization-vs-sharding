@@ -1,0 +1,80 @@
+{
+  "n": 20,
+  "variant": "atomized",
+  "phase": "hash",
+  "rep": 2,
+  "target": "test-ci",
+  "parallel": null,
+  "startedAt": "2026-10-09T18:44:09.818Z",
+  "cpus": 32,
+  "memAvailGbBefore": 17.2,
+  "stats": {
+    "variant": "atomized",
+    "projects": 20,
+    "targets": 194,
+    "atomTargets": 154,
+    "shardTargets": 0,
+    "projectDeps": 38,
+    "graphWallMs": 677
+  },
+  "ok": true,
+  "spawnAt": 1791571449819,
+  "exitAt": 1791571450496,
+  "wallMs": 677,
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "time": {
+    "wallS": 0.67,
+    "maxRssMb": 190.2,
+    "userS": 0.77,
+    "sysS": 0.25,
+    "cpuS": 1.02
+  },
+  "mem": {
+    "nxPeakRssMb": 172.2,
+    "workers": 4,
+    "workersPeakRssMbSum": 388.6,
+    "workersPeakRssMbMax": 112.9,
+    "workerComms": {
+      "MainThread": 4
+    },
+    "coordTreePeakRssMb": 472.2,
+    "treePeakRssMb": 472.2,
+    "peakTaskProcs": 0,
+    "taskProcsSeen": 0,
+    "samplerTicks": 4,
+    "samplerTickMsMean": 0.94
+  },
+  "readyMs": 650,
+  "taskCount": 174,
+  "hashedUpfront": 154,
+  "ranTasks": false,
+  "nxMeasures": {
+    "createProjectGraphAsync": 484.3,
+    "buildProjectConfigs": 143.7,
+    "createDependencies": 15.1,
+    "hashMultipleTasks": 52.1,
+    "all": {
+      "loading dotenv files": 0.3,
+      "workspace context init": 0.2,
+      "code-loading": 22.4,
+      "createProjectGraphAsync": 484.3,
+      "createProjectGraphAsync >> retrieve-project-configurations": 437.7,
+      "loadDefaultNxPlugins": 258.2,
+      "loadSpecifiedNxPlugins": 291.3,
+      "build-project-configs": 143.7,
+      "createNodes:merge": 7.4,
+      "createProjectGraphAsync >> retrieve-workspace-files": 0.8,
+      "native-file-deps": 0,
+      "get-workspace-files": 0.7,
+      "createProjectGraphAsync >> build-project-graph-using-project-file-map": 17.9,
+      "read cache": 0.1,
+      "createDependencies": 15.1,
+      "createMetadata": 0,
+      "write cache": 2.6,
+      "preTasksExecution": 0.1,
+      "hashMultipleTasks": 52.1
+    }
+  }
+}

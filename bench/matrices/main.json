@@ -1,0 +1,13 @@
+{
+  "reps": 3,
+  "workspaces": ["baseline", "atomized", "sharded"],
+  "scenarios": ["partial", "full"],
+  "runners": ["ct", "e2e", "unit", "all"],
+  "parallel": [8],
+  "rotate": true,
+  "cooldownSec": 20,
+  "minMemAvailableGb": 16,
+  "memWaitTimeoutMin": 30,
+  "out": "results/raw",
+  "runArgs": { "interval": 250, "timeout-min": 60 }
+}

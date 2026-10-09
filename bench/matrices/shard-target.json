@@ -1,0 +1,18 @@
+{
+  "reps": 2,
+  "workspaces": ["sharded"],
+  "configs": [
+    { "scenario": "full", "runner": "ct", "parallel": 8, "label": "target30", "env": { "SHARD_TARGET_SECONDS": "30" } },
+    { "scenario": "full", "runner": "ct", "parallel": 8, "label": "target15", "env": { "SHARD_TARGET_SECONDS": "15" } },
+    { "scenario": "full", "runner": "unit", "parallel": 8, "label": "target30", "env": { "SHARD_TARGET_SECONDS": "30" } },
+    { "scenario": "full", "runner": "unit", "parallel": 8, "label": "target15", "env": { "SHARD_TARGET_SECONDS": "15" } },
+    { "scenario": "full", "runner": "e2e", "parallel": 8, "label": "target30", "env": { "SHARD_TARGET_SECONDS": "30" } },
+    { "scenario": "full", "runner": "e2e", "parallel": 8, "label": "target15", "env": { "SHARD_TARGET_SECONDS": "15" } },
+    { "scenario": "partial", "runner": "all", "parallel": 8, "label": "target30", "env": { "SHARD_TARGET_SECONDS": "30" } },
+    { "scenario": "partial", "runner": "all", "parallel": 8, "label": "target15", "env": { "SHARD_TARGET_SECONDS": "15" } }
+  ],
+  "cooldownSec": 20,
+  "minMemAvailableGb": 16,
+  "out": "results/raw",
+  "runArgs": { "interval": 250, "timeout-min": 60 }
+}

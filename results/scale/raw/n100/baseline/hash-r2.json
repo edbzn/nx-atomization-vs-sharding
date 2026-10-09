@@ -1,0 +1,81 @@
+{
+  "n": 100,
+  "variant": "baseline",
+  "phase": "hash",
+  "rep": 2,
+  "target": "test",
+  "parallel": null,
+  "startedAt": "2026-10-09T18:45:30.043Z",
+  "cpus": 32,
+  "memAvailGbBefore": 17,
+  "stats": {
+    "variant": "baseline",
+    "projects": 100,
+    "targets": 100,
+    "atomTargets": 0,
+    "shardTargets": 0,
+    "projectDeps": 183,
+    "graphWallMs": 897
+  },
+  "ok": true,
+  "spawnAt": 1791571530044,
+  "exitAt": 1791571530807,
+  "wallMs": 763,
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "time": {
+    "wallS": 0.75,
+    "maxRssMb": 191.9,
+    "userS": 0.86,
+    "sysS": 0.26,
+    "cpuS": 1.12
+  },
+  "mem": {
+    "nxPeakRssMb": 156.6,
+    "workers": 5,
+    "workersPeakRssMbSum": 554,
+    "workersPeakRssMbMax": 187.6,
+    "workerComms": {
+      "MainThread": 4,
+      "esbuild": 1
+    },
+    "coordTreePeakRssMb": 521,
+    "treePeakRssMb": 521,
+    "peakTaskProcs": 0,
+    "taskProcsSeen": 0,
+    "samplerTicks": 4,
+    "samplerTickMsMean": 0.83
+  },
+  "readyMs": 737,
+  "taskCount": 100,
+  "hashedUpfront": 100,
+  "ranTasks": false,
+  "nxMeasures": {
+    "createProjectGraphAsync": 593.4,
+    "buildProjectConfigs": 216.1,
+    "createDependencies": 33.4,
+    "hashMultipleTasks": 33.7,
+    "all": {
+      "loading dotenv files": 0.2,
+      "workspace context init": 0.2,
+      "code-loading": 23.2,
+      "createProjectGraphAsync": 593.4,
+      "createProjectGraphAsync >> retrieve-project-configurations": 527.2,
+      "loadDefaultNxPlugins": 273,
+      "loadSpecifiedNxPlugins": 308,
+      "build-project-configs": 216.1,
+      "createNodes:merge": 5.3,
+      "createProjectGraphAsync >> retrieve-workspace-files": 1.4,
+      "native-file-deps": 0,
+      "get-workspace-files": 1.3,
+      "createProjectGraphAsync >> build-project-graph-using-project-file-map": 37,
+      "read cache": 0.1,
+      "createDependencies": 33.4,
+      "createMetadata": 0,
+      "write cache": 2.3,
+      "preTasksExecution": 0.1,
+      "hashMultipleTasks": 33.7
+    }
+  }
+}

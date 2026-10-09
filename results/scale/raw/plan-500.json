@@ -1,0 +1,45 @@
+{
+  "projects": 500,
+  "layers": 10,
+  "depEdges": 892,
+  "specs": 4158,
+  "specsPerProject": {
+    "mean": 8.32,
+    "hist": {
+      "2-5": 300,
+      "6-15": 150,
+      "20-40": 50
+    }
+  },
+  "files": 8090,
+  "sourceBytes": 7192120,
+  "shard": {
+    "secondsPerKb": 4.262,
+    "shardedProjects": 50,
+    "shardTargets": 110,
+    "shardsPerProjectHist": {
+      "1": 450,
+      "2": 40,
+      "3": 10
+    }
+  },
+  "variants": {
+    "baseline": {
+      "target": "test",
+      "targets": 500,
+      "tasks": 500
+    },
+    "atomized": {
+      "target": "test-ci",
+      "targets": 5158,
+      "tasks": 4658,
+      "atoms": 4158
+    },
+    "sharded": {
+      "target": "test-ci",
+      "targets": 1110,
+      "tasks": 1060,
+      "shards": 110
+    }
+  }
+}

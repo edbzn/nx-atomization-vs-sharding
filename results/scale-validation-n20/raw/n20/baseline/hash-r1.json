@@ -1,0 +1,81 @@
+{
+  "n": 20,
+  "variant": "baseline",
+  "phase": "hash",
+  "rep": 1,
+  "target": "test",
+  "parallel": null,
+  "startedAt": "2026-10-09T15:35:00.710Z",
+  "cpus": 2,
+  "memAvailGbBefore": 22.4,
+  "stats": {
+    "variant": "baseline",
+    "projects": 20,
+    "targets": 20,
+    "atomTargets": 0,
+    "shardTargets": 0,
+    "projectDeps": 38,
+    "graphWallMs": 640
+  },
+  "ok": true,
+  "spawnAt": 1791560100711,
+  "exitAt": 1791560101438,
+  "wallMs": 727,
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "time": {
+    "wallS": 0.72,
+    "maxRssMb": 157.9,
+    "userS": 0.61,
+    "sysS": 0.17,
+    "cpuS": 0.78
+  },
+  "mem": {
+    "nxPeakRssMb": 147.3,
+    "workers": 5,
+    "workersPeakRssMbSum": 444.3,
+    "workersPeakRssMbMax": 152.6,
+    "workerComms": {
+      "MainThread": 4,
+      "esbuild": 1
+    },
+    "coordTreePeakRssMb": 482.7,
+    "treePeakRssMb": 482.7,
+    "peakTaskProcs": 0,
+    "taskProcsSeen": 0,
+    "samplerTicks": 4,
+    "samplerTickMsMean": 0.44
+  },
+  "readyMs": 701,
+  "taskCount": 20,
+  "hashedUpfront": 20,
+  "ranTasks": false,
+  "nxMeasures": {
+    "createProjectGraphAsync": 578.8,
+    "buildProjectConfigs": 143.9,
+    "createDependencies": 26,
+    "hashMultipleTasks": 13.2,
+    "all": {
+      "loading dotenv files": 0.3,
+      "workspace context init": 0.2,
+      "code-loading": 24.1,
+      "createProjectGraphAsync": 578.8,
+      "createProjectGraphAsync >> retrieve-project-configurations": 526.5,
+      "loadDefaultNxPlugins": 346.6,
+      "loadSpecifiedNxPlugins": 380.8,
+      "build-project-configs": 143.9,
+      "createNodes:merge": 3.8,
+      "createProjectGraphAsync >> retrieve-workspace-files": 0.4,
+      "native-file-deps": 0,
+      "get-workspace-files": 0.4,
+      "createProjectGraphAsync >> build-project-graph-using-project-file-map": 28.7,
+      "read cache": 0.1,
+      "createDependencies": 26,
+      "createMetadata": 0,
+      "write cache": 1.2,
+      "preTasksExecution": 0.1,
+      "hashMultipleTasks": 13.2
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "n": 100,
+  "variant": "atomized",
+  "phase": "hash",
+  "rep": 1,
+  "target": "test-ci",
+  "parallel": null,
+  "startedAt": "2026-10-09T18:45:00.278Z",
+  "cpus": 32,
+  "memAvailGbBefore": 17.1,
+  "stats": {
+    "variant": "atomized",
+    "projects": 100,
+    "targets": 1012,
+    "atomTargets": 812,
+    "shardTargets": 0,
+    "projectDeps": 183,
+    "graphWallMs": 1122
+  },
+  "ok": true,
+  "spawnAt": 1791571500279,
+  "exitAt": 1791571501451,
+  "wallMs": 1172,
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "time": {
+    "wallS": 1.16,
+    "maxRssMb": 255.7,
+    "userS": 1.55,
+    "sysS": 0.32,
+    "cpuS": 1.87
+  },
+  "mem": {
+    "nxPeakRssMb": 219.4,
+    "workers": 4,
+    "workersPeakRssMbSum": 473.6,
+    "workersPeakRssMbMax": 184.6,
+    "workerComms": {
+      "MainThread": 4
+    },
+    "coordTreePeakRssMb": 532.1,
+    "treePeakRssMb": 532.1,
+    "peakTaskProcs": 1,
+    "taskProcsSeen": 0,
+    "samplerTicks": 6,
+    "samplerTickMsMean": 0.89
+  },
+  "readyMs": 1139,
+  "taskCount": 912,
+  "hashedUpfront": 812,
+  "ranTasks": false,
+  "nxMeasures": {
+    "createProjectGraphAsync": 768,
+    "buildProjectConfigs": 366,
+    "createDependencies": 37.4,
+    "hashMultipleTasks": 243.7,
+    "all": {
+      "loading dotenv files": 0.2,
+      "workspace context init": 0.2,
+      "code-loading": 23.1,
+      "createProjectGraphAsync": 768,
+      "createProjectGraphAsync >> retrieve-project-configurations": 685.2,
+      "loadDefaultNxPlugins": 282.5,
+      "loadSpecifiedNxPlugins": 316.3,
+      "build-project-configs": 366,
+      "createNodes:merge": 22.6,
+      "createProjectGraphAsync >> retrieve-workspace-files": 1.7,
+      "native-file-deps": 0,
+      "get-workspace-files": 1.6,
+      "createProjectGraphAsync >> build-project-graph-using-project-file-map": 40.7,
+      "read cache": 0.1,
+      "createDependencies": 37.4,
+      "createMetadata": 0,
+      "write cache": 9.8,
+      "preTasksExecution": 0.2,
+      "hashMultipleTasks": 243.7
+    }
+  }
+}

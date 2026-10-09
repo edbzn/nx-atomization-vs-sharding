@@ -1,0 +1,5 @@
+{
+  "//": "Marks the plugin sources as ESM so Node's native TS stripping loads them without reparsing, whatever the workspace's own module type.",
+  "private": true,
+  "type": "module"
+}

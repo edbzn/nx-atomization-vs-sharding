@@ -1,0 +1,9 @@
+{
+  "variant": "baseline",
+  "projects": 1500,
+  "targets": 1500,
+  "atomTargets": 0,
+  "shardTargets": 0,
+  "projectDeps": 2714,
+  "graphWallMs": 3235
+}

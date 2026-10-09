@@ -1,0 +1,9 @@
+{
+  "variant": "atomized",
+  "projects": 500,
+  "targets": 5158,
+  "atomTargets": 4158,
+  "shardTargets": 0,
+  "projectDeps": 892,
+  "graphWallMs": 2490
+}

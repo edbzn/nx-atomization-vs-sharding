@@ -1,0 +1,80 @@
+{
+  "n": 20,
+  "variant": "atomized",
+  "phase": "hash",
+  "rep": 1,
+  "target": "test-ci",
+  "parallel": null,
+  "startedAt": "2026-10-09T18:43:48.253Z",
+  "cpus": 32,
+  "memAvailGbBefore": 17.3,
+  "stats": {
+    "variant": "atomized",
+    "projects": 20,
+    "targets": 194,
+    "atomTargets": 154,
+    "shardTargets": 0,
+    "projectDeps": 38,
+    "graphWallMs": 677
+  },
+  "ok": true,
+  "spawnAt": 1791571428254,
+  "exitAt": 1791571428924,
+  "wallMs": 670,
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "time": {
+    "wallS": 0.66,
+    "maxRssMb": 187.1,
+    "userS": 0.78,
+    "sysS": 0.25,
+    "cpuS": 1.03
+  },
+  "mem": {
+    "nxPeakRssMb": 173,
+    "workers": 4,
+    "workersPeakRssMbSum": 397.9,
+    "workersPeakRssMbMax": 122.6,
+    "workerComms": {
+      "MainThread": 4
+    },
+    "coordTreePeakRssMb": 476.4,
+    "treePeakRssMb": 476.4,
+    "peakTaskProcs": 0,
+    "taskProcsSeen": 0,
+    "samplerTicks": 4,
+    "samplerTickMsMean": 0.87
+  },
+  "readyMs": 644,
+  "taskCount": 174,
+  "hashedUpfront": 154,
+  "ranTasks": false,
+  "nxMeasures": {
+    "createProjectGraphAsync": 483.2,
+    "buildProjectConfigs": 150.3,
+    "createDependencies": 17.1,
+    "hashMultipleTasks": 49.6,
+    "all": {
+      "loading dotenv files": 0.2,
+      "workspace context init": 0.1,
+      "code-loading": 23.9,
+      "createProjectGraphAsync": 483.2,
+      "createProjectGraphAsync >> retrieve-project-configurations": 438.2,
+      "loadDefaultNxPlugins": 252.9,
+      "loadSpecifiedNxPlugins": 285.5,
+      "build-project-configs": 150.3,
+      "createNodes:merge": 8.3,
+      "createProjectGraphAsync >> retrieve-workspace-files": 0.7,
+      "native-file-deps": 0,
+      "get-workspace-files": 0.6,
+      "createProjectGraphAsync >> build-project-graph-using-project-file-map": 20.1,
+      "read cache": 0.1,
+      "createDependencies": 17.1,
+      "createMetadata": 0,
+      "write cache": 2.5,
+      "preTasksExecution": 0.1,
+      "hashMultipleTasks": 49.6
+    }
+  }
+}

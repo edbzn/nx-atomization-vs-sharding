@@ -1,0 +1,8 @@
+{
+  "reps": 1,
+  "workspaces": ["baseline", "atomized", "sharded"],
+  "configs": [{ "scenario": "partial", "runner": "unit", "parallel": 4 }],
+  "cooldownSec": 5,
+  "minMemAvailableGb": 10,
+  "out": "results/raw-smoke"
+}

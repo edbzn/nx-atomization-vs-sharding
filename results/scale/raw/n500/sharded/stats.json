@@ -1,0 +1,9 @@
+{
+  "variant": "sharded",
+  "projects": 500,
+  "targets": 1110,
+  "atomTargets": 0,
+  "shardTargets": 110,
+  "projectDeps": 892,
+  "graphWallMs": 1704
+}

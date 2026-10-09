@@ -1,0 +1,97 @@
+{
+  "n": 20,
+  "variant": "sharded",
+  "phase": "run",
+  "rep": 1,
+  "target": "test-ci",
+  "parallel": 16,
+  "startedAt": "2026-10-09T18:44:30.487Z",
+  "cpus": 32,
+  "memAvailGbBefore": 16.1,
+  "stats": {
+    "variant": "sharded",
+    "projects": 20,
+    "targets": 44,
+    "atomTargets": 0,
+    "shardTargets": 4,
+    "projectDeps": 38,
+    "graphWallMs": 794
+  },
+  "ok": true,
+  "errors": [],
+  "spawnAt": 1791571470489,
+  "exitAt": 1791571473388,
+  "wallMs": 2899,
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "time": {
+    "wallS": 2.89,
+    "maxRssMb": 181.5,
+    "userS": 26.43,
+    "sysS": 3.56,
+    "cpuS": 29.99
+  },
+  "mem": {
+    "nxPeakRssMb": 187.5,
+    "workers": 6,
+    "workersPeakRssMbSum": 516.1,
+    "workersPeakRssMbMax": 158.3,
+    "workerComms": {
+      "MainThread": 5,
+      "esbuild": 1
+    },
+    "coordTreePeakRssMb": 473,
+    "treePeakRssMb": 3269,
+    "peakTaskProcs": 67,
+    "taskProcsSeen": 163,
+    "samplerTicks": 15,
+    "samplerTickMsMean": 2.69
+  },
+  "tasks": {
+    "count": 42,
+    "realCount": 22,
+    "noopCount": 20,
+    "slotsUsed": 16,
+    "statuses": {
+      "success": 42
+    },
+    "failed": [],
+    "cacheHits": 0,
+    "sumDurMs": 23898,
+    "sumRealDurMs": 23896,
+    "realDurMeanMs": 1086.2,
+    "realDurMedianMs": 915.5,
+    "realDurP95Ms": 2148.2,
+    "noopDurSumMs": 2,
+    "preTaskMs": 687,
+    "taskPhaseMs": 2181,
+    "postTaskMs": 31,
+    "slotOccupancy": 0.685,
+    "gapCount": 26,
+    "gapSumMs": 1376,
+    "gapMeanMs": 52.92,
+    "gapMedianMs": 3.5,
+    "gapP95Ms": 198,
+    "idealMakespanMs": 1494,
+    "overheadMs": 1405,
+    "overheadPerTaskMs": 33.46,
+    "inPhaseLossMs": 687
+  },
+  "hook": {
+    "graphReadyMs": 682,
+    "runDuration": 2198.4716796875,
+    "criticalPathDuration": 2180,
+    "criticalPathTaskCount": 1,
+    "overhead": 18.4716796875,
+    "recoverableByParallel": 18.4716796875,
+    "recoverableByMachines": 0,
+    "coordinatorOverhead": 0,
+    "error": null
+  },
+  "printedReport": {
+    "runDuration": 2200,
+    "criticalPathDuration": 2200,
+    "recoverable": 18
+  }
+}

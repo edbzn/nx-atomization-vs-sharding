@@ -1,0 +1,80 @@
+{
+  "n": 20,
+  "variant": "baseline",
+  "phase": "hash",
+  "rep": 1,
+  "target": "test",
+  "parallel": null,
+  "startedAt": "2026-10-09T18:43:45.661Z",
+  "cpus": 32,
+  "memAvailGbBefore": 17.4,
+  "stats": {
+    "variant": "baseline",
+    "projects": 20,
+    "targets": 20,
+    "atomTargets": 0,
+    "shardTargets": 0,
+    "projectDeps": 38,
+    "graphWallMs": 650
+  },
+  "ok": true,
+  "spawnAt": 1791571425662,
+  "exitAt": 1791571426250,
+  "wallMs": 588,
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "time": {
+    "wallS": 0.58,
+    "maxRssMb": 167.3,
+    "userS": 0.67,
+    "sysS": 0.21,
+    "cpuS": 0.88
+  },
+  "mem": {
+    "nxPeakRssMb": 156.6,
+    "workers": 4,
+    "workersPeakRssMbSum": 379.7,
+    "workersPeakRssMbMax": 118.3,
+    "workerComms": {
+      "MainThread": 4
+    },
+    "coordTreePeakRssMb": 467.9,
+    "treePeakRssMb": 467.9,
+    "peakTaskProcs": 0,
+    "taskProcsSeen": 0,
+    "samplerTicks": 3,
+    "samplerTickMsMean": 0.98
+  },
+  "readyMs": 564,
+  "taskCount": 20,
+  "hashedUpfront": 20,
+  "ranTasks": false,
+  "nxMeasures": {
+    "createProjectGraphAsync": 446.8,
+    "buildProjectConfigs": 112.5,
+    "createDependencies": 12.9,
+    "hashMultipleTasks": 9.7,
+    "all": {
+      "loading dotenv files": 0.3,
+      "workspace context init": 0.2,
+      "code-loading": 22.5,
+      "createProjectGraphAsync": 446.8,
+      "createProjectGraphAsync >> retrieve-project-configurations": 404.2,
+      "loadDefaultNxPlugins": 254.8,
+      "loadSpecifiedNxPlugins": 289.3,
+      "build-project-configs": 112.5,
+      "createNodes:merge": 3.5,
+      "createProjectGraphAsync >> retrieve-workspace-files": 0.7,
+      "native-file-deps": 0,
+      "get-workspace-files": 0.7,
+      "createProjectGraphAsync >> build-project-graph-using-project-file-map": 15.7,
+      "read cache": 0.1,
+      "createDependencies": 12.9,
+      "createMetadata": 0,
+      "write cache": 1.1,
+      "preTasksExecution": 0.1,
+      "hashMultipleTasks": 9.7
+    }
+  }
+}

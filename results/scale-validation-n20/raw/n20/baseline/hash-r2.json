@@ -1,0 +1,80 @@
+{
+  "n": 20,
+  "variant": "baseline",
+  "phase": "hash",
+  "rep": 2,
+  "target": "test",
+  "parallel": null,
+  "startedAt": "2026-10-09T15:35:24.229Z",
+  "cpus": 2,
+  "memAvailGbBefore": 23.2,
+  "stats": {
+    "variant": "baseline",
+    "projects": 20,
+    "targets": 20,
+    "atomTargets": 0,
+    "shardTargets": 0,
+    "projectDeps": 38,
+    "graphWallMs": 640
+  },
+  "ok": true,
+  "spawnAt": 1791560124229,
+  "exitAt": 1791560124871,
+  "wallMs": 642,
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "time": {
+    "wallS": 0.63,
+    "maxRssMb": 160,
+    "userS": 0.56,
+    "sysS": 0.16,
+    "cpuS": 0.72
+  },
+  "mem": {
+    "nxPeakRssMb": 157.2,
+    "workers": 4,
+    "workersPeakRssMbSum": 374.6,
+    "workersPeakRssMbMax": 101.3,
+    "workerComms": {
+      "MainThread": 4
+    },
+    "coordTreePeakRssMb": 507,
+    "treePeakRssMb": 507,
+    "peakTaskProcs": 0,
+    "taskProcsSeen": 0,
+    "samplerTicks": 4,
+    "samplerTickMsMean": 0.4
+  },
+  "readyMs": 612,
+  "taskCount": 20,
+  "hashedUpfront": 20,
+  "ranTasks": false,
+  "nxMeasures": {
+    "createProjectGraphAsync": 490.2,
+    "buildProjectConfigs": 125.1,
+    "createDependencies": 20.7,
+    "hashMultipleTasks": 11.2,
+    "all": {
+      "loading dotenv files": 0.2,
+      "workspace context init": 0.2,
+      "code-loading": 27.8,
+      "createProjectGraphAsync": 490.2,
+      "createProjectGraphAsync >> retrieve-project-configurations": 440.5,
+      "loadDefaultNxPlugins": 277.8,
+      "loadSpecifiedNxPlugins": 313.8,
+      "build-project-configs": 125.1,
+      "createNodes:merge": 4,
+      "createProjectGraphAsync >> retrieve-workspace-files": 0.4,
+      "native-file-deps": 0,
+      "get-workspace-files": 0.4,
+      "createProjectGraphAsync >> build-project-graph-using-project-file-map": 23.2,
+      "read cache": 0.1,
+      "createDependencies": 20.7,
+      "createMetadata": 0,
+      "write cache": 1,
+      "preTasksExecution": 0.1,
+      "hashMultipleTasks": 11.2
+    }
+  }
+}

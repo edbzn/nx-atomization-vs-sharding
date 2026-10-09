@@ -1,0 +1,80 @@
+{
+  "n": 20,
+  "variant": "baseline",
+  "phase": "hash",
+  "rep": 2,
+  "target": "test",
+  "parallel": null,
+  "startedAt": "2026-10-09T18:44:15.219Z",
+  "cpus": 32,
+  "memAvailGbBefore": 17.2,
+  "stats": {
+    "variant": "baseline",
+    "projects": 20,
+    "targets": 20,
+    "atomTargets": 0,
+    "shardTargets": 0,
+    "projectDeps": 38,
+    "graphWallMs": 650
+  },
+  "ok": true,
+  "spawnAt": 1791571455219,
+  "exitAt": 1791571455823,
+  "wallMs": 604,
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "time": {
+    "wallS": 0.6,
+    "maxRssMb": 166.4,
+    "userS": 0.7,
+    "sysS": 0.18,
+    "cpuS": 0.88
+  },
+  "mem": {
+    "nxPeakRssMb": 154,
+    "workers": 4,
+    "workersPeakRssMbSum": 378.2,
+    "workersPeakRssMbMax": 103.4,
+    "workerComms": {
+      "MainThread": 4
+    },
+    "coordTreePeakRssMb": 500.4,
+    "treePeakRssMb": 500.4,
+    "peakTaskProcs": 0,
+    "taskProcsSeen": 0,
+    "samplerTicks": 4,
+    "samplerTickMsMean": 0.68
+  },
+  "readyMs": 579,
+  "taskCount": 20,
+  "hashedUpfront": 20,
+  "ranTasks": false,
+  "nxMeasures": {
+    "createProjectGraphAsync": 461.1,
+    "buildProjectConfigs": 112.2,
+    "createDependencies": 12.7,
+    "hashMultipleTasks": 9.8,
+    "all": {
+      "loading dotenv files": 0.3,
+      "workspace context init": 0.2,
+      "code-loading": 22.4,
+      "createProjectGraphAsync": 461.1,
+      "createProjectGraphAsync >> retrieve-project-configurations": 419.1,
+      "loadDefaultNxPlugins": 269.1,
+      "loadSpecifiedNxPlugins": 304.2,
+      "build-project-configs": 112.2,
+      "createNodes:merge": 3.8,
+      "createProjectGraphAsync >> retrieve-workspace-files": 0.5,
+      "native-file-deps": 0,
+      "get-workspace-files": 0.5,
+      "createProjectGraphAsync >> build-project-graph-using-project-file-map": 15.2,
+      "read cache": 0.1,
+      "createDependencies": 12.7,
+      "createMetadata": 0,
+      "write cache": 1.1,
+      "preTasksExecution": 0.1,
+      "hashMultipleTasks": 9.8
+    }
+  }
+}
