@@ -1,7 +1,7 @@
 // Turns one run's artifacts (NX_PROFILE trace, task graph, sampler output, hook dump, log)
 // into summary.json.
 import { classifyTarget } from './config.mjs';
-import { max, mean, median, p95, round, sum } from './stats.mjs';
+import { max, mean, median, min, p95, round, sum } from './stats.mjs';
 import { parsePerformanceReport } from './perf-report.mjs';
 
 const CACHE_HIT = new Set(['local-cache', 'local-cache-kept-existing', 'remote-cache']);
@@ -105,16 +105,15 @@ export function buildSummary({
     });
 
   const wallMs = exitAt - spawnAt;
-  const firstStart = tasks.length ? Math.min(...tasks.map((t) => t.start)) : null;
-  const lastEnd = tasks.length ? Math.max(...tasks.map((t) => t.end)) : null;
+  const firstStart = tasks.length ? tasks.reduce((m, t) => Math.min(m, t.start), Infinity) : null;
+  const lastEnd = tasks.length ? tasks.reduce((m, t) => Math.max(m, t.end), -Infinity) : null;
   const taskPhaseMs = tasks.length ? lastEnd - firstStart : null;
   const real = tasks.filter((t) => !t.isNoop);
   const durations = tasks.map((t) => t.duration);
   const realDur = real.map((t) => t.duration);
   const failed = tasks.filter((t) => t.status === 'failure').map((t) => t.id);
-  const notRun = taskGraph?.tasks?.tasks
-    ? Object.keys(taskGraph.tasks.tasks).filter((id) => !tasks.some((t) => t.id === id))
-    : [];
+  const ran = new Set(tasks.map((t) => t.id));
+  const notRun = taskGraph?.tasks?.tasks ? Object.keys(taskGraph.tasks.tasks).filter((id) => !ran.has(id)) : [];
   const statusCounts = {};
   for (const t of tasks) statusCounts[t.status ?? 'unknown'] = (statusCounts[t.status ?? 'unknown'] ?? 0) + 1;
   const byKind = {};
@@ -155,7 +154,7 @@ export function buildSummary({
         avgSysCores: round(mean(col('sysCores').slice(1)), 2),
         peakSysCores: max(col('sysCores')),
         avgSysCoresTaskPhase: round(mean(inTaskPhase.map((r) => r[sysIdx])), 2),
-        minMemAvailableMb: Math.min(...col('memAvailMb')),
+        minMemAvailableMb: min(col('memAvailMb')),
         maxLoad1: max(col('load1')),
         processesSeen: sampler.processes.length,
         reparentedProcesses: sampler.processes.filter((p) => p.reparented).length,

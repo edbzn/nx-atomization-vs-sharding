@@ -7,6 +7,7 @@ import { componentDirs, componentNames, libComponentFiles } from './lib-componen
 import { ctSpecFile, emitCtBlock } from './ct-spec.mjs';
 import { emitUnitBlock, unitSpecFile } from './unit-spec.mjs';
 import { estimate } from '../lib/cost.mjs';
+import { aliasDeclaration } from './aliases.mjs';
 
 const KINDS = ['table', 'form', 'tags', 'wizard', 'board'];
 const TOPICS = {
@@ -35,7 +36,7 @@ function specNames(domain) {
  * Build the spec files of one lib. Every spec has a runtime target (seconds); `it` blocks are
  * added until the cost model says the target is reached, so spec size tracks spec runtime.
  */
-function buildSpecs({ runner, rng, domain, targets, model }) {
+function buildSpecs({ runner, rng, domain, targets, model, fixtureRows = [24, 44] }) {
   const names = specNames(domain);
   const dirs = componentDirs(domain);
   const emit = runner === 'cypress' ? emitCtBlock : emitUnitBlock;
@@ -53,7 +54,7 @@ function buildSpecs({ runner, rng, domain, targets, model }) {
     const base = kind === 'tags' ? 'tag-editor' : kebab(names[kind]);
     const path = `${dirs[kind]}/${base}.${topic}${ext}`;
     // Table specs share one row fixture per file (blocks use a prefix of it).
-    const fixture = kind === 'table' ? makeRows(rng.fork(`${path}#rows`), domain, rng.int(24, 44), rng.int(0, 400)) : undefined;
+    const fixture = kind === 'table' ? makeRows(rng.fork(`${path}#rows`), domain, rng.int(fixtureRows[0], fixtureRows[1]), rng.int(0, 400)) : undefined;
     const blocks = [];
     let est = estimate(model, { spec: 1, rows: fixture?.length ?? 0 });
     let j = 0;
@@ -83,18 +84,26 @@ function buildSpecs({ runner, rng, domain, targets, model }) {
   return specs;
 }
 
-export function libFiles({ runner, name, domain, targets, rng, model, touched = false }) {
+/**
+ * Options used by generator/size.mjs only (defaults reproduce the main workspaces):
+ * `fixtureRows`: [min, max] rows of a table spec's fixture; `packageJson: false` drops the
+ * pnpm workspace package manifest; `aliases: true` adds Vite resolve aliases for @bench/*
+ * (see aliases.mjs).
+ */
+export function libFiles({ runner, name, domain, targets, rng, model, touched = false, fixtureRows, packageJson = true, aliases = false }) {
   const group = runner === 'cypress' ? 'ct' : 'unit';
   const root = `libs/${group}/${name}`;
   const files = {};
-  files[`${root}/package.json`] = json({
-    name: `@bench/${name}`,
-    version: '0.0.0',
-    private: true,
-    main: './src/index.ts',
-    types: './src/index.ts',
-    dependencies: { '@bench/shared-ui': 'workspace:*' },
-  });
+  if (packageJson) {
+    files[`${root}/package.json`] = json({
+      name: `@bench/${name}`,
+      version: '0.0.0',
+      private: true,
+      main: './src/index.ts',
+      types: './src/index.ts',
+      dependencies: { '@bench/shared-ui': 'workspace:*' },
+    });
+  }
   files[`${root}/project.json`] = json({
     $schema: '../../../node_modules/nx/schemas/project-schema.json',
     name,
@@ -114,7 +123,7 @@ export function libFiles({ runner, name, domain, targets, rng, model, touched = 
 import { join } from 'node:path';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'cypress';
-
+${aliases ? `\n${aliasDeclaration('../../..')}` : ''}
 // Every Cypress process gets its own Vite cache dir: concurrent Nx tasks of the same project
 // (atoms or shards) would otherwise race on one dependency-optimizer cache. Each process thus
 // starts with a cold optimizer, like a fresh CI agent. The dir is removed after the run.
@@ -137,7 +146,7 @@ export default defineConfig({
         configFile: false,
         plugins: [react()],
         cacheDir,
-        logLevel: 'warn',
+        logLevel: 'warn',${aliases ? `\n        resolve: { alias: benchAliases },` : ''}
         optimizeDeps: {
           include: ['react', 'react-dom', 'react-dom/client', 'react/jsx-dev-runtime', 'cypress/react'],
         },
@@ -177,13 +186,13 @@ Cypress.Commands.add('mount', mount);
 </html>
 `;
   } else {
-    files[`${root}/vitest.config.ts`] = `import react from '@vitejs/plugin-react';
+    files[`${root}/vitest.config.ts`] = `${aliases ? `import { join } from 'node:path';\n` : ''}import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 const ci = !!process.env.CI;
-
+${aliases ? `\n${aliasDeclaration('../../..')}` : ''}
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react()],${aliases ? `\n  resolve: { alias: benchAliases },` : ''}
   test: {
     name: '${name}',
     environment: 'jsdom',
@@ -210,7 +219,7 @@ afterEach(() => {
 `;
   }
 
-  const specs = buildSpecs({ runner, rng, domain, targets, model });
+  const specs = buildSpecs({ runner, rng, domain, targets, model, fixtureRows });
   for (const s of specs) files[`${root}/${s.path}`] = s.content;
   return { root, files, specs };
 }

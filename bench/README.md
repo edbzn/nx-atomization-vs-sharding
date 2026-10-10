@@ -586,3 +586,134 @@ process. `mem.nxPeakRssMb` is the coordinator's own peak RSS (VmHWM).
 - Under a restricted CPU set (`taskset`), `--parallel 16` oversubscribes the CPUs: task
   durations inflate and `overheadMs` is meaningless. Use run-phase numbers only from runs with
   ≥ P free cores. Each result records `cpus`.
+
+## Size sweep
+
+Question: how do the three variants behave as the *full* workspace (Cypress CT + Playwright
+e2e + Vitest, the main benchmark's templates) grows from 10 to 2,000 projects? Unlike the
+Vitest-only scaling experiment above, every run here is the main benchmark's measurement:
+one `bench/run.mjs` run per size × variant, scenario `full`, all three runners together.
+
+```
+generator/size.mjs          full workspaces with N projects (workspaces/size/<variant>-<N>/)
+generator/size/pnpm-lock.yaml the one lockfile every size and variant installs from
+bench/size-sweep.mjs        the sweep (generation + interleaved run.mjs runs), resumable
+bench/size-sweep-report.mjs <out>/raw/** -> <out>/report.{json,md}
+```
+
+### Quick start
+
+```sh
+node generator/size.mjs --plan                       # totals for 10..2000 at shard target 15 s; writes nothing
+node bench/size-sweep.mjs --dry-run                  # plan + estimated duration from the runs so far
+node bench/size-sweep.mjs                            # sizes 10,25,50,100,250,500,1000,2000; resumable
+node bench/size-sweep-report.mjs                     # results/size-sweep/report.{md,json}
+node bench/report-data.mjs                           # + results/report/size-sweep.json
+```
+
+`bench/size-sweep.mjs` options: `--sizes 10,25,50,100,250,500,1000,2000`,
+`--variants baseline,atomized,sharded`, `--parallel 8`, `--timeout-min 90`, `--shard-target 15`,
+`--out results/size-sweep`, `--ws-dir workspaces/size`, `--cooldown 20` (s between runs),
+`--min-mem-gb 16` (wait for MemAvailable before each run, up to `--mem-wait-min 30`),
+`--interval 250` (sampler), `--retry-flagged`, `--dry-run`.
+
+- Sizes run in ascending order. A size's missing workspaces are generated right before its
+  runs. The three variants are interleaved and their order rotates per size (b,a,s; a,s,b; s,b,a; ...).
+- Each run is `run.mjs --workspace workspaces/size/<variant>-<N> --kind <variant> --scenario full
+  --runner all --parallel P --reps 1`: targets `component-test,e2e,test` (baseline) or
+  `component-test-ci,e2e-ci,test-ci` (atomized, sharded), NX_PROFILE, the `/proc` sampler,
+  the perf hook, cold workspace data, `--skip-nx-cache` and the leftover kill, exactly as above.
+  The task-graph export (`affected --graph`) runs before each measured run, as always; it is
+  not part of the wall time but it is part of the sweep's duration.
+- Sharded runs get `SHARD_TARGET_SECONDS=<--shard-target>` and the label `target<s>`. The
+  default is 15 s, the best Cypress target found on this machine: with these short specs a
+  90 s target would shard almost nothing.
+- A run that hits `--timeout-min` is killed, recorded (`flags.timedOut`, wall ≥ timeout, no
+  profile) and the sweep continues. A `run.mjs` crash (exit 2) stops the sweep. Re-running
+  the same command resumes: a size × variant whose `summary.json` exists (same `-P` and label)
+  is skipped. `<out>/sweep-runs.jsonl` logs every generation and run with its elapsed time.
+
+### Generated workspaces
+
+`node generator/size.mjs --projects N[,N...] [--variant baseline|atomized|sharded|all] [--out workspaces/size] [--force] [--no-install] [--shard-target 15]`
+
+- N counts every project except `libs/shared-ui`: 40% Cypress CT libs (`libs/ct/ct-<domain>-<i>`),
+  40% Vitest libs (`libs/unit/unit-<domain>-<i>`), 10% Vite apps (`apps/<academy|homes|shop>-<j>`)
+  and 10% Playwright e2e projects (`apps/<app>-e2e`, one per app), at least one of each.
+  Every project is rendered by the main templates (`generator/templates/*`), so a lib, an app
+  or an e2e project looks like the main workspaces' ones, with fewer and shorter specs.
+- Specs per project are long-tailed and stratified per runner: 55% of projects have 1-3
+  specs, 35% have 4-8 and 10% have 12-24 (mean ≈ 5). Spec runtime targets (in-process work, as
+  the templates' cost model in `generator/calibration.json` sees it) are log-normal and
+  clamped: Cypress CT and Playwright 0.5-2 s (median 0.95 s), Vitest 0.1-0.5 s (median 0.22 s).
+  The templates add `it` blocks until a spec reaches its target, so spec bytes track runtime
+  (what the shard plugin estimates from). Table fixtures have 12-20 rows instead of 24-44.
+- Dependencies: every lib imports `@bench/shared-ui`. Libs are spread over 8 layers and import
+  0-2 libs from lower layers (60% from the layer right below) in `src/lib/integrations.ts`,
+  re-exported from `src/index.ts`. Each app imports 2-4 libs in `src/features.ts` (not imported
+  by `main.tsx`, so it shapes the project graph without changing the bundle). Each e2e
+  project depends on its app (`implicitDependencies`, `^build`). Changing shared-ui affects
+  every project.
+- **Not pnpm workspace packages.** Projects have no `package.json` (shared-ui gets a
+  `project.json`). `@bench/*` imports resolve through explicit path aliases in
+  `tsconfig.base.json` (Nx infers the project graph from them) and the same aliases as Vite
+  `resolve.alias` in `cypress.config.ts`, `vitest.config.ts` and the apps' `vite.config.ts`
+  (`generator/templates/aliases.mjs`). The root `package.json` is therefore the only importer
+  and is byte-identical to the main workspaces', so one lockfile serves every size and
+  variant. It was resolved once from `generator/pnpm-lock.yaml` (same 856 packages, only the
+  importers differ). Every workspace installs it with `pnpm install --frozen-lockfile
+  --prefer-offline` from the store. The generator then checks that nx, the @nx plugins,
+  cypress, @playwright/test, vitest, vite, react and the other runtime packages resolve inside
+  the workspace (Node's lookup order: a parent `node_modules` such as `$HOME/node_modules` would
+  show up), and that `pnpm exec nx --version` reports `Local: v23.3.0`, `Global: Not found`.
+- nx.json comes from the main generator's `nxJson(variant)`, so the plugin configuration is
+  identical to the main workspaces: `ciComponentTestingTargetName` / `ciTargetName` for
+  atomized, `ciTargetName: ""` for Playwright in baseline and sharded, the `parallelism: true`
+  overrides, and the shard plugin (`shard-plugin/src` copied to `tools/shard-plugin/src`)
+  with its default `secondsPerKb`.
+- Git: tag `base` (initial commit, `main`) and tag `full` (adds a `size` prop to shared-ui's
+  `Button`, as in the main workspaces). There is no `partial` tag.
+- Generation streams: each project is rendered and written to every variant directory at once.
+  Rendering is cheap (< 1 s even at N=2000); writing, pnpm and git dominate.
+  `<out>/plan-<N>.json` records the expected totals and the project list. A workspace that
+  already has `.git` and `node_modules` is skipped unless `--force` is passed.
+
+Expected tasks of `nx affected` on `full`: baseline = test projects + app builds; atomized =
+specs (atoms) + one noop parent per test project + builds; sharded = shards + delegated
+whole-project targets + noop parents + builds. `--plan` prints them, with the shard plan
+computed by the plugin's own `planShards` at `--shard-target`.
+
+Totals (`--plan`, shard target 15 s, the plugin's default `secondsPerKb`):
+
+| N | CT / Vitest / apps / e2e | specs (CT / Vitest / PW) | baseline tasks | atomized tasks | sharded tasks (shards) | files per workspace |
+|---|---|---|---|---|---|---|
+| 10 | 4 / 4 / 1 / 1 | 26 (13 / 12 / 1) | 10 | 36 | 19 (0) | 163 |
+| 25 | 10 / 9 / 3 / 3 | 98 (41 / 46 / 11) | 25 | 123 | 48 (2) | 410 |
+| 50 | 20 / 20 / 5 / 5 | 237 (108 / 97 / 32) | 50 | 287 | 97 (4) | 848 |
+| 100 | 40 / 40 / 10 / 10 | 440 (185 / 199 / 56) | 100 | 540 | 196 (11) | 1,645 |
+| 250 | 100 / 100 / 25 / 25 | 1,127 (496 / 491 / 140) | 250 | 1,377 | 493 (31) | 4,110 |
+| 500 | 200 / 200 / 50 / 50 | 2,269 (1,008 / 1,018 / 243) | 500 | 2,769 | 980 (54) | 8,227 |
+| 1000 | 400 / 400 / 100 / 100 | 4,499 (1,997 / 2,007 / 495) | 1,000 | 5,499 | 1,961 (110) | 16,388 |
+| 2000 | 800 / 800 / 200 / 200 | 8,976 (3,920 / 4,061 / 995) | 2,000 | 10,976 | 3,920 (218) | 32,728 |
+
+At 15 s only the 12-24-spec Cypress and Playwright projects shard (2-3 shards). Vitest projects
+never do: the plugin estimates ≤ 7 s for the largest one (0.095 s/KB).
+
+`results/size-sweep-validation/` holds the validation run (N = 10 and 50, all variants, -P 8,
+all tasks green). `node bench/size-sweep.mjs --dry-run --out results/size-sweep-validation`
+extrapolates the sweep from it. The real sweep writes to `results/size-sweep/`.
+
+### Report
+
+`bench/size-sweep-report.mjs [--out results/size-sweep] [--parallel 8]` takes the newest run
+per size × variant and writes `report.json` (one row each) and `report.md`. Columns: projects,
+specs, tasks (and expected tasks), wall, pre-task (`timing.preTaskMs`: boot, project graph,
+task graph, upfront hashing; `graphMs` from the hook), task phase, Σ task time, median real
+task, CPU seconds of the tree, average / peak busy cores, slot utilisation, peak PSS, Nx's
+`coordinatorOverhead`, the mean and median idle gap between consecutive real tasks on one slot,
+the nx main process's peak RSS (the sampler's record of the root pid: the hook launcher runs
+Nx in-process) and the `(nx)` bucket's CPU, and the `timedOut` / failed / flag columns.
+A timed-out run's wall is shown as `≥`. `bench/report-data.mjs` turns it into
+`results/report/size-sweep.json` (flat rows) when `results/size-sweep/report.json` exists.
+
+`results/size-sweep*/raw/` is git-ignored (logs, profiles and samples are large).

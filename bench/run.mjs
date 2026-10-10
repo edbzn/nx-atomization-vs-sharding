@@ -9,6 +9,8 @@
 //
 // Env: BENCH_NX_CMD="node /path/fake-nx.mjs" replaces the nx launcher (tests);
 //      BENCH_WORKSPACES_DIR overrides <repo>/workspaces.
+// --workspace also takes a path; the variant (target mapping) is --kind, else the directory
+// name without a trailing -<N> (size-sweep workspaces: workspaces/size/atomized-500).
 import { spawn, fork, execFileSync } from 'node:child_process';
 import { createWriteStream, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { basename, join, relative, resolve } from 'node:path';
@@ -130,7 +132,8 @@ async function killStrays(excludePids) {
 /** Exported for matrix.mjs. Returns the summary. */
 export async function runOnce(opts) {
   const { dir: ws, name } = resolveWorkspace(opts.workspace);
-  const kind = opts.kind ?? name;
+  // Size-sweep workspaces are named <variant>-<N> (workspaces/size/atomized-500).
+  const kind = opts.kind ?? name.replace(/-\d+$/, '');
   const targets = opts.targets ? opts.targets.split(',') : targetsFor(kind, opts.runner);
   const L = launcher(opts.launcher);
   const parallel = Number(opts.parallel);

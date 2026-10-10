@@ -4,6 +4,7 @@
 // `touched` is the "partial" change for the app: a small, behaviour-preserving feature.
 
 import { rowsLiteral, tsString } from '../lib/domain.mjs';
+import { aliasDeclaration } from './aliases.mjs';
 
 function json(o) {
   return JSON.stringify(o, null, 2) + '\n';
@@ -25,18 +26,21 @@ export const LANGUAGES = ['English', 'Nederlands', 'Français', 'Deutsch'];
 export const VISIBILITY = ['Public', 'Team', 'Private'];
 export const NOTIFICATIONS = ['Order updates', 'Weekly digest', 'Product news'];
 
-export function appFiles({ name, title, domain, rows, touched = false }) {
+/** `packageJson: false` / `aliases: true`: generator/size.mjs only (see lib.mjs). */
+export function appFiles({ name, title, domain, rows, touched = false, packageJson = true, aliases = false }) {
   const root = `apps/${name}`;
   const files = {};
   const plural = domain.plural;
   const entityLower = domain.entity.toLowerCase();
 
-  files[`${root}/package.json`] = json({
-    name: `@bench/${name}`,
-    version: '0.0.0',
-    private: true,
-    dependencies: { '@bench/shared-ui': 'workspace:*' },
-  });
+  if (packageJson) {
+    files[`${root}/package.json`] = json({
+      name: `@bench/${name}`,
+      version: '0.0.0',
+      private: true,
+      dependencies: { '@bench/shared-ui': 'workspace:*' },
+    });
+  }
   files[`${root}/project.json`] = json({
     $schema: '../../node_modules/nx/schemas/project-schema.json',
     name,
@@ -58,11 +62,11 @@ export function appFiles({ name, title, domain, rows, touched = false }) {
     compilerOptions: { types: ['vite/client', 'node'] },
     include: ['src/**/*.ts', 'src/**/*.tsx', 'vite.config.ts'],
   });
-  files[`${root}/vite.config.ts`] = `import react from '@vitejs/plugin-react';
+  files[`${root}/vite.config.ts`] = `${aliases ? `import { join } from 'node:path';\n` : ''}import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-
+${aliases ? `\n${aliasDeclaration('../..')}` : ''}
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react()],${aliases ? `\n  resolve: { alias: benchAliases },` : ''}
   logLevel: 'warn',
   build: {
     outDir: 'dist',

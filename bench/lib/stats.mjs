@@ -12,8 +12,9 @@ export function quantile(xs, q) {
 }
 export const median = (xs) => quantile(xs, 0.5);
 export const p95 = (xs) => quantile(xs, 0.95);
-export const min = (xs) => (xs.length ? Math.min(...xs) : null);
-export const max = (xs) => (xs.length ? Math.max(...xs) : null);
+// reduce, not Math.min(...xs): spreading hits the argument limit on long runs (size sweep).
+export const min = (xs) => (xs.length ? xs.reduce((m, x) => Math.min(m, x), Infinity) : null);
+export const max = (xs) => (xs.length ? xs.reduce((m, x) => Math.max(m, x), -Infinity) : null);
 
 export const round = (x, d = 0) => (x == null || !Number.isFinite(x) ? x : Math.round(x * 10 ** d) / 10 ** d);
 

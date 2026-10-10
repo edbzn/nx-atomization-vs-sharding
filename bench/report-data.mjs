@@ -152,6 +152,23 @@ try {
   write('scale.json', scale);
 } catch (e) { console.warn('no scale report', e.message); }
 
+// 4d'. size sweep (full workspace: CT + e2e + Vitest, 10..2000 projects), when its report exists
+try {
+  const sw = JSON.parse(readFileSync(join(REPO, 'results/size-sweep/report.json'), 'utf8'));
+  write('size-sweep.json', sw.rows.map((r) => ({
+    key: r.key, projects: r.projects, variant: r.variant, parallel: r.parallel, shard_target_s: r.shardTarget,
+    specs: r.specs, tasks: r.tasks, real_tasks: r.realTasks,
+    wall_min: r1(r.wallMs / 60000, 2), pre_task_s: r1((r.preTaskMs ?? 0) / 1000, 2), task_phase_min: r1((r.taskPhaseMs ?? 0) / 60000, 2),
+    task_time_min: r1(r.sumTaskMs / 60000, 1), median_task_s: r1((r.medianTaskMs ?? 0) / 1000, 2),
+    cpu_s: r.cpuSeconds == null ? null : Math.round(r.cpuSeconds), avg_cores: r.avgCores, peak_cores: r.peakCores,
+    slot_util: r.slotUtilisation == null ? null : Math.round(r.slotUtilisation * 1000) / 1000,
+    peak_pss_gb: r.peakPssMb == null ? null : r1(r.peakPssMb / 1024, 2),
+    nx_coord_overhead_s: r.nxCoordinatorOverheadMs == null ? null : r1(r.nxCoordinatorOverheadMs / 1000, 2),
+    gap_mean_ms: r.gapMeanMs, nx_rss_mb: r.nxMainPeakRssMb == null ? null : Math.round(r.nxMainPeakRssMb),
+    timed_out: r.timedOut, failed_tasks: r.failed, ok: r.ok,
+  })));
+} catch (e) { if (e.code !== 'ENOENT') throw e; }
+
 // 4e. where the Nx main process spends its CPU: atomized, 100 projects, 912 tasks (node --cpu-prof)
 try {
   const prof = JSON.parse(readFileSync(join(OUT, 'nx-profile.cpuprofile'), 'utf8'));

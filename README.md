@@ -15,10 +15,12 @@ Runners: Cypress component tests (React + Vite), Playwright e2e against `vite pr
 ## Layout
 
 ```
-generator/      # seeded generator: workspaces/{baseline,atomized,sharded} + the 20..1500-project scale workspaces
+generator/      # seeded generator: workspaces/{baseline,atomized,sharded}, the 20..1500-project Vitest-only scale
+                # workspaces (scale.mjs) and the 10..2000-project full size-sweep workspaces (size.mjs)
 shard-plugin/   # the sharding plugin (Nx createNodes) + its unit tests
 bench/          # run.mjs (one measured nx affected run), matrix.mjs (sweeps), aggregate.mjs,
-                # simulate.mjs (DTE simulator), scale.mjs (workspace-size sweep), report-data.mjs
+                # simulate.mjs (DTE simulator), scale.mjs (workspace-size sweep, Vitest only),
+                # size-sweep.mjs (full workspace at 10..2000 projects), report-data.mjs
 results/        # aggregates, simulator output, workspace-size report, chart datasets (results/report)
 ```
 
@@ -41,6 +43,8 @@ node bench/matrix.mjs bench/matrices/shard-target.json
 node bench/aggregate.mjs                            # -> results/aggregate.md
 node bench/simulate.mjs --from atomized/full/all/p8 --agents 1,2,4,8,16 --slots 3 --policy greedy,batch
 node bench/scale.mjs && node bench/scale-report.mjs # workspace-size sweep -> results/scale/report.md
+node generator/size.mjs --plan                      # full-workspace size sweep: totals per size
+node bench/size-sweep.mjs && node bench/size-sweep-report.mjs   # -> results/size-sweep/report.md; resumable
 node bench/report-data.mjs                          # chart datasets -> results/report/
 ```
 

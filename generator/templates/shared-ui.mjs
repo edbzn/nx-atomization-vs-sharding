@@ -1,22 +1,38 @@
 // libs/shared-ui: the React component library every other project depends on.
 // `variant.buttonSize` is the "full" change: a new Button prop with a default value.
 
-export function sharedUiFiles({ buttonSize = false } = {}) {
+// `projectJson: true` (generator/size.mjs only): a project.json instead of the pnpm workspace
+// package manifest; imports then resolve through TS path / Vite aliases.
+export function sharedUiFiles({ buttonSize = false, projectJson = false } = {}) {
   const root = 'libs/shared-ui';
   const files = {};
-  files[`${root}/package.json`] = JSON.stringify(
-    {
-      name: '@bench/shared-ui',
-      version: '0.0.0',
-      private: true,
-      main: './src/index.ts',
-      types: './src/index.ts',
-      exports: { '.': './src/index.ts' },
-      nx: { name: 'shared-ui', tags: ['type:ui'] },
-    },
-    null,
-    2,
-  ) + '\n';
+  if (projectJson) {
+    files[`${root}/project.json`] = JSON.stringify(
+      {
+        $schema: '../../node_modules/nx/schemas/project-schema.json',
+        name: 'shared-ui',
+        sourceRoot: `${root}/src`,
+        projectType: 'library',
+        tags: ['type:ui'],
+      },
+      null,
+      2,
+    ) + '\n';
+  } else {
+    files[`${root}/package.json`] = JSON.stringify(
+      {
+        name: '@bench/shared-ui',
+        version: '0.0.0',
+        private: true,
+        main: './src/index.ts',
+        types: './src/index.ts',
+        exports: { '.': './src/index.ts' },
+        nx: { name: 'shared-ui', tags: ['type:ui'] },
+      },
+      null,
+      2,
+    ) + '\n';
+  }
   files[`${root}/tsconfig.json`] = JSON.stringify(
     { extends: '../../tsconfig.base.json', include: ['src/**/*.ts', 'src/**/*.tsx'] },
     null,

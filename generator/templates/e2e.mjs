@@ -406,17 +406,20 @@ const E2E_KINDS = {
   navigation: { gen: navigationTest, topics: ['smoke', 'menu', 'history', 'featured'] },
 };
 
-export function e2eFiles({ app, title, domain, rows, targets, rng, model }) {
+/** `packageJson: false`: generator/size.mjs only (the app dependency is the implicit one below). */
+export function e2eFiles({ app, title, domain, rows, targets, rng, model, packageJson = true }) {
   const root = `apps/${app}-e2e`;
   const name = `${app}-e2e`;
   const files = {};
   const json = (o) => JSON.stringify(o, null, 2) + '\n';
-  files[`${root}/package.json`] = json({
-    name: `@bench/${name}`,
-    version: '0.0.0',
-    private: true,
-    devDependencies: { [`@bench/${app}`]: 'workspace:*' },
-  });
+  if (packageJson) {
+    files[`${root}/package.json`] = json({
+      name: `@bench/${name}`,
+      version: '0.0.0',
+      private: true,
+      devDependencies: { [`@bench/${app}`]: 'workspace:*' },
+    });
+  }
   files[`${root}/project.json`] = json({
     $schema: '../../node_modules/nx/schemas/project-schema.json',
     name,
