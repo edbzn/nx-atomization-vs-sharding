@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-10T08:34:38.950Z",
+ "generatedAt": "2026-10-10T09:13:13.287Z",
  "rawDir": "/home/edouard/work/nx-atomization-vs-sharding/results/closeup/raw",
  "groups": [
   {
@@ -752,6 +752,62 @@
    }
   },
   {
+   "key": "sharded/full/all/p16/target1.5",
+   "workspace": "sharded",
+   "scenario": "full",
+   "runner": "all",
+   "parallel": 16,
+   "label": "target1.5",
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 95263,
+    "min": 95263,
+    "max": 95263,
+    "all": [
+     95263
+    ]
+   },
+   "preTaskMs": 1168,
+   "graphMs": 1151,
+   "taskPhaseMs": 94045,
+   "taskCount": 262,
+   "atomCount": 218,
+   "noopCount": 90,
+   "sumTaskMs": 1483491,
+   "taskMs": {
+    "mean": 5662,
+    "median": 6185,
+    "p95": 10034,
+    "max": 14065
+   },
+   "slotUtilisation": 0.9859,
+   "peakPssMb": 12651.5,
+   "peakRssMb": 25255.5,
+   "avgCores": 19.41,
+   "peakCores": 25.78,
+   "cpuSeconds": 1827,
+   "cpuSecondsSystem": 2253.9,
+   "minMemAvailableMb": 13048,
+   "nx": {
+    "criticalPathMs": 14065,
+    "recoverableMs": 80083,
+    "recoverableByParallelMs": 47788,
+    "recoverableByMachinesMs": 32295,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.193,
+    "max": 0.193
+   },
+   "representativeRun": "20261010T090509Z_sharded_full_all_p16_r1_target1.5",
+   "startupTaxMs": {}
+  },
+  {
    "key": "sharded/full/all/p4",
    "workspace": "sharded",
    "scenario": "full",
@@ -811,6 +867,62 @@
    }
   },
   {
+   "key": "sharded/full/all/p4/target1.5",
+   "workspace": "sharded",
+   "scenario": "full",
+   "runner": "all",
+   "parallel": 4,
+   "label": "target1.5",
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 247344,
+    "min": 247344,
+    "max": 247344,
+    "all": [
+     247344
+    ]
+   },
+   "preTaskMs": 1266,
+   "graphMs": 1251,
+   "taskPhaseMs": 246030,
+   "taskCount": 262,
+   "atomCount": 218,
+   "noopCount": 90,
+   "sumTaskMs": 979854,
+   "taskMs": {
+    "mean": 3740,
+    "median": 3858,
+    "p95": 6681,
+    "max": 9424
+   },
+   "slotUtilisation": 0.9957,
+   "peakPssMb": 4355.5,
+   "peakRssMb": 7321.4,
+   "avgCores": 4.36,
+   "peakCores": 8.88,
+   "cpuSeconds": 1076.2,
+   "cpuSecondsSystem": 1594.8,
+   "minMemAvailableMb": 19004,
+   "nx": {
+    "criticalPathMs": 9424,
+    "recoverableMs": 236714,
+    "recoverableByParallelMs": 215517,
+    "recoverableByMachinesMs": 21197,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.16,
+    "max": 0.16
+   },
+   "representativeRun": "20261010T090039Z_sharded_full_all_p4_r1_target1.5",
+   "startupTaxMs": {}
+  },
+  {
    "key": "sharded/full/all/p8",
    "workspace": "sharded",
    "scenario": "full",
@@ -868,6 +980,62 @@
     "ct": 2567,
     "e2e": 2176
    }
+  },
+  {
+   "key": "sharded/full/all/p8/target1.5",
+   "workspace": "sharded",
+   "scenario": "full",
+   "runner": "all",
+   "parallel": 8,
+   "label": "target1.5",
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 137165,
+    "min": 137165,
+    "max": 137165,
+    "all": [
+     137165
+    ]
+   },
+   "preTaskMs": 1173,
+   "graphMs": 1159,
+   "taskPhaseMs": 135940,
+   "taskCount": 262,
+   "atomCount": 218,
+   "noopCount": 90,
+   "sumTaskMs": 1080806,
+   "taskMs": {
+    "mean": 4125,
+    "median": 4278,
+    "p95": 7195,
+    "max": 10268
+   },
+   "slotUtilisation": 0.9938,
+   "peakPssMb": 7706.7,
+   "peakRssMb": 13494.5,
+   "avgCores": 9.23,
+   "peakCores": 17.23,
+   "cpuSeconds": 1257.3,
+   "cpuSecondsSystem": 1684.7,
+   "minMemAvailableMb": 16596,
+   "nx": {
+    "criticalPathMs": 10269,
+    "recoverableMs": 125777,
+    "recoverableByParallelMs": 102271,
+    "recoverableByMachinesMs": 23506,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.173,
+    "max": 0.173
+   },
+   "representativeRun": "20261010T085800Z_sharded_full_all_p8_r1_target1.5",
+   "startupTaxMs": {}
   },
   {
    "key": "sharded/full/all/p8/target30",
@@ -1040,6 +1208,62 @@
    }
   },
   {
+   "key": "sharded/full/ct/p8/target1.5",
+   "workspace": "sharded",
+   "scenario": "full",
+   "runner": "ct",
+   "parallel": 8,
+   "label": "target1.5",
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 107720,
+    "min": 107720,
+    "max": 107720,
+    "all": [
+     107720
+    ]
+   },
+   "preTaskMs": 1077,
+   "graphMs": 1062,
+   "taskPhaseMs": 106599,
+   "taskCount": 154,
+   "atomCount": 148,
+   "noopCount": 40,
+   "sumTaskMs": 832933,
+   "taskMs": {
+    "mean": 5409,
+    "median": 5072,
+    "p95": 8131,
+    "max": 10400
+   },
+   "slotUtilisation": 0.9767,
+   "peakPssMb": 7478.6,
+   "peakRssMb": 13112.4,
+   "avgCores": 9.28,
+   "peakCores": 18.96,
+   "cpuSeconds": 990.1,
+   "cpuSecondsSystem": 1258.6,
+   "minMemAvailableMb": 19811,
+   "nx": {
+    "criticalPathMs": 10400,
+    "recoverableMs": 96256,
+    "recoverableByParallelMs": 80626,
+    "recoverableByMachinesMs": 15630,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.175,
+    "max": 0.175
+   },
+   "representativeRun": "20261010T085429Z_sharded_full_ct_p8_r1_target1.5",
+   "startupTaxMs": {}
+  },
+  {
    "key": "sharded/full/e2e/p8",
    "workspace": "sharded",
    "scenario": "full",
@@ -1098,6 +1322,62 @@
    }
   },
   {
+   "key": "sharded/full/e2e/p8/target1.5",
+   "workspace": "sharded",
+   "scenario": "full",
+   "runner": "e2e",
+   "parallel": 8,
+   "label": "target1.5",
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 15099,
+    "min": 15099,
+    "max": 15099,
+    "all": [
+     15099
+    ]
+   },
+   "preTaskMs": 1085,
+   "graphMs": 1070,
+   "taskPhaseMs": 13973,
+   "taskCount": 48,
+   "atomCount": 37,
+   "noopCount": 10,
+   "sumTaskMs": 103435,
+   "taskMs": {
+    "mean": 2155,
+    "median": 2127,
+    "p95": 4298,
+    "max": 4736
+   },
+   "slotUtilisation": 0.9253,
+   "peakPssMb": 4146.1,
+   "peakRssMb": 8165.9,
+   "avgCores": 6.58,
+   "peakCores": 16.68,
+   "cpuSeconds": 94.2,
+   "cpuSecondsSystem": 124.7,
+   "minMemAvailableMb": 22955,
+   "nx": {
+    "criticalPathMs": 5443,
+    "recoverableMs": 8552,
+    "recoverableByParallelMs": 8552,
+    "recoverableByMachinesMs": 0,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.153,
+    "max": 0.153
+   },
+   "representativeRun": "20261010T085639Z_sharded_full_e2e_p8_r1_target1.5",
+   "startupTaxMs": {}
+  },
+  {
    "key": "sharded/full/unit/p8",
    "workspace": "sharded",
    "scenario": "full",
@@ -1151,6 +1431,62 @@
     "max": 0.114
    },
    "representativeRun": "20261010T080558Z_sharded_full_unit_p8_r1",
+   "startupTaxMs": {}
+  },
+  {
+   "key": "sharded/full/unit/p8/target1.5",
+   "workspace": "sharded",
+   "scenario": "full",
+   "runner": "unit",
+   "parallel": 8,
+   "label": "target1.5",
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 20617,
+    "min": 20617,
+    "max": 20617,
+    "all": [
+     20617
+    ]
+   },
+   "preTaskMs": 1102,
+   "graphMs": 1086,
+   "taskPhaseMs": 19470,
+   "taskCount": 60,
+   "atomCount": 33,
+   "noopCount": 40,
+   "sumTaskMs": 144675,
+   "taskMs": {
+    "mean": 2411,
+    "median": 2435,
+    "p95": 3556,
+    "max": 4191
+   },
+   "slotUtilisation": 0.9288,
+   "peakPssMb": 2053.5,
+   "peakRssMb": 3008.8,
+   "avgCores": 8.17,
+   "peakCores": 13.52,
+   "cpuSeconds": 161.6,
+   "cpuSecondsSystem": 208.3,
+   "minMemAvailableMb": 25091,
+   "nx": {
+    "criticalPathMs": 4191,
+    "recoverableMs": 15311,
+    "recoverableByParallelMs": 14980,
+    "recoverableByMachinesMs": 330,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.127,
+    "max": 0.127
+   },
+   "representativeRun": "20261010T085717Z_sharded_full_unit_p8_r1_target1.5",
    "startupTaxMs": {}
   }
  ],

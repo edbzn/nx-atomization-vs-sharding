@@ -21,11 +21,18 @@ const { values: cli } = parseArgs({
     results: { type: 'string', default: join(REPO, 'results') },
     out: { type: 'string' },
     'default-shard-target': { type: 'string', default: '90' },
+    // The sharded configuration the charts present as "sharded" (e.g. target1.5): its runs
+    // replace the unlabelled sharded runs in the timelines, resources and durations.
+    'sharded-label': { type: 'string' },
   },
 });
 const RES = resolve(cli.results);
 const OUT = resolve(cli.out ?? join(RES, 'report'));
 const DEFAULT_SHARD_TARGET = Number(cli['default-shard-target']);
+const SHARDED_LABEL = cli['sharded-label'] ?? null;
+// Is this group/chart entry the presented configuration? Unlabelled runs, except sharded
+// ones when another sharded label is presented.
+const presented = (g) => (g.workspace === 'sharded' && SHARDED_LABEL ? g.label === SHARDED_LABEL : !g.label);
 mkdirSync(OUT, { recursive: true });
 const r1 = (x, d = 1) => Math.round(x * 10 ** d) / 10 ** d;
 const write = (name, rows) => writeFileSync(join(OUT, name), JSON.stringify(rows));
@@ -72,15 +79,16 @@ write('startup-tax.json', tax);
 // 3. DTE simulation grid
 const sim = [];
 for (const f of readdirSync(join(RES, 'sim'))) {
-  const m = f.match(/^(baseline|atomized|sharded)_full_all_p8(_tax-ct-17)?(?:_x(\d+))?\.json$/);
+  const m = f.match(/^(baseline|atomized|sharded)_full_all_p8(?:_(target[\d.]+))?(_tax-ct-17)?(?:_x(\d+))?\.json$/);
   if (!m) continue;
+  if (m[1] === 'sharded' && (m[2] ?? null) !== SHARDED_LABEL) continue;
   const d = JSON.parse(readFileSync(join(RES, 'sim', f), 'utf8'));
   for (const r of d.results) {
     if (r.params.order !== 'longest-first') continue;
     sim.push({
       variant: m[1],
-      ct_startup: m[2] ? 'heavy (+17 s)' : 'measured',
-      load: `${m[3] ?? 1}x`,
+      ct_startup: m[3] ? 'heavy (+17 s)' : 'measured',
+      load: `${m[4] ?? 1}x`,
       policy: r.params.policy,
       agents: r.params.agents,
       makespan_min: r1(r.makespanMs / 60000, 2),
@@ -104,7 +112,7 @@ write('dte-sim.json', simRows);
 const gantt = JSON.parse(readFileSync(join(RES, 'charts/gantt.json'), 'utf8'));
 const tl = [];
 for (const g of gantt) {
-  if (g.scenario !== 'full' || g.runner !== 'all' || g.parallel !== 8 || g.label) continue;
+  if (g.scenario !== 'full' || g.runner !== 'all' || g.parallel !== 8 || !presented(g)) continue;
   for (const t of g.tasks) {
     if (t.isNoop) continue;
     tl.push({
@@ -123,7 +131,7 @@ write('timelines.json', tl);
 const timelines = JSON.parse(readFileSync(join(RES, 'charts/timelines.json'), 'utf8'));
 const res = [];
 for (const t of timelines) {
-  if (t.scenario !== 'full' || t.runner !== 'all' || t.parallel !== 8 || t.label) continue;
+  if (t.scenario !== 'full' || t.runner !== 'all' || t.parallel !== 8 || !presented(t)) continue;
   const iT = t.columns.indexOf('tS'), iP = t.columns.indexOf('pssGb'), iC = t.columns.indexOf('cores');
   const buckets = new Map();
   for (const row of t.rows) {
@@ -140,7 +148,7 @@ write('resources.json', res);
 const durations = JSON.parse(readFileSync(join(RES, 'charts/task-durations.json'), 'utf8'));
 const dur = [];
 for (const d of durations) {
-  if (d.scenario !== 'full' || d.runner !== 'all' || d.parallel !== 8 || d.label) continue;
+  if (d.scenario !== 'full' || d.runner !== 'all' || d.parallel !== 8 || !presented(d)) continue;
   for (const [kind, ms] of Object.entries(d.byKind)) {
     if (kind === 'build') continue;
     ms.forEach((m, i) => dur.push({ id: `${d.workspace}-${kind}-${i}`, variant: d.workspace, kind, duration_s: r1(m / 1000, 2) }));

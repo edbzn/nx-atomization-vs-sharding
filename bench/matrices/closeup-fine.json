@@ -1,0 +1,69 @@
+{
+  "reps": 1,
+  "workspaces": [
+    "sharded"
+  ],
+  "configs": [
+    {
+      "scenario": "full",
+      "runner": "ct",
+      "parallel": 8,
+      "label": "target1.5",
+      "env": {
+        "SHARD_TARGET_SECONDS": "1.5"
+      }
+    },
+    {
+      "scenario": "full",
+      "runner": "e2e",
+      "parallel": 8,
+      "label": "target1.5",
+      "env": {
+        "SHARD_TARGET_SECONDS": "1.5"
+      }
+    },
+    {
+      "scenario": "full",
+      "runner": "unit",
+      "parallel": 8,
+      "label": "target1.5",
+      "env": {
+        "SHARD_TARGET_SECONDS": "1.5"
+      }
+    },
+    {
+      "scenario": "full",
+      "runner": "all",
+      "parallel": 8,
+      "label": "target1.5",
+      "env": {
+        "SHARD_TARGET_SECONDS": "1.5"
+      }
+    },
+    {
+      "scenario": "full",
+      "runner": "all",
+      "parallel": 4,
+      "label": "target1.5",
+      "env": {
+        "SHARD_TARGET_SECONDS": "1.5"
+      }
+    },
+    {
+      "scenario": "full",
+      "runner": "all",
+      "parallel": 16,
+      "label": "target1.5",
+      "env": {
+        "SHARD_TARGET_SECONDS": "1.5"
+      }
+    }
+  ],
+  "cooldownSec": 20,
+  "minMemAvailableGb": 16,
+  "out": "results/closeup/raw",
+  "runArgs": {
+    "interval": 250,
+    "timeout-min": 60
+  }
+}
