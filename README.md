@@ -1,6 +1,6 @@
 # nx-atomization-vs-sharding
 
-Companion benchmark for [Nx atomization vs sharding: what the CPU is actually doing](https://edbzn.dev/nx-atomization-vs-sharding).
+Companion benchmark for [Nx atomization vs sharding: what the CPU is actually doing](https://edbzn.dev/blog/nx-atomization-vs-sharding/).
 
 It compares three ways of turning test projects into Nx tasks, on identical synthetic workspaces (Nx 23.3):
 
