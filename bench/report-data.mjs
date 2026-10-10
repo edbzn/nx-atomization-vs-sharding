@@ -40,6 +40,8 @@ const runs = groups.map((g) => ({
   slot_util: Math.round(g.slotUtilisation * 1000) / 1000,
   peak_pss_gb: r1(g.peakPssMb / 1024, 2),
   avg_cores: r1(g.avgCores, 2),
+  // CPU time of the whole Nx process tree, attributed by the /proc sampler
+  cpu_s: Math.round(g.cpuSeconds),
   pre_task_s: r1(g.preTaskMs / 1000, 2),
   runs_failed: g.runs - g.runsUsed,
 }));
