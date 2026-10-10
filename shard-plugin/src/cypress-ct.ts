@@ -6,7 +6,7 @@
 import { createShardNodes, quoteArg, type RunnerDefinition } from './core.ts';
 
 /**
- * Estimated CI seconds per KB of `.cy.tsx` source. Calibrated like the production plugin:
+ * Estimated CI seconds per KB of `.cy.tsx` source. Calibrated from a measured run:
  * measured task time of the largest project / its spec KB (ct-booking: 205.6s `component-test` task / 300 KB). Override per workspace with the
  * `secondsPerKb` plugin option.
  */

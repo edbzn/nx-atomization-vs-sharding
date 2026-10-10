@@ -1,16 +1,15 @@
 /**
- * Spec-size sharding for Nx test targets — a generalized port of the production
- * `cct-shards` plugin (Cypress component tests) to Cypress CT, Playwright and Vitest.
+ * Spec-size sharding for Nx test targets: Cypress component tests, Playwright and Vitest.
  *
  * Why shards instead of Nx's per-file atomizers: every task pays a fixed startup cost
- * (Vite dev server / transform cache, browser launch) of ~20s for browser runners. One
+ * (Vite dev server / transform cache, browser launch), seconds for browser runners. One
  * task per spec pays it once per spec; a handful of balanced shards per project pays it
  * a handful of times while still spreading a large project over several agents/slots.
  *
- * - Spec bytes are the duration proxy (CI duration tracked spec bytes at r ≈ 0.9 in
- *   production), converted to seconds with a per-runner `secondsPerKb`.
- * - A project is split into ceil(estimate / targetShardSeconds) shards (90s target: a
- *   60s target added more tasks whose startup outweighed the more even batches), capped
+ * - Spec bytes are the duration proxy (runtime tracks spec bytes closely in the
+ *   generated workspaces), converted to seconds with a per-runner `secondsPerKb`.
+ * - A project is split into ceil(estimate / targetShardSeconds) shards (90s by default;
+ *   the right target scales with the runner's startup cost), capped
  *   by `maxShards` and by the number of specs.
  * - Specs are assigned longest-processing-time-first (each spec to the lightest shard).
  * - Projects that would get ≤ 1 shard delegate to the runner's plain whole-project target.

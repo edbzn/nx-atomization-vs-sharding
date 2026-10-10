@@ -10,7 +10,7 @@
 import { createShardNodes, quoteArg, type RunnerDefinition } from './core.ts';
 
 /**
- * Estimated CI seconds per KB of `.spec.ts` source. Calibrated like the production plugin:
+ * Estimated CI seconds per KB of `.spec.ts` source. Calibrated from a measured run:
  * measured task time of the largest project / its spec KB (shop-e2e: 126.7s `e2e` task / 901 KB). Override per workspace with the
  * `secondsPerKb` plugin option.
  */

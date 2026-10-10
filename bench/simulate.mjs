@@ -11,7 +11,7 @@
 // configuration in --raw. Units: --mem-cap GB per agent (0 = no cap), --bootstrap and
 // --penalty seconds. --extra-tax adds a fixed per-task startup cost (seconds) to every test
 // task of that kind (not builds, not noops): a what-if for slower startup than measured here,
-// e.g. Angular CCT on CI agents (~20s per process vs ~2.7s for React here). --replicate k
+// e.g. a heavier framework or a slower CI machine (~20s per process vs ~2.7s here). --replicate k
 // copies the whole task graph k times (a workspace with k× the projects, same profile), to
 // model a load where the agent pool is saturated rather than idle.
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';

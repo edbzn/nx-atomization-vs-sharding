@@ -2,7 +2,7 @@
   "name": "shard-plugin",
   "version": "0.0.0",
   "private": true,
-  "description": "Spec-size sharding Nx plugin for Cypress CT, Playwright and Vitest (benchmark port of cct-shards)",
+  "description": "Spec-size sharding Nx plugin for Cypress CT, Playwright and Vitest (benchmark)",
   "type": "commonjs",
   "scripts": {
     "test": "vitest run",

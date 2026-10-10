@@ -13,7 +13,7 @@
 //  - policies:
 //      greedy: whenever a slot frees up, the agent pulls the next ready task;
 //      batch:  an idle agent pulls up to P ready tasks at once and only pulls again once the
-//              whole batch has finished (how our production Nx agents behaved);
+//              whole batch has finished;
 //  - ordering of the ready queue: longest-first (historical duration), critical-path
 //    (longest remaining path incl. the task), graph-order (topological, stable on task
 //    graph order), observed (start time in the measured run - used for validation).

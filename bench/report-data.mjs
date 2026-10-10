@@ -6,8 +6,7 @@
 // (bench/simulate.mjs), results/scale/report.json (bench/scale-report.mjs), results/matrix.log
 // (sweep status, optional), results/report/nx-profile.cpuprofile (optional: a
 // `node --cpu-prof` profile of the main Nx process; without it the committed
-// results/report/nx-profile.json is kept) and results/report/workspace-size.input.json
-// (hand-written: synthetic vs production workspace counts).
+// results/report/nx-profile.json is kept).
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -55,8 +54,6 @@ write('runs.json', runs);
 const tax = groups
   .filter((g) => g.workspace === 'atomized' && g.scenario === 'full' && g.parallel === 8 && g.runner !== 'all' && !g.label)
   .map((g) => ({ runner: g.runner, startup_tax_s: r1(Object.values(g.startupTaxMs)[0] / 1000, 2), source: 'measured here (atoms vs whole-project run)' }));
-// Reference point from production: Angular CCT on CI agents (rosa commit 3792424, "~20s of Vite + browser startup per spec").
-tax.push({ runner: 'ct-production', startup_tax_s: 20, source: 'rosa commit 3792424: Angular CCT on CI agents, approximate' });
 write('startup-tax.json', tax);
 
 // 3. DTE simulation grid
@@ -69,7 +66,7 @@ for (const f of readdirSync(join(REPO, 'results/sim'))) {
     if (r.params.order !== 'longest-first') continue;
     sim.push({
       variant: m[1],
-      ct_startup: m[2] ? 'rosa-like (+17 s)' : 'measured',
+      ct_startup: m[2] ? 'heavy (+17 s)' : 'measured',
       load: `${m[3] ?? 1}x`,
       policy: r.params.policy,
       agents: r.params.agents,
@@ -178,8 +175,6 @@ try {
   write('nx-profile.json', rows);
 } catch { console.warn('no results/report/nx-profile.cpuprofile: keeping results/report/nx-profile.json'); }
 
-// 5. workspace size: synthetic vs the production monorepo (counts from its cached project graph)
-write('workspace-size.json', JSON.parse(readFileSync(join(OUT, 'workspace-size.input.json'), 'utf8')));
 
 // 6. sweep status
 // matrix.log has one section per matrix, each opening with "[matrix] N planned run(s)"

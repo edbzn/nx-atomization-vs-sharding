@@ -307,7 +307,7 @@ The model:
 - Policies:
   - `greedy`: a free slot pulls the next ready task, and the least-loaded agent gets it.
   - `batch`: an idle agent pulls up to P ready tasks and pulls again only once the whole
-    batch has finished. This is how our production Nx agents behaved.
+    batch has finished, like an agent that pulls work in batches.
 - Orderings: `longest-first` (historical duration), `critical-path` (longest remaining path
   including the task), `graph-order` (stable topological order), and `observed` (start time
   in the measured run, used for validation).
