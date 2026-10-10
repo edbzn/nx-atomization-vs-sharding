@@ -6,3 +6,8 @@ results/raw/
 results/size-sweep*/raw/
 results/closeup/raw/
 results/size-sweep-fine/raw/
+results/quick/raw/
+# partial runs, not used by the article
+results/quick-validate/
+results/closeup-large/
+results/size-sweep-large/

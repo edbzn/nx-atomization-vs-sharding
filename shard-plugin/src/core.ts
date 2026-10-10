@@ -44,6 +44,12 @@ export interface ShardPluginOptions {
   targetShardSeconds?: number;
   /** Upper bound on shards per project. Default 8. */
   maxShards?: number;
+  /**
+   * dependsOn for every shard (and the CI target), replacing the runner's default (e.g. for
+   * Playwright: `^build`). Use it to mirror what the official plugin infers, such as a
+   * continuous serve task and its readiness gate.
+   */
+  dependsOn?: (string | TargetDependencyConfig)[];
 }
 
 export interface Spec {
@@ -209,13 +215,17 @@ export const createShardTargets = (
   const resolved = resolveOptions(runner, options);
   const { ciTargetName, delegateTarget } = resolved;
   const plan = planShards(specs, resolved);
-  const extraDependsOn = runner.extraDependsOn ?? [];
+  const extraDependsOn = options.dependsOn ?? runner.extraDependsOn ?? [];
+  // The no-op parent only waits for its shards (or the delegate), like the official atomizer's
+  // parent. Custom dependsOn can point at continuous tasks (a dev server): a no-op depending
+  // on a never-ending task would keep the run open, so those stay on the shards only.
+  const parentDependsOn = options.dependsOn ? [] : extraDependsOn;
   const targets: Record<string, TargetConfiguration> = {};
 
   if (!plan.sharded) {
     targets[ciTargetName] = {
       executor: 'nx:noop',
-      dependsOn: [{ target: delegateTarget, params: 'forward' }, ...extraDependsOn],
+      dependsOn: [{ target: delegateTarget, params: 'forward' }, ...parentDependsOn],
     };
     return targets;
   }
@@ -246,7 +256,7 @@ export const createShardTargets = (
     executor: 'nx:noop',
     dependsOn: [
       ...shardNames.map((target) => ({ target, params: 'forward' as const })),
-      ...extraDependsOn,
+      ...parentDependsOn,
     ],
   };
   return targets;

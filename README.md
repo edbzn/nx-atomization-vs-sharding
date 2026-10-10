@@ -35,6 +35,16 @@ results/        # aggregates, simulator output, workspace-size report, chart dat
 
 ## Reproduce
 
+The article's experiment, about 15 minutes on one machine: 12 projects (5 Cypress CT, 5 Vitest, 1 app + its Playwright e2e), ~20 specs each, 17 runs (default, sharded and atomized, per runner and together, `--parallel` 8 and 16, shard targets 30/10/5 s).
+
+```bash
+bash bench/quick.sh                                 # -> results/quick/aggregate.md, chart datasets in results/quick/report
+```
+
+Playwright runs the way `@nx/playwright` expects: each app has a continuous `serve-static` target, and every e2e task (plain, atom or shard) reuses that one server through the inferred `e2e--wait-for-webserver` gate (`SIZE_E2E_SERVER=shared`). Continuous tasks are left out of the task counts and slot use.
+
+The earlier, longer experiments (larger workspaces, size sweeps, a DTE simulator):
+
 ```bash
 node generator/generate.mjs                         # writes workspaces/ and installs them (pnpm 12)
 node bench/matrix.mjs bench/matrices/main.json      # 72 runs, ~2 h; resumable
@@ -54,9 +64,9 @@ Don't run two benchmarks at once: each run kills stray processes carrying its ma
 
 - Native atomized targets refuse to run without Nx Cloud; the bench sets `NX_SKIP_ATOMIZER_VALIDATION=true`.
 - `@nx/cypress` component-test atoms and `@nx/playwright` atoms are `parallelism: false`, so locally they run one at a time. The generated workspaces override it so `--parallel` is the only knob (`--native-parallelism` keeps the stock behaviour).
-- `@nx/playwright` atomizes by default; `ciTargetName: ""` turns it off.
+- `@nx/playwright` atomizes by default; `ciTargetName: ""` turns it off. With a shared `webServer` (`reuseExistingServer: true` and an `nx run` command), it infers a dependency on the continuous serve task, and atoms can run in parallel.
 - Nx 23.3 keeps its cache and task history under `~/.nx/<hash>`; the bench pins them inside each workspace (`NX_WORKSPACE_DATA_DIRECTORY`, `NX_CACHE_DIRECTORY`).
 
 ## Results
 
-The blog post has the analysis. Medians are in [`results/aggregate.md`](results/aggregate.md) and the workspace-size sweep in [`results/scale/report.md`](results/scale/report.md). Measured on a Ryzen 9 9950X3D (16 cores, 32 threads), 64 GB, Ubuntu, Node 24.
+The blog post has the analysis; its data is [`results/quick/aggregate.md`](results/quick/aggregate.md). Earlier experiments: medians in [`results/aggregate.md`](results/aggregate.md) and the workspace-size sweep in [`results/scale/report.md`](results/scale/report.md). Measured on a Ryzen 9 9950X3D (16 cores, 32 threads), 64 GB, Ubuntu, Node 24.

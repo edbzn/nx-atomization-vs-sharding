@@ -24,6 +24,8 @@ const { values: cli } = parseArgs({
     // The sharded configuration the charts present as "sharded" (e.g. target1.5): its runs
     // replace the unlabelled sharded runs in the timelines, resources and durations.
     'sharded-label': { type: 'string' },
+    // size-sweep report to turn into size-sweep.json
+    'size-sweep': { type: 'string', default: join(REPO, 'results', 'size-sweep', 'report.json') },
   },
 });
 const RES = resolve(cli.results);
@@ -175,7 +177,7 @@ try {
 
 // 4d'. size sweep (full workspace: CT + e2e + Vitest, 10..2000 projects), when its report exists
 try {
-  const sw = JSON.parse(readFileSync(join(REPO, 'results/size-sweep/report.json'), 'utf8'));
+  const sw = JSON.parse(readFileSync(resolve(cli['size-sweep']), 'utf8'));
   write('size-sweep.json', sw.rows.map((r) => ({
     key: r.key, projects: r.projects, variant: r.variant, parallel: r.parallel, shard_target_s: r.shardTarget,
     specs: r.specs, tasks: r.tasks, real_tasks: r.realTasks,

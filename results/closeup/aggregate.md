@@ -1,6 +1,6 @@
 # Aggregate results
 
-Generated 2026-10-10T09:13:13.288Z from 26 run(s) in `/home/edouard/work/nx-atomization-vs-sharding/results/closeup/raw`.
+Generated 2026-10-10T09:13:13.288Z from 26 run(s) in `results/closeup/raw`.
 
 Times are medians over clean reps (min-max for wall). Task stats exclude noop parent tasks. PSS/RSS = peak of the whole Nx process tree. CPU = mean cores busy (attributed to the tree) during the task phase.
 

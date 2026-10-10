@@ -407,7 +407,7 @@ const E2E_KINDS = {
 };
 
 /** `packageJson: false`: generator/size.mjs only (the app dependency is the implicit one below). */
-export function e2eFiles({ app, title, domain, rows, targets, rng, model, packageJson = true }) {
+export function e2eFiles({ app, title, domain, rows, targets, rng, model, packageJson = true, servePort }) {
   const root = `apps/${app}-e2e`;
   const name = `${app}-e2e`;
   const files = {};
@@ -429,7 +429,7 @@ export function e2eFiles({ app, title, domain, rows, targets, rng, model, packag
     implicitDependencies: [app],
   });
   files[`${root}/tsconfig.json`] = json({ extends: '../../tsconfig.base.json', compilerOptions: { types: ['node'] }, include: ['src/**/*.ts', 'playwright.config.ts'] });
-  files[`${root}/playwright.config.ts`] = `import { execFileSync } from 'node:child_process';
+  files[`${root}/playwright.config.ts`] = servePort ? sharedServerConfig(app, servePort) : `import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 import { defineConfig, devices } from '@playwright/test';
 
@@ -521,4 +521,41 @@ export default defineConfig({
     specs.push({ path, kind, target, estimate: est, cost });
   });
   return { root, name, files, specs };
+}
+
+/**
+ * Nx's intended Playwright setup: the webServer is the app's continuous `serve-static` Nx task
+ * with reuseExistingServer, so @nx/playwright infers a dependency on it (plus a readiness gate)
+ * and every e2e task of the run (plain, atom or shard) shares one server per app.
+ */
+function sharedServerConfig(app, port) {
+  return `import { defineConfig, devices } from '@playwright/test';
+
+const ci = !!process.env.CI;
+const baseURL = 'http://127.0.0.1:${port}';
+
+export default defineConfig({
+  testDir: './src',
+  // Fairness rule: in CI a Playwright process runs one test at a time (1 worker, no
+  // fullyParallel, no retries), so Nx --parallel is the only parallelism knob.
+  workers: ci ? 1 : undefined,
+  fullyParallel: !ci,
+  retries: 0,
+  forbidOnly: ci,
+  reporter: [['list']],
+  use: {
+    baseURL,
+    trace: 'off',
+    video: 'off',
+    screenshot: 'off',
+  },
+  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  webServer: {
+    command: 'pnpm exec nx run ${app}:serve-static',
+    url: baseURL,
+    reuseExistingServer: true,
+    timeout: 60_000,
+  },
+});
+`;
 }

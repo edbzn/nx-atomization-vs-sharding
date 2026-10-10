@@ -53,12 +53,29 @@ export const DEFAULT_SIZES = [10, 25, 50, 100, 250, 500, 1000, 2000];
 export const DEFAULT_SHARD_TARGET = 15;
 
 export const LAYERS = 8;
-/** Specs per project, long-tailed (mean ≈ 5). Shares are exact per runner (stratified), order shuffled. */
-export const SPEC_TIERS = [
-  { share: 0.55, min: 1, max: 3 },
-  { share: 0.35, min: 4, max: 8 },
-  { share: 0.1, min: 12, max: 24 },
-];
+/**
+ * Specs per project. Shares are exact per runner (stratified), order shuffled.
+ * SIZE_DENSITY=small (default): long-tailed, mean ≈ 5 — mostly tiny projects.
+ * SIZE_DENSITY=large: component-library sizes, mean ≈ 20 (6 to 60), so a 15 s shard target
+ * actually splits most projects and sharding lands between one task per project and one
+ * per spec. Use a separate --out / --ws-dir for each density.
+ */
+const DENSITIES = {
+  small: [
+    { share: 0.55, min: 1, max: 3 },
+    { share: 0.35, min: 4, max: 8 },
+    { share: 0.1, min: 12, max: 24 },
+  ],
+  large: [
+    { share: 0.25, min: 6, max: 10 },
+    { share: 0.4, min: 11, max: 20 },
+    { share: 0.25, min: 21, max: 35 },
+    { share: 0.1, min: 36, max: 60 },
+  ],
+};
+export const SPEC_DENSITY = process.env.SIZE_DENSITY ?? 'small';
+if (!DENSITIES[SPEC_DENSITY]) throw new Error(`unknown SIZE_DENSITY ${SPEC_DENSITY} (small | large)`);
+export const SPEC_TIERS = DENSITIES[SPEC_DENSITY];
 /**
  * In-process seconds per spec (log-normal around the median, clamped), turned into `it`
  * blocks by the templates' cost model (generator/calibration.json), so spec bytes track runtime.
@@ -226,12 +243,13 @@ export function renderWorkspace(model, emit, { calibration }) {
     assertNoSubstringPaths(lib.name, specs);
     projects.push({ name: lib.name, root: lib.root, runner: lib.runner, layer: lib.layer, deps: lib.deps.map((d) => d.name), specs });
   }
-  for (const app of model.apps) {
+  for (const [appIndex, app] of model.apps.entries()) {
     const rows = makeRows(createRng(`${SEED}/catalog/${app.name}`), app.domain, app.catalog);
-    const a = appFiles({ name: app.name, title: app.title, domain: app.domain, rows, packageJson: false, aliases: true });
+    const servePort = process.env.SIZE_E2E_SERVER === 'shared' ? 4300 + appIndex : undefined;
+    const a = appFiles({ name: app.name, title: app.title, domain: app.domain, rows, packageJson: false, aliases: true, servePort });
     a.files[`${a.root}/src/features.ts`] = importsModule(app.imports, 'FEATURES', '// Feature libraries this app integrates (shapes the project graph; not imported by main.tsx).');
     for (const [k, v] of Object.entries(a.files)) emit(k, v);
-    const e = e2eFiles({ app: app.name, title: app.title, domain: app.domain, rows, targets: app.targets, rng: createRng(`${SEED}/e2e/${app.name}`), model: calibration.playwright, packageJson: false });
+    const e = e2eFiles({ app: app.name, title: app.title, domain: app.domain, rows, targets: app.targets, rng: createRng(`${SEED}/e2e/${app.name}`), model: calibration.playwright, packageJson: false, servePort });
     for (const [k, v] of Object.entries(e.files)) emit(k, v);
     const specs = specMeta(e.root, e.files, e.specs);
     assertNoSubstringPaths(e.name, specs);
@@ -274,7 +292,8 @@ export async function planTotals(model, projects, { shardTarget = DEFAULT_SHARD_
     const tierHist = {};
     for (const p of ps) {
       const n = p.specs.length;
-      const key = n <= 3 ? '1-3' : n <= 8 ? '4-8' : '12-24';
+      const t = SPEC_TIERS.find((x) => n >= x.min && n <= x.max) ?? SPEC_TIERS[SPEC_TIERS.length - 1];
+      const key = `${t.min}-${t.max}`;
       tierHist[key] = (tierHist[key] ?? 0) + 1;
     }
     byRunner[r] = {
@@ -436,7 +455,7 @@ export async function generateSize({ n, variants = SIZE_VARIANTS, out = DEFAULT_
   for (const variant of todo) {
     const dir = workspaceDir(out, variant, n);
     const vt = (timings[variant] = {});
-    writeFileSync(join(dir, 'nx.json'), nxJson(variant));
+    writeFileSync(join(dir, 'nx.json'), nxJson(variant, { sharedServer: process.env.SIZE_E2E_SERVER === 'shared' }));
     if (variant === 'sharded') copyShardPlugin(dir);
     t = Date.now();
     const haveLock = existsSync(SIZE_LOCKFILE);

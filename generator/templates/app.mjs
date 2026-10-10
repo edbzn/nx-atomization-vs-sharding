@@ -27,7 +27,7 @@ export const VISIBILITY = ['Public', 'Team', 'Private'];
 export const NOTIFICATIONS = ['Order updates', 'Weekly digest', 'Product news'];
 
 /** `packageJson: false` / `aliases: true`: generator/size.mjs only (see lib.mjs). */
-export function appFiles({ name, title, domain, rows, touched = false, packageJson = true, aliases = false }) {
+export function appFiles({ name, title, domain, rows, touched = false, packageJson = true, aliases = false, servePort }) {
   const root = `apps/${name}`;
   const files = {};
   const plural = domain.plural;
@@ -55,6 +55,18 @@ export function appFiles({ name, title, domain, rows, touched = false, packageJs
         inputs: ['production', '^production', { externalDependencies: ['vite'] }],
         outputs: ['{projectRoot}/dist'],
       },
+      // Nx's intended Playwright setup: one continuous preview server per app, shared by
+      // every e2e task (plain, atom or shard) through webServer.reuseExistingServer.
+      ...(servePort
+        ? {
+            'serve-static': {
+              command: `vite preview --host 127.0.0.1 --port ${servePort} --strictPort`,
+              options: { cwd: '{projectRoot}' },
+              dependsOn: ['build'],
+              continuous: true,
+            },
+          }
+        : {}),
     },
   });
   files[`${root}/tsconfig.json`] = json({

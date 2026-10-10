@@ -7,7 +7,7 @@
 // no failed task, exit 0, profile present); flagged runs are only used when a group has
 // no clean run (or with --include-flagged), and are always counted under `failures`.
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { basename, join, resolve } from 'node:path';
+import { basename, join, relative, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { BASE_TARGETS, RAW_DIR, RESULTS_DIR } from './lib/config.mjs';
 import { findSummaries, groupKey, loadSamples, loadSummary } from './lib/results.mjs';
@@ -22,6 +22,7 @@ const { values } = parseArgs({
   },
 });
 const rawDir = resolve(values.raw);
+const rawDirLabel = relative(process.cwd(), rawDir) || '.';
 const outDir = resolve(values.out);
 const chartsDir = join(outDir, 'charts');
 const POINTS = Number(values['timeline-points']);
@@ -212,13 +213,13 @@ const charts = {
 
 mkdirSync(chartsDir, { recursive: true });
 for (const [name, data] of Object.entries(charts)) writeFileSync(join(chartsDir, `${name}.json`), JSON.stringify(data));
-writeFileSync(join(outDir, 'aggregate.json'), JSON.stringify({ generatedAt: new Date().toISOString(), rawDir, groups: aggregate, startupTax }, null, 1));
+writeFileSync(join(outDir, 'aggregate.json'), JSON.stringify({ generatedAt: new Date().toISOString(), rawDir: rawDirLabel, groups: aggregate, startupTax }, null, 1));
 
 // --- markdown -------------------------------------------------------------------------
 const gb = (mb) => (mb == null ? '-' : `${(mb / 1024).toFixed(1)}`);
 const pct = (x) => (x == null ? '-' : `${Math.round(x * 100)}%`);
 const md = [];
-md.push(`# Aggregate results`, '', `Generated ${new Date().toISOString()} from ${runs.length} run(s) in \`${rawDir}\`.`, '');
+md.push(`# Aggregate results`, '', `Generated ${new Date().toISOString()} from ${runs.length} run(s) in \`${rawDirLabel}\`.`, '');
 md.push('Times are medians over clean reps (min-max for wall). Task stats exclude noop parent tasks. PSS/RSS = peak of the whole Nx process tree. CPU = mean cores busy (attributed to the tree) during the task phase.', '');
 md.push('| variant | scenario | runner | -P | reps (fail) | wall median (min-max) | pre-task | task phase | crit. path | tasks | sum task time | task mean / med / p95 | slot util | peak PSS GB | peak RSS GB | avg CPU | startup tax |');
 md.push('|---|---|---|--:|--:|---|--:|--:|--:|--:|--:|---|--:|--:|--:|--:|---|');

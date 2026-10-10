@@ -145,7 +145,7 @@ Running locally:
  * `true` because every task here is isolated (own Vite cache dir, own preview port), so that
  * `--parallel` is the only concurrency knob for all three workspaces.
  */
-export function nxJson(variant, { nativeParallelism = false } = {}) {
+export function nxJson(variant, { nativeParallelism = false, sharedServer = false } = {}) {
   const par = nativeParallelism ? {} : { parallelism: true };
   const plugins = [
     {
@@ -177,7 +177,15 @@ export function nxJson(variant, { nativeParallelism = false } = {}) {
   if (variant === 'sharded') {
     plugins.push(
       { plugin: './tools/shard-plugin/src/cypress-ct.ts', options: { ciTargetName: 'component-test-ci', delegateTarget: 'component-test' } },
-      { plugin: './tools/shard-plugin/src/playwright.ts', options: { ciTargetName: 'e2e-ci', delegateTarget: 'e2e' } },
+      {
+        plugin: './tools/shard-plugin/src/playwright.ts',
+        options: {
+          ciTargetName: 'e2e-ci',
+          delegateTarget: 'e2e',
+          // Same dependencies @nx/playwright infers for its atoms with a shared server.
+          ...(sharedServer ? { dependsOn: [{ target: 'serve-static', dependencies: true }, { target: 'e2e--wait-for-webserver' }] } : {}),
+        },
+      },
       { plugin: './tools/shard-plugin/src/vitest.ts', options: { ciTargetName: 'test-ci', delegateTarget: 'test' } },
     );
   }
@@ -205,13 +213,19 @@ export function nxJson(variant, { nativeParallelism = false } = {}) {
     targetDefaults: {
       build: { cache: true, dependsOn: ['^build'] },
       // Every e2e task serves the built app: plain target, atoms and shards alike.
-      e2e: { dependsOn: ['^build'], ...par },
-      'e2e-ci': { ...par },
+      // With a shared serve-static server (Nx's intended setup) @nx/playwright infers the
+      // dependency on it and the parallelism itself, so the e2e targets keep its defaults.
+      ...(sharedServer
+        ? {}
+        : {
+            e2e: { dependsOn: ['^build'], ...par },
+            'e2e-ci': { ...par },
       // Nx matches target-default globs with minimatch, where `/` separates segments:
       // `e2e-ci--*` matches shard targets (e2e-ci--shard-1-of-3), `e2e-ci--*/**` matches
       // atom targets (e2e-ci--src/foo.spec.ts).
-      'e2e-ci--*': { dependsOn: ['^build'], ...par },
-      'e2e-ci--*/**': { dependsOn: ['^build'], ...par },
+            'e2e-ci--*': { dependsOn: ['^build'], ...par },
+            'e2e-ci--*/**': { dependsOn: ['^build'], ...par },
+          }),
       ...(nativeParallelism ? {} : { 'component-test-ci--*/**': { ...par } }),
     },
     plugins,
