@@ -8,16 +8,29 @@
 // `node --cpu-prof` profile of the main Nx process; without it the committed
 // results/report/nx-profile.json is kept).
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseArgs } from 'node:util';
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = join(REPO, 'results', 'report');
+// --results: where aggregate.json, charts/ and sim/ live (e.g. results/closeup for the
+// 100-project close-up); --out: where the datasets go; --default-shard-target: the target of
+// unlabelled sharded runs (90 for the main workspaces, 15 for the size-sweep workspaces).
+const { values: cli } = parseArgs({
+  options: {
+    results: { type: 'string', default: join(REPO, 'results') },
+    out: { type: 'string' },
+    'default-shard-target': { type: 'string', default: '90' },
+  },
+});
+const RES = resolve(cli.results);
+const OUT = resolve(cli.out ?? join(RES, 'report'));
+const DEFAULT_SHARD_TARGET = Number(cli['default-shard-target']);
 mkdirSync(OUT, { recursive: true });
 const r1 = (x, d = 1) => Math.round(x * 10 ** d) / 10 ** d;
 const write = (name, rows) => writeFileSync(join(OUT, name), JSON.stringify(rows));
 
-const agg = JSON.parse(readFileSync(join(REPO, 'results/aggregate.json'), 'utf8'));
+const agg = JSON.parse(readFileSync(join(RES, 'aggregate.json'), 'utf8'));
 const groups = agg.groups.filter((g) => g.runsUsed > 0);
 
 // 1. runs: one row per configuration (median over reps)
@@ -27,7 +40,7 @@ const runs = groups.map((g) => ({
   scenario: g.scenario,
   runner: g.runner,
   parallel: g.parallel,
-  shard_target_s: g.label?.startsWith('target') ? Number(g.label.slice(6)) : g.workspace === 'sharded' ? 90 : null,
+  shard_target_s: g.label?.startsWith('target') ? Number(g.label.slice(6)) : g.workspace === 'sharded' ? DEFAULT_SHARD_TARGET : null,
   reps: g.runsUsed,
   failures: g.failures,
   wall_s: r1(g.wallMs.median / 1000),
@@ -58,10 +71,10 @@ write('startup-tax.json', tax);
 
 // 3. DTE simulation grid
 const sim = [];
-for (const f of readdirSync(join(REPO, 'results/sim'))) {
+for (const f of readdirSync(join(RES, 'sim'))) {
   const m = f.match(/^(baseline|atomized|sharded)_full_all_p8(_tax-ct-17)?(?:_x(\d+))?\.json$/);
   if (!m) continue;
-  const d = JSON.parse(readFileSync(join(REPO, 'results/sim', f), 'utf8'));
+  const d = JSON.parse(readFileSync(join(RES, 'sim', f), 'utf8'));
   for (const r of d.results) {
     if (r.params.order !== 'longest-first') continue;
     sim.push({
@@ -88,7 +101,7 @@ const simRows = sim.filter((r) => {
 write('dte-sim.json', simRows);
 
 // 4. slot timelines of one representative run per variant (full pipeline, -P 8)
-const gantt = JSON.parse(readFileSync(join(REPO, 'results/charts/gantt.json'), 'utf8'));
+const gantt = JSON.parse(readFileSync(join(RES, 'charts/gantt.json'), 'utf8'));
 const tl = [];
 for (const g of gantt) {
   if (g.scenario !== 'full' || g.runner !== 'all' || g.parallel !== 8 || g.label) continue;
@@ -107,7 +120,7 @@ for (const g of gantt) {
 write('timelines.json', tl);
 
 // 4b. resources over time, full pipeline -P 8, the same representative run per variant, 1 s buckets
-const timelines = JSON.parse(readFileSync(join(REPO, 'results/charts/timelines.json'), 'utf8'));
+const timelines = JSON.parse(readFileSync(join(RES, 'charts/timelines.json'), 'utf8'));
 const res = [];
 for (const t of timelines) {
   if (t.scenario !== 'full' || t.runner !== 'all' || t.parallel !== 8 || t.label) continue;
@@ -124,7 +137,7 @@ for (const t of timelines) {
 write('resources.json', res);
 
 // 4c. every task duration (all reps) of the full pipeline at -P 8, by kind
-const durations = JSON.parse(readFileSync(join(REPO, 'results/charts/task-durations.json'), 'utf8'));
+const durations = JSON.parse(readFileSync(join(RES, 'charts/task-durations.json'), 'utf8'));
 const dur = [];
 for (const d of durations) {
   if (d.scenario !== 'full' || d.runner !== 'all' || d.parallel !== 8 || d.label) continue;

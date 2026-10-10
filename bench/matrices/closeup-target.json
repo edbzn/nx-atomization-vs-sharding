@@ -1,0 +1,33 @@
+{
+  "reps": 1,
+  "workspaces": [
+    "sharded"
+  ],
+  "configs": [
+    {
+      "scenario": "full",
+      "runner": "all",
+      "parallel": 8,
+      "label": "target30",
+      "env": {
+        "SHARD_TARGET_SECONDS": "30"
+      }
+    },
+    {
+      "scenario": "full",
+      "runner": "all",
+      "parallel": 8,
+      "label": "target90",
+      "env": {
+        "SHARD_TARGET_SECONDS": "90"
+      }
+    }
+  ],
+  "cooldownSec": 20,
+  "minMemAvailableGb": 16,
+  "out": "results/closeup/raw",
+  "runArgs": {
+    "interval": 250,
+    "timeout-min": 60
+  }
+}

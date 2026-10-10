@@ -1,0 +1,32 @@
+{
+  "reps": 1,
+  "workspaces": [
+    "baseline",
+    "atomized",
+    "sharded"
+  ],
+  "configs": [
+    {
+      "scenario": "full",
+      "runner": "all",
+      "parallel": 4
+    },
+    {
+      "scenario": "full",
+      "runner": "all",
+      "parallel": 16
+    }
+  ],
+  "rotate": true,
+  "env": {
+    "SHARD_TARGET_SECONDS": "15"
+  },
+  "cooldownSec": 20,
+  "minMemAvailableGb": 18,
+  "memWaitTimeoutMin": 30,
+  "out": "results/closeup/raw",
+  "runArgs": {
+    "interval": 250,
+    "timeout-min": 60
+  }
+}

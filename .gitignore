@@ -4,3 +4,4 @@ results/raw/
 *.log
 # size sweep: raw run dirs (nx.log, profile, samples) are large; report.{json,md} are kept
 results/size-sweep*/raw/
+results/closeup/raw/
