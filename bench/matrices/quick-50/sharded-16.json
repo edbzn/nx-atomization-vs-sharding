@@ -1,0 +1,1 @@
+{"reps": 1, "workspaces": ["sharded"], "configs": [{"scenario": "full", "runner": "all", "parallel": 16}], "label": "target10", "env": {"SHARD_TARGET_SECONDS": "10"}, "rotate": true, "cooldownSec": 5, "minMemAvailableGb": 12, "out": "results/quick-50/raw", "runArgs": {"interval": 250, "timeout-min": 30}}

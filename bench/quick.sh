@@ -9,25 +9,29 @@
 #   - all runners at --parallel=16
 # Results: results/quick/raw -> aggregate + chart datasets in results/quick/report.
 #
-#   bash bench/quick.sh
+#   bash bench/quick.sh            # 12 projects -> results/quick
+#   N=50 bash bench/quick.sh       # 50 projects -> results/quick-50 (about 40 min; 100: about 80 min)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export SIZE_DENSITY=large SIZE_E2E_SERVER=shared
-N=12
+N=${N:-12}
 T=10
-OUT=results/quick
-mkdir -p "$OUT" bench/matrices/quick
+SUF=$([ "$N" = 12 ] || echo "-$N")
+OUT=results/quick$SUF
+MAT=bench/matrices/quick$SUF
+mkdir -p "$OUT" "$MAT"
 
 node generator/size.mjs --projects "$N" --out workspaces/size-quick --shard-target "$T"
-mkdir -p workspaces/closeup-quick
-for v in baseline atomized sharded; do ln -sfn "../size-quick/$v-$N" "workspaces/closeup-quick/$v"; done
-export BENCH_WORKSPACES_DIR="$PWD/workspaces/closeup-quick"
+LINKS=workspaces/closeup-quick$SUF
+mkdir -p "$LINKS"
+for v in baseline atomized sharded; do ln -sfn "../size-quick/$v-$N" "$LINKS/$v"; done
+export BENCH_WORKSPACES_DIR="$PWD/$LINKS"
 
 matrix() { # name json
-  printf '%s\n' "$2" > "bench/matrices/quick/$1.json"
-  node bench/matrix.mjs "bench/matrices/quick/$1.json"
+  printf '%s\n' "$2" > "$MAT/$1.json"
+  node bench/matrix.mjs "$MAT/$1.json"
 }
-common='"rotate": true, "cooldownSec": 5, "minMemAvailableGb": 12, "out": "'"$OUT"'/raw", "runArgs": {"interval": 250, "timeout-min": 10}'
+common='"rotate": true, "cooldownSec": 5, "minMemAvailableGb": 12, "out": "'"$OUT"'/raw", "runArgs": {"interval": 250, "timeout-min": 30}'
 sharded() { echo '"label": "target'"$1"'", "env": {"SHARD_TARGET_SECONDS": "'"$1"'"}'; }
 
 cfg() { echo '{"scenario": "full", "runner": "'"$1"'", "parallel": '"$2"'}'; }

@@ -35,11 +35,15 @@ results/        # aggregates, simulator output, workspace-size report, chart dat
 
 ## Reproduce
 
-The article's experiment, about 15 minutes on one machine: 12 projects (5 Cypress CT, 5 Vitest, 1 app + its Playwright e2e), ~20 specs each, 17 runs (default, sharded and atomized, per runner and together, `--parallel` 8 and 16, shard targets 30/10/5 s).
+The article's experiment: the same workspace at 12, 50 and 100 projects (Cypress CT and Vitest libraries, apps with their Playwright e2e projects, ~20 specs each), 17 runs per size (default, sharded and atomized, per runner and together, `--parallel` 8 and 16, shard targets 30/10/5 s). About 15 minutes at 12 projects, 40 at 50, 80 at 100.
 
 ```bash
-bash bench/quick.sh                                 # -> results/quick/aggregate.md, chart datasets in results/quick/report
+bash bench/quick.sh                                 # 12 projects -> results/quick/aggregate.md, chart datasets in results/quick/report
+N=50 bash bench/quick.sh                            # -> results/quick-50
+N=100 bash bench/quick.sh                           # -> results/quick-100
 ```
+
+Keep the machine otherwise idle while it runs: compare each run's `cpuSecondsSystem` with `cpuSecondsAttributed` in its `summary.json` to spot runs disturbed by other load, move them out of `raw/` and rerun the script (it resumes).
 
 Playwright runs the way `@nx/playwright` expects: each app has a continuous `serve-static` target, and every e2e task (plain, atom or shard) reuses that one server through the inferred `e2e--wait-for-webserver` gate (`SIZE_E2E_SERVER=shared`). Continuous tasks are left out of the task counts and slot use.
 
@@ -69,4 +73,4 @@ Don't run two benchmarks at once: each run kills stray processes carrying its ma
 
 ## Results
 
-The blog post has the analysis; its data is [`results/quick/aggregate.md`](results/quick/aggregate.md). Earlier experiments: medians in [`results/aggregate.md`](results/aggregate.md) and the workspace-size sweep in [`results/scale/report.md`](results/scale/report.md). Measured on a Ryzen 9 9950X3D (16 cores, 32 threads), 64 GB, Ubuntu, Node 24.
+The blog post has the analysis; its data is in [`results/quick`](results/quick/aggregate.md), [`results/quick-50`](results/quick-50/aggregate.md) and [`results/quick-100`](results/quick-100/aggregate.md). Earlier experiments: medians in [`results/aggregate.md`](results/aggregate.md) and the workspace-size sweep in [`results/scale/report.md`](results/scale/report.md). Measured on a Ryzen 9 9950X3D (16 cores, 32 threads), 64 GB, Ubuntu, Node 24.

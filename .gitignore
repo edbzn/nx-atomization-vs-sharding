@@ -11,3 +11,7 @@ results/quick/raw/
 results/quick-validate/
 results/closeup-large/
 results/size-sweep-large/
+results/quick-*/raw/
+# runs set aside and repeated (flaky Cypress start, disturbed by other load)
+results/quick-*/flaky/
+results/quick-*/contaminated/
