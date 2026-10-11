@@ -1,0 +1,29 @@
+# Nx Agents for the benchmark: 4 vCPU, ~16 GB. Nx Cloud packs tasks on each agent from their
+# measured CPU and memory; there is no --parallel per agent.
+launch-templates:
+  linux-large-bench:
+    resource-class: 'docker_linux_amd64/large'
+    image: 'ubuntu22.04-node24.14-v1'
+    init-steps:
+      - name: Checkout
+        uses: 'nrwl/nx-cloud-workflows/v6/workflow-steps/checkout/main.yaml'
+      - name: Restore pnpm store
+        uses: 'nrwl/nx-cloud-workflows/v6/workflow-steps/cache/main.yaml'
+        inputs:
+          key: 'pnpm-lock.yaml'
+          paths: '~/.local/share/pnpm/store'
+      - name: Restore Cypress binary
+        uses: 'nrwl/nx-cloud-workflows/v6/workflow-steps/cache/main.yaml'
+        inputs:
+          key: 'pnpm-lock.yaml|.nx/workflows/agents.yaml'
+          paths: '~/.cache/Cypress'
+      - name: Install dependencies
+        script: |
+          corepack enable
+          pnpm install --frozen-lockfile
+      - name: Install browsers and system deps
+        script: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth
+          pnpm exec cypress install
+          pnpm exec playwright install --with-deps chromium
