@@ -4,6 +4,11 @@ launch-templates:
   linux-large-bench:
     resource-class: 'docker_linux_amd64/large'
     image: 'ubuntu22.04-node24.14-v1'
+    env:
+      # One shared virtual display per agent. Without it, every Cypress process starts its own
+      # Xvfb on :99, and the second task packed on the same agent fails ("Display :99 is
+      # already in use").
+      DISPLAY: ':99'
     init-steps:
       - name: Checkout
         uses: 'nrwl/nx-cloud-workflows/v6/workflow-steps/checkout/main.yaml'
@@ -27,3 +32,8 @@ launch-templates:
           sudo apt-get install -y xvfb libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth
           pnpm exec cypress install
           pnpm exec playwright install --with-deps chromium
+      - name: Start a shared virtual display
+        script: |
+          setsid nohup Xvfb :99 -screen 0 1280x1024x24 -nolisten tcp > /tmp/xvfb.log 2>&1 < /dev/null &
+          for i in $(seq 1 20); do [ -e /tmp/.X11-unix/X99 ] && break; sleep 0.5; done
+          ls -la /tmp/.X11-unix/
