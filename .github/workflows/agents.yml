@@ -1,0 +1,21 @@
+# The Nx Agents runs live on the agents/<setup>-<size> branches, one generated workspace each.
+# GitHub only offers workflow_dispatch for workflows on the default branch, so this file exists
+# to make them dispatchable:
+#   gh workflow run agents.yml --ref agents/atomized-12 -f agents=4
+name: agents
+
+on:
+  workflow_dispatch:
+    inputs:
+      agents:
+        description: Number of Nx Agents
+        required: true
+        default: '2'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Dispatch this workflow on an agents/* branch, e.g. --ref agents/atomized-12." >&2
+          exit 1
