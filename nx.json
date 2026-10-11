@@ -63,7 +63,8 @@
       "plugin": "./tools/shard-plugin/src/cypress-ct.ts",
       "options": {
         "ciTargetName": "component-test-ci",
-        "delegateTarget": "component-test"
+        "delegateTarget": "component-test",
+        "targetShardSeconds": 10
       }
     },
     {
@@ -79,14 +80,16 @@
           {
             "target": "e2e--wait-for-webserver"
           }
-        ]
+        ],
+        "targetShardSeconds": 10
       }
     },
     {
       "plugin": "./tools/shard-plugin/src/vitest.ts",
       "options": {
         "ciTargetName": "test-ci",
-        "delegateTarget": "test"
+        "delegateTarget": "test",
+        "targetShardSeconds": 10
       }
     }
   ]
