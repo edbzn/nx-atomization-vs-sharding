@@ -1,0 +1,39 @@
+# Nx Agents for the benchmark: 4 vCPU, ~16 GB. Nx Cloud packs tasks on each agent from their
+# measured CPU and memory; there is no --parallel per agent.
+launch-templates:
+  linux-large-bench:
+    resource-class: 'docker_linux_amd64/large'
+    image: 'ubuntu22.04-node24.14-v1'
+    env:
+      # One shared virtual display per agent. Without it, every Cypress process starts its own
+      # Xvfb on :99, and the second task packed on the same agent fails ("Display :99 is
+      # already in use").
+      DISPLAY: ':99'
+    init-steps:
+      - name: Checkout
+        uses: 'nrwl/nx-cloud-workflows/v6/workflow-steps/checkout/main.yaml'
+      - name: Restore pnpm store
+        uses: 'nrwl/nx-cloud-workflows/v6/workflow-steps/cache/main.yaml'
+        inputs:
+          key: 'pnpm-lock.yaml'
+          paths: '~/.local/share/pnpm/store'
+      - name: Restore Cypress binary
+        uses: 'nrwl/nx-cloud-workflows/v6/workflow-steps/cache/main.yaml'
+        inputs:
+          key: 'pnpm-lock.yaml|.nx/workflows/agents.yaml'
+          paths: '~/.cache/Cypress'
+      - name: Install dependencies
+        script: |
+          corepack enable
+          pnpm install --frozen-lockfile
+      - name: Install browsers and system deps
+        script: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth
+          pnpm exec cypress install
+          pnpm exec playwright install --with-deps chromium
+      - name: Start a shared virtual display
+        script: |
+          setsid nohup Xvfb :99 -screen 0 1280x1024x24 -nolisten tcp > /tmp/xvfb.log 2>&1 < /dev/null &
+          for i in $(seq 1 20); do [ -e /tmp/.X11-unix/X99 ] && break; sleep 0.5; done
+          ls -la /tmp/.X11-unix/

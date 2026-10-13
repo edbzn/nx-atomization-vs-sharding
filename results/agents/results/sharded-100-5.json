@@ -1,0 +1,11 @@
+{
+  "workspace": "sharded-100",
+  "agents": 5,
+  "runId": "38141356061-1",
+  "ok": true,
+  "startToReadyS": 142.32330799102783,
+  "testsS": 426.0487825870514,
+  "totalS": 568.3720905780792,
+  "githubRunId": "38141356061",
+  "conclusion": "success"
+}

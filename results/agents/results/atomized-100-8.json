@@ -1,0 +1,11 @@
+{
+  "workspace": "atomized-100",
+  "agents": 8,
+  "runId": "38145234248-1",
+  "ok": true,
+  "startToReadyS": 145.28397965431213,
+  "testsS": 558.7976055145264,
+  "totalS": 704.0815851688385,
+  "githubRunId": "38145234248",
+  "conclusion": "success"
+}

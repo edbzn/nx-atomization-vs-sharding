@@ -1,0 +1,8 @@
+baseline-100: exists (/home/edouard/work/nx-atomization-vs-sharding/workspaces/size-slow/baseline-100), skipped (use --force to regenerate)
+atomized-100: exists (/home/edouard/work/nx-atomization-vs-sharding/workspaces/size-slow/atomized-100), skipped (use --force to regenerate)
+sharded-100: exists (/home/edouard/work/nx-atomization-vs-sharding/workspaces/size-slow/sharded-100), skipped (use --force to regenerate)
+N=100: 40 CT + 40 Vitest libs + 10 apps + 10 e2e; 8 layers, 71 lib->lib edges, 33 app->lib edges; 1674 specs
+  cypress      40 projects,   733 specs (mean 18.32; 11-20:14 21-35:10 6-10:13 36-60:3), ~4569s spec work, 7.55 MB; shards@10s: 146 in 34 projects (1×6 2×10 3×7 4×5 5×3 6×1 8×8)
+  vitest       40 projects,   763 specs (mean 19.07; 11-20:15 6-10:13 21-35:8 36-60:4), ~474s spec work, 6.49 MB; shards@10s: 50 in 12 projects (1×28 2×4 3×2 5×3 6×1 7×1 8×1)
+  playwright   10 projects,   178 specs (mean 17.8; 21-35:3 11-20:4 6-10:3), ~655s spec work, 4.94 MB; shards@10s: 35 in 10 projects (2×4 3×3 4×1 6×1 8×1)
+  tasks: baseline 100 | atomized 1774 (1674 atoms + 90 noop parents + 10 builds) | sharded 365 (231 shards + 34 delegated + 90 noop parents + 10 builds)

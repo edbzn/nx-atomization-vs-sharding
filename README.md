@@ -21,7 +21,8 @@ shard-plugin/   # the sharding plugin (Nx createNodes) + its unit tests
 bench/          # run.mjs (one measured nx affected run), matrix.mjs (sweeps), aggregate.mjs,
                 # simulate.mjs (DTE simulator), scale.mjs (workspace-size sweep, Vitest only),
                 # size-sweep.mjs (full workspace at 10..2000 projects), report-data.mjs
-results/        # aggregates, simulator output, workspace-size report, chart datasets (results/report)
+results/        # aggregates, simulator output, workspace-size report, chart datasets (results/report),
+                # Nx Agents runs (results/agents), REPORT.md
 ```
 
 `bench/README.md` documents every metric, the sampler and the simulator.
@@ -73,4 +74,10 @@ Don't run two benchmarks at once: each run kills stray processes carrying its ma
 
 ## Results
 
-The blog post has the analysis; its data is in [`results/quick`](results/quick/aggregate.md), [`results/quick-50`](results/quick-50/aggregate.md) and [`results/quick-100`](results/quick-100/aggregate.md). Earlier experiments: medians in [`results/aggregate.md`](results/aggregate.md) and the workspace-size sweep in [`results/scale/report.md`](results/scale/report.md). Measured on a Ryzen 9 9950X3D (16 cores, 32 threads), 64 GB, Ubuntu, Node 24.
+The blog post has the analysis, and [`results/REPORT.md`](results/REPORT.md) has every number behind it. Its data:
+
+- **Quick specs:** [`results/quick`](results/quick/aggregate.md), [`results/quick-50`](results/quick-50/aggregate.md), [`results/quick-100`](results/quick-100/aggregate.md) (`bench/quick.sh`).
+- **Slow projects** (`SIZE_SLOW=0.2`: one project in five gets ~15 s specs): [`results/slow`](results/slow/aggregate.md), [`results/slow-50`](results/slow-50/aggregate.md), [`results/slow-100`](results/slow-100/aggregate.md) (`bench/slow.sh`), analysed in [`results/slow-report.md`](results/slow-report.md).
+- **Nx Agents:** [`results/agents`](results/agents) (scripts in `bench/agents`).
+
+ Earlier experiments: medians in [`results/aggregate.md`](results/aggregate.md) and the workspace-size sweep in [`results/scale/report.md`](results/scale/report.md). Measured on a Ryzen 9 9950X3D (16 cores, 32 threads), 64 GB, Ubuntu, Node 24.

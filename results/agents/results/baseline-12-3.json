@@ -1,0 +1,11 @@
+{
+  "workspace": "baseline-12",
+  "agents": 3,
+  "runId": "38130805878-1",
+  "ok": true,
+  "startToReadyS": 137.24878025054932,
+  "testsS": 158.73748421669006,
+  "totalS": 295.9862644672394,
+  "githubRunId": "38130805878",
+  "conclusion": "success"
+}

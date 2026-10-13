@@ -1,0 +1,1404 @@
+{
+ "generatedAt": "2026-10-12T13:28:28.077Z",
+ "rawDir": "results/slow-50/raw",
+ "groups": [
+  {
+   "key": "atomized/full/all/p8",
+   "workspace": "atomized",
+   "scenario": "full",
+   "runner": "all",
+   "parallel": 8,
+   "label": null,
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 650575,
+    "min": 650575,
+    "max": 650575,
+    "all": [
+     650575
+    ]
+   },
+   "preTaskMs": 1165,
+   "graphMs": 1144,
+   "taskPhaseMs": 649066,
+   "taskCount": 897,
+   "atomCount": 892,
+   "noopCount": 45,
+   "sumTaskMs": 5107976,
+   "taskMs": {
+    "mean": 5695,
+    "median": 4129,
+    "p95": 21767,
+    "max": 66163
+   },
+   "slotUtilisation": 0.9837,
+   "peakPssMb": 8496.4,
+   "peakRssMb": 13848.8,
+   "avgCores": 7.22,
+   "peakCores": 17.2,
+   "cpuSeconds": 4687.8,
+   "cpuSecondsSystem": 6435.7,
+   "minMemAvailableMb": 12180,
+   "nx": {
+    "criticalPathMs": 66163,
+    "recoverableMs": 583202,
+    "recoverableByParallelMs": 489741,
+    "recoverableByMachinesMs": 93461,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.181,
+    "max": 0.181
+   },
+   "representativeRun": "20261012T073234Z_atomized_full_all_p8_r1",
+   "startupTaxMs": {
+    "ct": 2869,
+    "e2e": 711,
+    "unit": 236
+   }
+  },
+  {
+   "key": "atomized/full/ct/p8",
+   "workspace": "atomized",
+   "scenario": "full",
+   "runner": "ct",
+   "parallel": 8,
+   "label": null,
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 489721,
+    "min": 489721,
+    "max": 489721,
+    "all": [
+     489721
+    ]
+   },
+   "preTaskMs": 925,
+   "graphMs": 905,
+   "taskPhaseMs": 488757,
+   "taskCount": 408,
+   "atomCount": 408,
+   "noopCount": 20,
+   "sumTaskMs": 3896151,
+   "taskMs": {
+    "mean": 9549,
+    "median": 5092,
+    "p95": 28364,
+    "max": 64809
+   },
+   "slotUtilisation": 0.9964,
+   "peakPssMb": 8094.5,
+   "peakRssMb": 13338.6,
+   "avgCores": 6.63,
+   "peakCores": 19.8,
+   "cpuSeconds": 3244.5,
+   "cpuSecondsSystem": 3931,
+   "minMemAvailableMb": 13097,
+   "nx": {
+    "criticalPathMs": 64809,
+    "recoverableMs": 424077,
+    "recoverableByParallelMs": 367132,
+    "recoverableByMachinesMs": 56946,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.177,
+    "max": 0.177
+   },
+   "representativeRun": "20261012T080335Z_atomized_full_ct_p8_r1",
+   "startupTaxMs": {
+    "ct": 2550
+   }
+  },
+  {
+   "key": "atomized/full/e2e/p8",
+   "workspace": "atomized",
+   "scenario": "full",
+   "runner": "e2e",
+   "parallel": 8,
+   "label": null,
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 72162,
+    "min": 72162,
+    "max": 72162,
+    "all": [
+     72162
+    ]
+   },
+   "preTaskMs": 815,
+   "graphMs": 801,
+   "taskPhaseMs": 71027,
+   "taskCount": 121,
+   "atomCount": 116,
+   "noopCount": 5,
+   "sumTaskMs": 408660,
+   "taskMs": {
+    "mean": 3377,
+    "median": 1678,
+    "p95": 12471,
+    "max": 53414
+   },
+   "slotUtilisation": 0.7192,
+   "peakPssMb": 4493.6,
+   "peakRssMb": 8226.5,
+   "avgCores": 4.06,
+   "peakCores": 14.12,
+   "cpuSeconds": 290.2,
+   "cpuSecondsSystem": 396.7,
+   "minMemAvailableMb": 16167,
+   "nx": {
+    "criticalPathMs": 53579,
+    "recoverableMs": 17498,
+    "recoverableByParallelMs": 17498,
+    "recoverableByMachinesMs": 0,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.149,
+    "max": 0.149
+   },
+   "representativeRun": "20261012T081543Z_atomized_full_e2e_p8_r1",
+   "startupTaxMs": {
+    "e2e": 659
+   }
+  },
+  {
+   "key": "atomized/full/unit/p8",
+   "workspace": "atomized",
+   "scenario": "full",
+   "runner": "unit",
+   "parallel": 8,
+   "label": null,
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 68687,
+    "min": 68687,
+    "max": 68687,
+    "all": [
+     68687
+    ]
+   },
+   "preTaskMs": 907,
+   "graphMs": 887,
+   "taskPhaseMs": 67732,
+   "taskCount": 368,
+   "atomCount": 368,
+   "noopCount": 20,
+   "sumTaskMs": 527533,
+   "taskMs": {
+    "mean": 1434,
+    "median": 886,
+    "p95": 4722,
+    "max": 8705
+   },
+   "slotUtilisation": 0.9736,
+   "peakPssMb": 2955.6,
+   "peakRssMb": 3842.4,
+   "avgCores": 7.09,
+   "peakCores": 12.56,
+   "cpuSeconds": 482.2,
+   "cpuSecondsSystem": 573.5,
+   "minMemAvailableMb": 17677,
+   "nx": {
+    "criticalPathMs": 8705,
+    "recoverableMs": 59144,
+    "recoverableByParallelMs": 51363,
+    "recoverableByMachinesMs": 7780,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.139,
+    "max": 0.139
+   },
+   "representativeRun": "20261012T081846Z_atomized_full_unit_p8_r1",
+   "startupTaxMs": {
+    "unit": 234
+   }
+  },
+  {
+   "key": "baseline/full/all/p8",
+   "workspace": "baseline",
+   "scenario": "full",
+   "runner": "all",
+   "parallel": 8,
+   "label": null,
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 1241002,
+    "min": 1241002,
+    "max": 1241002,
+    "all": [
+     1241002
+    ]
+   },
+   "preTaskMs": 804,
+   "graphMs": 790,
+   "taskPhaseMs": 1240165,
+   "taskCount": 55,
+   "atomCount": 5,
+   "noopCount": 0,
+   "sumTaskMs": 3844355,
+   "taskMs": {
+    "mean": 69897,
+    "median": 21420,
+    "p95": 245979,
+    "max": 1203143
+   },
+   "slotUtilisation": 0.3875,
+   "peakPssMb": 7853.5,
+   "peakRssMb": 13160.9,
+   "avgCores": 2.34,
+   "peakCores": 15.04,
+   "cpuSeconds": 2907.3,
+   "cpuSecondsSystem": 5183,
+   "minMemAvailableMb": 6817,
+   "nx": {
+    "criticalPathMs": 1203143,
+    "recoverableMs": 37047,
+    "recoverableByParallelMs": 37047,
+    "recoverableByMachinesMs": 0,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.143,
+    "max": 0.143
+   },
+   "representativeRun": "20261012T071146Z_baseline_full_all_p8_r1",
+   "startupTaxMs": {}
+  },
+  {
+   "key": "baseline/full/ct/p8",
+   "workspace": "baseline",
+   "scenario": "full",
+   "runner": "ct",
+   "parallel": 8,
+   "label": null,
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 1195006,
+    "min": 1195006,
+    "max": 1195006,
+    "all": [
+     1195006
+    ]
+   },
+   "preTaskMs": 780,
+   "graphMs": 766,
+   "taskPhaseMs": 1194193,
+   "taskCount": 20,
+   "atomCount": 0,
+   "noopCount": 0,
+   "sumTaskMs": 2956121,
+   "taskMs": {
+    "mean": 147806,
+    "median": 48780,
+    "p95": 597058,
+    "max": 1194193
+   },
+   "slotUtilisation": 0.3094,
+   "peakPssMb": 8188.3,
+   "peakRssMb": 13718.4,
+   "avgCores": 1.79,
+   "peakCores": 19.2,
+   "cpuSeconds": 2135.2,
+   "cpuSecondsSystem": 3227.8,
+   "minMemAvailableMb": 12681,
+   "nx": {
+    "criticalPathMs": 1194193,
+    "recoverableMs": 11,
+    "recoverableByParallelMs": 11,
+    "recoverableByMachinesMs": 0,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.127,
+    "max": 0.127
+   },
+   "representativeRun": "20261012T074333Z_baseline_full_ct_p8_r1",
+   "startupTaxMs": {}
+  },
+  {
+   "key": "baseline/full/e2e/p8",
+   "workspace": "baseline",
+   "scenario": "full",
+   "runner": "e2e",
+   "parallel": 8,
+   "label": null,
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 224089,
+    "min": 224089,
+    "max": 224089,
+    "all": [
+     224089
+    ]
+   },
+   "preTaskMs": 720,
+   "graphMs": 704,
+   "taskPhaseMs": 223061,
+   "taskCount": 15,
+   "atomCount": 5,
+   "noopCount": 0,
+   "sumTaskMs": 334004,
+   "taskMs": {
+    "mean": 22267,
+    "median": 653,
+    "p95": 102710,
+    "max": 222275
+   },
+   "slotUtilisation": 0.1872,
+   "peakPssMb": 3235,
+   "peakRssMb": 5707.7,
+   "avgCores": 0.79,
+   "peakCores": 9.64,
+   "cpuSeconds": 177.2,
+   "cpuSecondsSystem": 317,
+   "minMemAvailableMb": 17460,
+   "nx": {
+    "criticalPathMs": 222421,
+    "recoverableMs": 0,
+    "recoverableByParallelMs": 0,
+    "recoverableByMachinesMs": 0,
+    "coordinatorOverheadMs": 651,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.093,
+    "max": 0.093
+   },
+   "representativeRun": "20261012T081152Z_baseline_full_e2e_p8_r1",
+   "startupTaxMs": {}
+  },
+  {
+   "key": "baseline/full/unit/p8",
+   "workspace": "baseline",
+   "scenario": "full",
+   "runner": "unit",
+   "parallel": 8,
+   "label": null,
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 96730,
+    "min": 96730,
+    "max": 96730,
+    "all": [
+     96730
+    ]
+   },
+   "preTaskMs": 732,
+   "graphMs": 717,
+   "taskPhaseMs": 95963,
+   "taskCount": 20,
+   "atomCount": 0,
+   "noopCount": 0,
+   "sumTaskMs": 435138,
+   "taskMs": {
+    "mean": 21757,
+    "median": 12945,
+    "p95": 68690,
+    "max": 73156
+   },
+   "slotUtilisation": 0.5668,
+   "peakPssMb": 2429.7,
+   "peakRssMb": 3330,
+   "avgCores": 3.86,
+   "peakCores": 11.56,
+   "cpuSeconds": 372.2,
+   "cpuSecondsSystem": 455.5,
+   "minMemAvailableMb": 17804,
+   "nx": {
+    "criticalPathMs": 73156,
+    "recoverableMs": 22819,
+    "recoverableByParallelMs": 22819,
+    "recoverableByMachinesMs": 0,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.102,
+    "max": 0.102
+   },
+   "representativeRun": "20261012T081703Z_baseline_full_unit_p8_r1",
+   "startupTaxMs": {}
+  },
+  {
+   "key": "sharded/full/all/p8/target10",
+   "workspace": "sharded",
+   "scenario": "full",
+   "runner": "all",
+   "parallel": 8,
+   "label": "target10",
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 489858,
+    "min": 489858,
+    "max": 489858,
+    "all": [
+     489858
+    ]
+   },
+   "preTaskMs": 899,
+   "graphMs": 881,
+   "taskPhaseMs": 488641,
+   "taskCount": 163,
+   "atomCount": 142,
+   "noopCount": 45,
+   "sumTaskMs": 3872026,
+   "taskMs": {
+    "mean": 23755,
+    "median": 14535,
+    "p95": 85041,
+    "max": 159148
+   },
+   "slotUtilisation": 0.9905,
+   "peakPssMb": 10375.5,
+   "peakRssMb": 14160.1,
+   "avgCores": 5.8,
+   "peakCores": 13.64,
+   "cpuSeconds": 2838.5,
+   "cpuSecondsSystem": 3269,
+   "minMemAvailableMb": 12404,
+   "nx": {
+    "criticalPathMs": 159148,
+    "recoverableMs": 329562,
+    "recoverableByParallelMs": 329562,
+    "recoverableByMachinesMs": 0,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.175,
+    "max": 0.175
+   },
+   "representativeRun": "20261012T081957Z_sharded_full_all_p8_r1_target10",
+   "startupTaxMs": {}
+  },
+  {
+   "key": "sharded/full/ct/p8/target10",
+   "workspace": "sharded",
+   "scenario": "full",
+   "runner": "ct",
+   "parallel": 8,
+   "label": "target10",
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 399432,
+    "min": 399432,
+    "max": 399432,
+    "all": [
+     399432
+    ]
+   },
+   "preTaskMs": 946,
+   "graphMs": 931,
+   "taskPhaseMs": 398449,
+   "taskCount": 84,
+   "atomCount": 82,
+   "noopCount": 20,
+   "sumTaskMs": 3149522,
+   "taskMs": {
+    "mean": 37494,
+    "median": 18005,
+    "p95": 154292,
+    "max": 161769
+   },
+   "slotUtilisation": 0.9881,
+   "peakPssMb": 8677.8,
+   "peakRssMb": 14185.8,
+   "avgCores": 6.3,
+   "peakCores": 18.32,
+   "cpuSeconds": 2512.3,
+   "cpuSecondsSystem": 3773,
+   "minMemAvailableMb": 22480,
+   "nx": {
+    "criticalPathMs": 161770,
+    "recoverableMs": 236714,
+    "recoverableByParallelMs": 236714,
+    "recoverableByMachinesMs": 0,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.18,
+    "max": 0.18
+   },
+   "representativeRun": "20261012T132146Z_sharded_full_ct_p8_r1_target10",
+   "startupTaxMs": {}
+  },
+  {
+   "key": "sharded/full/e2e/p8/target10",
+   "workspace": "sharded",
+   "scenario": "full",
+   "runner": "e2e",
+   "parallel": 8,
+   "label": "target10",
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 55217,
+    "min": 55217,
+    "max": 55217,
+    "all": [
+     55217
+    ]
+   },
+   "preTaskMs": 829,
+   "graphMs": 813,
+   "taskPhaseMs": 54059,
+   "taskCount": 32,
+   "atomCount": 27,
+   "noopCount": 5,
+   "sumTaskMs": 349011,
+   "taskMs": {
+    "mean": 10907,
+    "median": 8253,
+    "p95": 44720,
+    "max": 53298
+   },
+   "slotUtilisation": 0.807,
+   "peakPssMb": 4649.1,
+   "peakRssMb": 8525.2,
+   "avgCores": 3.74,
+   "peakCores": 12.6,
+   "cpuSeconds": 203.4,
+   "cpuSecondsSystem": 282.2,
+   "minMemAvailableMb": 15896,
+   "nx": {
+    "criticalPathMs": 53452,
+    "recoverableMs": 625,
+    "recoverableByParallelMs": 625,
+    "recoverableByMachinesMs": 0,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.157,
+    "max": 0.157
+   },
+   "representativeRun": "20261012T083441Z_sharded_full_e2e_p8_r1_target10",
+   "startupTaxMs": {}
+  },
+  {
+   "key": "sharded/full/unit/p8/target10",
+   "workspace": "sharded",
+   "scenario": "full",
+   "runner": "unit",
+   "parallel": 8,
+   "label": "target10",
+   "runs": 1,
+   "runsUsed": 1,
+   "failures": 0,
+   "failureReasons": [],
+   "failedTasks": [],
+   "wallMs": {
+    "median": 64096,
+    "min": 64096,
+    "max": 64096,
+    "all": [
+     64096
+    ]
+   },
+   "preTaskMs": 851,
+   "graphMs": 836,
+   "taskPhaseMs": 63209,
+   "taskCount": 47,
+   "atomCount": 33,
+   "noopCount": 20,
+   "sumTaskMs": 449455,
+   "taskMs": {
+    "mean": 9563,
+    "median": 8763,
+    "p95": 16114,
+    "max": 21114
+   },
+   "slotUtilisation": 0.8888,
+   "peakPssMb": 2870.1,
+   "peakRssMb": 3793.5,
+   "avgCores": 6.11,
+   "peakCores": 14.06,
+   "cpuSeconds": 388.1,
+   "cpuSecondsSystem": 462.8,
+   "minMemAvailableMb": 17563,
+   "nx": {
+    "criticalPathMs": 21114,
+    "recoverableMs": 42118,
+    "recoverableByParallelMs": 42118,
+    "recoverableByMachinesMs": 0,
+    "coordinatorOverheadMs": 0,
+    "source": "hook"
+   },
+   "samplerCores": {
+    "median": 0.141,
+    "max": 0.141
+   },
+   "representativeRun": "20261012T083543Z_sharded_full_unit_p8_r1_target10",
+   "startupTaxMs": {}
+  }
+ ],
+ "startupTax": [
+  {
+   "variant": "atomized",
+   "scenario": "full",
+   "runner": "all",
+   "parallel": 8,
+   "label": null,
+   "kind": "ct",
+   "projects": 20,
+   "medianTaxMs": 2869,
+   "p25TaxMs": 2811,
+   "p75TaxMs": 3012,
+   "perProject": [
+    {
+     "project": "ct-invoice-0002",
+     "units": 8,
+     "baselineMs": 18988,
+     "variantSumMs": 42908,
+     "taxMs": 3417
+    },
+    {
+     "project": "ct-invoice-0014",
+     "units": 7,
+     "baselineMs": 20395,
+     "variantSumMs": 35163,
+     "taxMs": 2461
+    },
+    {
+     "project": "ct-booking-0020",
+     "units": 16,
+     "baselineMs": 40701,
+     "variantSumMs": 86238,
+     "taxMs": 3036
+    },
+    {
+     "project": "ct-shipment-0025",
+     "units": 28,
+     "baselineMs": 68547,
+     "variantSumMs": 147630,
+     "taxMs": 2929
+    },
+    {
+     "project": "ct-product-0021",
+     "units": 10,
+     "baselineMs": 26777,
+     "variantSumMs": 54308,
+     "taxMs": 3059
+    },
+    {
+     "project": "ct-invoice-0039",
+     "units": 33,
+     "baselineMs": 570026,
+     "variantSumMs": 653043,
+     "taxMs": 2594
+    },
+    {
+     "project": "ct-booking-0012",
+     "units": 60,
+     "baselineMs": 1203143,
+     "variantSumMs": 1365471,
+     "taxMs": 2751
+    },
+    {
+     "project": "ct-ticket-0024",
+     "units": 10,
+     "baselineMs": 183354,
+     "variantSumMs": 203582,
+     "taxMs": 2248
+    },
+    {
+     "project": "ct-ticket-0015",
+     "units": 19,
+     "baselineMs": 44383,
+     "variantSumMs": 94972,
+     "taxMs": 2811
+    },
+    {
+     "project": "ct-shipment-0016",
+     "units": 10,
+     "baselineMs": 25580,
+     "variantSumMs": 53885,
+     "taxMs": 3145
+    },
+    {
+     "project": "ct-patient-0009",
+     "units": 42,
+     "baselineMs": 109426,
+     "variantSumMs": 226932,
+     "taxMs": 2866
+    },
+    {
+     "project": "ct-patient-0018",
+     "units": 15,
+     "baselineMs": 42627,
+     "variantSumMs": 82686,
+     "taxMs": 2861
+    },
+    {
+     "project": "ct-patient-0028",
+     "units": 6,
+     "baselineMs": 18479,
+     "variantSumMs": 32553,
+     "taxMs": 2815
+    },
+    {
+     "project": "ct-ticket-0005",
+     "units": 30,
+     "baselineMs": 81147,
+     "variantSumMs": 164286,
+     "taxMs": 2867
+    },
+    {
+     "project": "ct-product-0038",
+     "units": 16,
+     "baselineMs": 43238,
+     "variantSumMs": 88208,
+     "taxMs": 2998
+    },
+    {
+     "project": "ct-product-0013",
+     "units": 23,
+     "baselineMs": 56604,
+     "variantSumMs": 120500,
+     "taxMs": 2904
+    },
+    {
+     "project": "ct-shipment-0006",
+     "units": 16,
+     "baselineMs": 274672,
+     "variantSumMs": 317736,
+     "taxMs": 2871
+    },
+    {
+     "project": "ct-booking-0032",
+     "units": 31,
+     "baselineMs": 75147,
+     "variantSumMs": 165495,
+     "taxMs": 3012
+    },
+    {
+     "project": "ct-invoice-0022",
+     "units": 8,
+     "baselineMs": 22456,
+     "variantSumMs": 42282,
+     "taxMs": 2832
+    },
+    {
+     "project": "ct-product-0001",
+     "units": 20,
+     "baselineMs": 53816,
+     "variantSumMs": 110050,
+     "taxMs": 2960
+    }
+   ]
+  },
+  {
+   "variant": "atomized",
+   "scenario": "full",
+   "runner": "all",
+   "parallel": 8,
+   "label": null,
+   "kind": "e2e",
+   "projects": 5,
+   "medianTaxMs": 711,
+   "p25TaxMs": 684,
+   "p75TaxMs": 780,
+   "perProject": [
+    {
+     "project": "academy-0000-e2e",
+     "units": 12,
+     "baselineMs": 233682,
+     "variantSumMs": 246803,
+     "taxMs": 1193
+    },
+    {
+     "project": "shop-0002-e2e",
+     "units": 32,
+     "baselineMs": 37382,
+     "variantSumMs": 59418,
+     "taxMs": 711
+    },
+    {
+     "project": "academy-0003-e2e",
+     "units": 10,
+     "baselineMs": 12481,
+     "variantSumMs": 18633,
+     "taxMs": 684
+    },
+    {
+     "project": "homes-0004-e2e",
+     "units": 11,
+     "baselineMs": 12957,
+     "variantSumMs": 19614,
+     "taxMs": 666
+    },
+    {
+     "project": "homes-0001-e2e",
+     "units": 51,
+     "baselineMs": 55808,
+     "variantSumMs": 94790,
+     "taxMs": 780
+    }
+   ]
+  },
+  {
+   "variant": "atomized",
+   "scenario": "full",
+   "runner": "all",
+   "parallel": 8,
+   "label": null,
+   "kind": "unit",
+   "projects": 20,
+   "medianTaxMs": 236,
+   "p25TaxMs": 169,
+   "p75TaxMs": 287,
+   "perProject": [
+    {
+     "project": "unit-asset-0003",
+     "units": 24,
+     "baselineMs": 16590,
+     "variantSumMs": 21881,
+     "taxMs": 230
+    },
+    {
+     "project": "unit-contract-0007",
+     "units": 10,
+     "baselineMs": 43798,
+     "variantSumMs": 45436,
+     "taxMs": 182
+    },
+    {
+     "project": "unit-vehicle-0010",
+     "units": 51,
+     "baselineMs": 36043,
+     "variantSumMs": 48597,
+     "taxMs": 251
+    },
+    {
+     "project": "unit-asset-0017",
+     "units": 6,
+     "baselineMs": 4026,
+     "variantSumMs": 5731,
+     "taxMs": 341
+    },
+    {
+     "project": "unit-campaign-0004",
+     "units": 33,
+     "baselineMs": 23614,
+     "variantSumMs": 31492,
+     "taxMs": 246
+    },
+    {
+     "project": "unit-contract-0023",
+     "units": 6,
+     "baselineMs": 3929,
+     "variantSumMs": 5106,
+     "taxMs": 235
+    },
+    {
+     "project": "unit-employee-0029",
+     "units": 9,
+     "baselineMs": 6532,
+     "variantSumMs": 8384,
+     "taxMs": 232
+    },
+    {
+     "project": "unit-recipe-0034",
+     "units": 12,
+     "baselineMs": 7996,
+     "variantSumMs": 10815,
+     "taxMs": 256
+    },
+    {
+     "project": "unit-asset-0030",
+     "units": 16,
+     "baselineMs": 11555,
+     "variantSumMs": 15947,
+     "taxMs": 293
+    },
+    {
+     "project": "unit-employee-0000",
+     "units": 31,
+     "baselineMs": 21420,
+     "variantSumMs": 30023,
+     "taxMs": 287
+    },
+    {
+     "project": "unit-employee-0036",
+     "units": 18,
+     "baselineMs": 13534,
+     "variantSumMs": 17569,
+     "taxMs": 237
+    },
+    {
+     "project": "unit-campaign-0031",
+     "units": 20,
+     "baselineMs": 13411,
+     "variantSumMs": 19443,
+     "taxMs": 317
+    },
+    {
+     "project": "unit-contract-0033",
+     "units": 14,
+     "baselineMs": 66961,
+     "variantSumMs": 65343,
+     "taxMs": -124
+    },
+    {
+     "project": "unit-vehicle-0035",
+     "units": 8,
+     "baselineMs": 5536,
+     "variantSumMs": 7658,
+     "taxMs": 303
+    },
+    {
+     "project": "unit-recipe-0026",
+     "units": 20,
+     "baselineMs": 91180,
+     "variantSumMs": 90147,
+     "taxMs": -54
+    },
+    {
+     "project": "unit-recipe-0008",
+     "units": 13,
+     "baselineMs": 10558,
+     "variantSumMs": 13481,
+     "taxMs": 244
+    },
+    {
+     "project": "unit-vehicle-0027",
+     "units": 43,
+     "baselineMs": 32820,
+     "variantSumMs": 40206,
+     "taxMs": 176
+    },
+    {
+     "project": "unit-asset-0037",
+     "units": 9,
+     "baselineMs": 7571,
+     "variantSumMs": 8448,
+     "taxMs": 110
+    },
+    {
+     "project": "unit-campaign-0019",
+     "units": 6,
+     "baselineMs": 5448,
+     "variantSumMs": 6294,
+     "taxMs": 169
+    },
+    {
+     "project": "unit-employee-0011",
+     "units": 19,
+     "baselineMs": 85146,
+     "variantSumMs": 85003,
+     "taxMs": -8
+    }
+   ]
+  },
+  {
+   "variant": "atomized",
+   "scenario": "full",
+   "runner": "ct",
+   "parallel": 8,
+   "label": null,
+   "kind": "ct",
+   "projects": 20,
+   "medianTaxMs": 2550,
+   "p25TaxMs": 2314,
+   "p75TaxMs": 2631,
+   "perProject": [
+    {
+     "project": "ct-invoice-0002",
+     "units": 8,
+     "baselineMs": 18994,
+     "variantSumMs": 38153,
+     "taxMs": 2737
+    },
+    {
+     "project": "ct-invoice-0014",
+     "units": 7,
+     "baselineMs": 20781,
+     "variantSumMs": 37446,
+     "taxMs": 2778
+    },
+    {
+     "project": "ct-booking-0020",
+     "units": 16,
+     "baselineMs": 41666,
+     "variantSumMs": 81315,
+     "taxMs": 2643
+    },
+    {
+     "project": "ct-shipment-0025",
+     "units": 28,
+     "baselineMs": 70541,
+     "variantSumMs": 137166,
+     "taxMs": 2468
+    },
+    {
+     "project": "ct-product-0021",
+     "units": 10,
+     "baselineMs": 28370,
+     "variantSumMs": 50319,
+     "taxMs": 2439
+    },
+    {
+     "project": "ct-invoice-0039",
+     "units": 33,
+     "baselineMs": 565630,
+     "variantSumMs": 629835,
+     "taxMs": 2006
+    },
+    {
+     "project": "ct-booking-0012",
+     "units": 60,
+     "baselineMs": 1194193,
+     "variantSumMs": 1322192,
+     "taxMs": 2169
+    },
+    {
+     "project": "ct-ticket-0024",
+     "units": 10,
+     "baselineMs": 182163,
+     "variantSumMs": 196461,
+     "taxMs": 1589
+    },
+    {
+     "project": "ct-ticket-0015",
+     "units": 19,
+     "baselineMs": 44945,
+     "variantSumMs": 92009,
+     "taxMs": 2615
+    },
+    {
+     "project": "ct-shipment-0016",
+     "units": 10,
+     "baselineMs": 25685,
+     "variantSumMs": 49505,
+     "taxMs": 2647
+    },
+    {
+     "project": "ct-patient-0009",
+     "units": 42,
+     "baselineMs": 105459,
+     "variantSumMs": 213335,
+     "taxMs": 2631
+    },
+    {
+     "project": "ct-patient-0018",
+     "units": 15,
+     "baselineMs": 40376,
+     "variantSumMs": 75803,
+     "taxMs": 2531
+    },
+    {
+     "project": "ct-patient-0028",
+     "units": 6,
+     "baselineMs": 16726,
+     "variantSumMs": 28297,
+     "taxMs": 2314
+    },
+    {
+     "project": "ct-ticket-0005",
+     "units": 30,
+     "baselineMs": 78803,
+     "variantSumMs": 151500,
+     "taxMs": 2507
+    },
+    {
+     "project": "ct-product-0038",
+     "units": 16,
+     "baselineMs": 42373,
+     "variantSumMs": 81252,
+     "taxMs": 2592
+    },
+    {
+     "project": "ct-product-0013",
+     "units": 23,
+     "baselineMs": 56640,
+     "variantSumMs": 113154,
+     "taxMs": 2569
+    },
+    {
+     "project": "ct-shipment-0006",
+     "units": 16,
+     "baselineMs": 273716,
+     "variantSumMs": 306149,
+     "taxMs": 2162
+    },
+    {
+     "project": "ct-booking-0032",
+     "units": 31,
+     "baselineMs": 74040,
+     "variantSumMs": 151204,
+     "taxMs": 2572
+    },
+    {
+     "project": "ct-invoice-0022",
+     "units": 8,
+     "baselineMs": 22405,
+     "variantSumMs": 40520,
+     "taxMs": 2588
+    },
+    {
+     "project": "ct-product-0001",
+     "units": 20,
+     "baselineMs": 52615,
+     "variantSumMs": 100536,
+     "taxMs": 2522
+    }
+   ]
+  },
+  {
+   "variant": "atomized",
+   "scenario": "full",
+   "runner": "e2e",
+   "parallel": 8,
+   "label": null,
+   "kind": "e2e",
+   "projects": 5,
+   "medianTaxMs": 659,
+   "p25TaxMs": 640,
+   "p75TaxMs": 684,
+   "perProject": [
+    {
+     "project": "shop-0002-e2e",
+     "units": 32,
+     "baselineMs": 33477,
+     "variantSumMs": 54687,
+     "taxMs": 684
+    },
+    {
+     "project": "academy-0000-e2e",
+     "units": 12,
+     "baselineMs": 222275,
+     "variantSumMs": 232195,
+     "taxMs": 902
+    },
+    {
+     "project": "academy-0003-e2e",
+     "units": 10,
+     "baselineMs": 11147,
+     "variantSumMs": 16909,
+     "taxMs": 640
+    },
+    {
+     "project": "homes-0004-e2e",
+     "units": 11,
+     "baselineMs": 11631,
+     "variantSumMs": 17375,
+     "taxMs": 574
+    },
+    {
+     "project": "homes-0001-e2e",
+     "units": 51,
+     "baselineMs": 51468,
+     "variantSumMs": 84402,
+     "taxMs": 659
+    }
+   ]
+  },
+  {
+   "variant": "atomized",
+   "scenario": "full",
+   "runner": "unit",
+   "parallel": 8,
+   "label": null,
+   "kind": "unit",
+   "projects": 20,
+   "medianTaxMs": 234,
+   "p25TaxMs": 218,
+   "p75TaxMs": 275,
+   "perProject": [
+    {
+     "project": "unit-asset-0003",
+     "units": 24,
+     "baselineMs": 14977,
+     "variantSumMs": 19990,
+     "taxMs": 218
+    },
+    {
+     "project": "unit-contract-0007",
+     "units": 10,
+     "baselineMs": 40277,
+     "variantSumMs": 40915,
+     "taxMs": 71
+    },
+    {
+     "project": "unit-vehicle-0010",
+     "units": 51,
+     "baselineMs": 32374,
+     "variantSumMs": 43226,
+     "taxMs": 217
+    },
+    {
+     "project": "unit-asset-0017",
+     "units": 6,
+     "baselineMs": 3545,
+     "variantSumMs": 4640,
+     "taxMs": 219
+    },
+    {
+     "project": "unit-campaign-0004",
+     "units": 33,
+     "baselineMs": 21563,
+     "variantSumMs": 28506,
+     "taxMs": 217
+    },
+    {
+     "project": "unit-contract-0023",
+     "units": 6,
+     "baselineMs": 3460,
+     "variantSumMs": 4677,
+     "taxMs": 243
+    },
+    {
+     "project": "unit-employee-0029",
+     "units": 9,
+     "baselineMs": 5806,
+     "variantSumMs": 7717,
+     "taxMs": 239
+    },
+    {
+     "project": "unit-recipe-0034",
+     "units": 12,
+     "baselineMs": 7314,
+     "variantSumMs": 10334,
+     "taxMs": 275
+    },
+    {
+     "project": "unit-asset-0030",
+     "units": 16,
+     "baselineMs": 10648,
+     "variantSumMs": 14149,
+     "taxMs": 233
+    },
+    {
+     "project": "unit-employee-0000",
+     "units": 31,
+     "baselineMs": 20268,
+     "variantSumMs": 27285,
+     "taxMs": 234
+    },
+    {
+     "project": "unit-employee-0036",
+     "units": 18,
+     "baselineMs": 12525,
+     "variantSumMs": 16298,
+     "taxMs": 222
+    },
+    {
+     "project": "unit-campaign-0031",
+     "units": 20,
+     "baselineMs": 13365,
+     "variantSumMs": 17576,
+     "taxMs": 222
+    },
+    {
+     "project": "unit-contract-0033",
+     "units": 14,
+     "baselineMs": 56445,
+     "variantSumMs": 62234,
+     "taxMs": 445
+    },
+    {
+     "project": "unit-vehicle-0035",
+     "units": 8,
+     "baselineMs": 5579,
+     "variantSumMs": 6815,
+     "taxMs": 177
+    },
+    {
+     "project": "unit-recipe-0026",
+     "units": 20,
+     "baselineMs": 73156,
+     "variantSumMs": 84143,
+     "taxMs": 578
+    },
+    {
+     "project": "unit-recipe-0008",
+     "units": 13,
+     "baselineMs": 9325,
+     "variantSumMs": 12101,
+     "taxMs": 231
+    },
+    {
+     "project": "unit-vehicle-0027",
+     "units": 43,
+     "baselineMs": 25669,
+     "variantSumMs": 37807,
+     "taxMs": 289
+    },
+    {
+     "project": "unit-asset-0037",
+     "units": 9,
+     "baselineMs": 5943,
+     "variantSumMs": 7897,
+     "taxMs": 244
+    },
+    {
+     "project": "unit-campaign-0019",
+     "units": 6,
+     "baselineMs": 4444,
+     "variantSumMs": 5648,
+     "taxMs": 241
+    },
+    {
+     "project": "unit-employee-0011",
+     "units": 19,
+     "baselineMs": 68455,
+     "variantSumMs": 75575,
+     "taxMs": 396
+    }
+   ]
+  }
+ ]
+}

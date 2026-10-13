@@ -85,6 +85,27 @@ export const SPEC_SECONDS = {
   playwright: { median: 0.95, sigma: 0.4, min: 0.5, max: 2 },
   vitest: { median: 0.22, sigma: 0.45, min: 0.1, max: 0.5 },
 };
+/**
+ * SIZE_SLOW=<share> (e.g. 0.2): that share of each runner's projects (at least one each) gets
+ * slow specs, like suites that drive long flows or wait on real timers. Their specs come from
+ * SLOW_SPEC_SECONDS instead, so a few projects dominate the run. Picked by their own RNG fork:
+ * the other projects are identical to the SIZE_SLOW-less workspace.
+ */
+export const SLOW_SHARE = Number(process.env.SIZE_SLOW ?? 0);
+if (!(SLOW_SHARE >= 0 && SLOW_SHARE <= 1)) throw new Error(`SIZE_SLOW must be a share in [0, 1] (got ${process.env.SIZE_SLOW})`);
+export const SLOW_SPEC_SECONDS = {
+  cypress: { median: 15, sigma: 0.5, min: 5, max: 60 },
+  playwright: { median: 15, sigma: 0.5, min: 5, max: 60 },
+  vitest: { median: 3, sigma: 0.5, min: 1, max: 8 },
+};
+
+/** Picks round(share × count) indexes (at least one when share > 0) of `count`. */
+function slowSet(rng, count) {
+  if (!SLOW_SHARE || !count) return new Set();
+  const k = Math.min(count, Math.max(1, Math.round(SLOW_SHARE * count)));
+  return new Set(rng.shuffle([...Array(count).keys()]).slice(0, k));
+}
+
 /** Rows of a table spec's fixture (main workspaces: 24-44). */
 const FIXTURE_ROWS = [12, 20];
 const CT_DOMAINS = ['product', 'invoice', 'ticket', 'shipment', 'patient', 'booking'];
@@ -126,6 +147,7 @@ export function buildModel(n) {
   const libCount = mix.ct + mix.unit;
   const groups = rng.fork('lib-order').shuffle([...Array(mix.ct).fill('ct'), ...Array(mix.unit).fill('unit')]);
   const tiers = { ct: tierList(rng.fork('tiers/ct'), mix.ct), unit: tierList(rng.fork('tiers/unit'), mix.unit), e2e: tierList(rng.fork('tiers/e2e'), mix.e2e) };
+  const slow = { ct: slowSet(rng.fork('slow/ct'), mix.ct), unit: slowSet(rng.fork('slow/unit'), mix.unit), e2e: slowSet(rng.fork('slow/e2e'), mix.e2e) };
   const layers = Math.min(LAYERS, libCount);
   const byLayer = Array.from({ length: layers }, () => []);
   const seen = { ct: 0, unit: 0 };
@@ -146,7 +168,8 @@ export function buildModel(n) {
       }
     }
     const tier = SPEC_TIERS[lib.tier];
-    lib.targets = specSeconds(r.fork('targets'), r.int(tier.min, tier.max), SPEC_SECONDS[lib.runner]);
+    lib.slow = slow[group].has(k);
+    lib.targets = specSeconds(r.fork('targets'), r.int(tier.min, tier.max), (lib.slow ? SLOW_SPEC_SECONDS : SPEC_SECONDS)[lib.runner]);
     libs.push(lib);
     byLayer[layer].push(lib);
   });
@@ -158,7 +181,8 @@ export function buildModel(n) {
     const want = Math.min(libs.length, r.int(2, 4));
     const imports = r.shuffle(libs).slice(0, want).sort((a, b) => (a.name < b.name ? -1 : 1));
     const tier = SPEC_TIERS[tiers.e2e[j]];
-    apps.push({ name, title: cfg.title, domain: domainByKey(cfg.domain), catalog: cfg.catalog, imports, targets: specSeconds(r.fork('targets'), r.int(tier.min, tier.max), SPEC_SECONDS.playwright) });
+    const isSlow = slow.e2e.has(j);
+    apps.push({ name, title: cfg.title, domain: domainByKey(cfg.domain), catalog: cfg.catalog, imports, slow: isSlow, targets: specSeconds(r.fork('targets'), r.int(tier.min, tier.max), (isSlow ? SLOW_SPEC_SECONDS : SPEC_SECONDS).playwright) });
   }
   return { n, mix, layers, libs, apps };
 }

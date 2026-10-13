@@ -15,3 +15,10 @@ results/quick-*/raw/
 # runs set aside and repeated (flaky Cypress start, disturbed by other load)
 results/quick-*/flaky/
 results/quick-*/contaminated/
+# slow-project experiment: raw run dirs stay local
+results/slow*/raw/
+results/slow*/flaky/
+results/slow*/contaminated/
+results/slow*/aborted/
+# Nx Agents branches are built here before they're pushed
+bench/agents/ws/
