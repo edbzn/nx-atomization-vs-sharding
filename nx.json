@@ -1,6 +1,5 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "neverConnectToCloud": true,
   "analytics": false,
   "defaultBase": "main",
   "namedInputs": {
@@ -21,7 +20,10 @@
       "!{projectRoot}/tsconfig.json"
     ],
     "sharedGlobals": [
-      "{workspaceRoot}/tsconfig.base.json"
+      "{workspaceRoot}/tsconfig.base.json",
+      {
+        "env": "NX_BENCH_RUN_ID"
+      }
     ]
   },
   "targetDefaults": {

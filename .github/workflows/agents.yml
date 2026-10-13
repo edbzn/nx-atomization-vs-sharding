@@ -1,0 +1,72 @@
+# One measured run of atomized-slow-100 on Nx Agents. Dispatch with:
+#   gh workflow run agents.yml --ref agents/atomized-slow-100 -f agents=4
+name: agents
+
+on:
+  workflow_dispatch:
+    inputs:
+      agents:
+        description: Number of Nx Agents
+        required: true
+        default: '2'
+
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+  NX_BENCH_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+  NX_TUI: 'false'
+
+jobs:
+  run:
+    name: atomized-slow-100 on ${{ inputs.agents }} agents
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Start agents
+        run: |
+          echo "T_START=$(date +%s.%N)" >> "$GITHUB_ENV"
+          npx --yes nx-cloud@latest start-ci-run \
+            --distribute-on="${{ inputs.agents }} linux-large-bench" \
+            --stop-agents-after="component-test-ci,e2e-ci,test-ci"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+
+      - name: Wait for agents
+        run: |
+          pnpm exec nx run shared-ui:agents-ready --outputStyle=static
+          echo "T_READY=$(date +%s.%N)" >> "$GITHUB_ENV"
+
+      - name: Run tests
+        run: |
+          pnpm exec nx run-many -t component-test-ci,e2e-ci,test-ci --outputStyle=static
+          echo "T_END=$(date +%s.%N)" >> "$GITHUB_ENV"
+
+      - name: Record timings
+        if: always()
+        run: |
+          node -e '
+            const e = process.env, n = (k) => (e[k] ? Number(e[k]) : null);
+            const r = {
+              workspace: "atomized-slow-100", agents: Number("${{ inputs.agents }}"), runId: e.NX_BENCH_RUN_ID,
+              ok: !!e.T_END, startToReadyS: n("T_READY") && n("T_READY") - n("T_START"),
+              testsS: n("T_END") && n("T_END") - n("T_READY"), totalS: n("T_END") && n("T_END") - n("T_START"),
+            };
+            console.log(JSON.stringify(r, null, 2));
+            require("fs").writeFileSync("result.json", JSON.stringify(r));
+          '
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: result-atomized-slow-100-${{ inputs.agents }}
+          path: result.json
